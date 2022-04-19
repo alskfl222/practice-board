@@ -6,7 +6,7 @@
   "author": "alsfkl222 <alskfl222@kakao.com>",
   "license": "MIT",
   "scripts": {
-    "start": "echo hello",
+    "build": "webpack --mode=production",
     "dev": "webpack serve --env development",
     "lint": "npx eslint src --fix"
   },
