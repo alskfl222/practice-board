@@ -21,7 +21,6 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "outDir": "./dist",
-    "baseUrl": ".",
   },
   "exclude": [
     "node_modules"
