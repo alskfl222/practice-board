@@ -1,5 +1,13 @@
+import React from 'react';
+import { RecoilRoot } from 'recoil';
+import CharCounter from './pages/CharCounter';
+
 function App() {
-  return <div>sjnsryjn?</div>;
+  return (
+    <RecoilRoot>
+      <CharCounter />
+    </RecoilRoot>
+  );
 }
 
 export default App;
