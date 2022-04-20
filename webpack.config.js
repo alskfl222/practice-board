@@ -1,9 +1,8 @@
 const path = require('path');
 
 module.exports = {
-  name: 'setting',
   mode: 'development',
-  devtool: 'eval',
+  // devtool: 'eval',
 
   resolve: {
     extensions: ['.js', '.ts', '.tsx'],
@@ -45,5 +44,6 @@ module.exports = {
     compress: true,
     port: 3000,
     hot: true,
+    historyApiFallback: true,
   },
 };

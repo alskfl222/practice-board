@@ -4,3 +4,8 @@ export const textState = atom({
   key: 'textState',
   default: '',
 });
+
+export const loginState = atom({
+  key: 'loginState',
+  default: ''
+})
