@@ -5,9 +5,9 @@ import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import CharCounter from './pages/CharCounter';
 import NotFound from './pages/NotFound';
-import Login from './pages/SignIn';
+import Signin from './pages/Signin';
 import SignUp from './pages/SignUp'
-import Posts from './pages/Posts';
+import PostList from './pages/PostList';
 import Post from './pages/Post';
 
 import styled from 'styled-components';
@@ -34,10 +34,10 @@ function App() {
           <Routes>
             <Route index element={<Home />} />
             <Route path='counter' element={<CharCounter />} />
-            <Route path='login' element={<Login />} />
+            <Route path='login' element={<Signin />} />
             <Route path='signup' element={<SignUp />} />
-            <Route path='posts' element={<Posts />} />
-            <Route path='posts/:id' element={<Post />} />
+            <Route path='post' element={<PostList />} />
+            <Route path='post/:id' element={<Post />} />
             {/* nested? */}
             <Route path='*' element={<NotFound />} />
           </Routes>

@@ -24,17 +24,17 @@ const InputContainer = styled.label`
   gap: 1rem;
 `;
 
-function Login() {
+function Signin() {
   const [formData, setFormData] = useState<Partial<UserType<string>>>({
     email: '',
     password: '',
   });
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [login, setLogin] = useRecoilState(loginState);
   const handleChange =
-    (key: string) =>
+    (key: keyof UserType<string>) =>
     (e: React.FormEvent<HTMLInputElement>): void => {
-      setFormData((data: any) => {
+      setFormData((data: Partial<UserType<string>>) => {
         const newData = { ...data };
         newData[key] = (e.target as HTMLInputElement).value;
         return newData;
@@ -48,14 +48,14 @@ function Login() {
         setLogin((state) =>
           JSON.stringify({ isLogin: true, email: formData.email })
         );
-        setTimeout(() => navigate('/posts'), 2000)
+        setTimeout(() => navigate('/post'), 2000);
       })
       .catch((err) => console.error(err));
   };
   return (
     <Container>
-      <PageTitle>Login PAGE</PageTitle>
-      <FormContainer name='login-form' onSubmit={onSubmit}>
+      <PageTitle>Signin PAGE</PageTitle>
+      <FormContainer name='signin-form' onSubmit={onSubmit}>
         <InputContainer>
           email
           <InputTextLine name='email' onChange={handleChange('email')} />
@@ -74,4 +74,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Signin;

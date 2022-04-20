@@ -5,16 +5,41 @@ export interface UserType<T> {
   password: T;
   pn: T;
 }
-
-// * api response type
-export interface LoginResponseType {
-  status: number;
-  msg: string;
-  data?: {
-    token: string;
-  }
+export interface PostType {
+  id: number;
+  title: string;
+  contents: string;
+  author: string;
+  createdAt: Date;
+  postType?: string;
+  filename?: string;
+}
+export interface PostQueryType {
+  postType: string;
+  pageSize: number;
+  page: number;
 }
 
+// * api response type
+export interface ResponseType {
+  status: number;
+  msg: string;
+}
+
+export interface SigninResponseType extends ResponseType {
+  data?: {
+    token: string;
+  };
+}
+export interface PostResponseType extends ResponseType {
+  data?: {
+    posts: PostType[],
+    totalCount: number,
+    page: number,
+    pageSize: number,
+    keyword: string,
+  }
+}
 
 // * components type
 export interface InputTextLineType {
