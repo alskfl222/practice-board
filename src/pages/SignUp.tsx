@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 
 import InputTextLine from '../components/InputTextLine';
 import SendButton from '../components/SendButton';
@@ -8,6 +7,7 @@ import styled from 'styled-components';
 import { theme } from '../styles/theme';
 
 import { UserType } from '../@types';
+import { register } from '../apis';
 
 const Container = styled.div`
   padding: 1rem;
@@ -19,9 +19,13 @@ const FormContainer = styled.form`
   flex-direction: column;
   gap: 1rem;
 `;
+const InputContainer = styled.label`
+  display: flex;
+  gap: 1rem;
+`;
 
 function SignUp() {
-  const [formData, setFormData] = useState<UserType>({
+  const [formData, setFormData] = useState<UserType<string>>({
     name: '',
     email: '',
     password: '',
@@ -40,12 +44,14 @@ function SignUp() {
         if (emailCondition) return true;
         return false;
       case 'password':
-        const passwordRegex =
-        /^(?=.*[a-zA-Z])((?=.*\d)|(?=.*\W)).{8,15}$/;
+        const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*\W).{8,15}$/;
         const passwordCondition = passwordRegex.test(password);
         if (passwordCondition) return true;
         return false;
       case 'pn':
+        const pnRegex = /^0(2([0-9]{7,8})|[1|3-9]([0-9]{8,9}))$/;
+        const pnCondition = pnRegex.test(pn);
+        if (pnCondition) return true;
         return false;
       default:
         return false;
@@ -59,20 +65,17 @@ function SignUp() {
         newData[key] = (e.target as HTMLInputElement).value;
         return newData;
       });
-      console.log(formData);
     };
-  console.log(isVaild('email'));
+  const onSubmit = (e: React.SyntheticEvent): void => {
+    e.preventDefault();
+    register(formData).then().catch();
+  };
+
   return (
     <Container>
       <PageTitle>SignUp PAGE</PageTitle>
-      <FormContainer
-        name='signup-form'
-        onSubmit={(e: React.SyntheticEvent) => {
-          e.preventDefault();
-          console.log('CLICK');
-        }}
-      >
-        <label>
+      <FormContainer name='signup-form' onSubmit={onSubmit}>
+        <InputContainer>
           name
           <InputTextLine name='name' onChange={handleChange('name')} />
           {isVaild('name')
@@ -80,8 +83,8 @@ function SignUp() {
             : formData.name.length === 0
             ? null
             : '이름은 3글자 이상이어야 합니다'}
-        </label>
-        <label>
+        </InputContainer>
+        <InputContainer>
           email
           <InputTextLine name='email' onChange={handleChange('email')} />
           {isVaild('email')
@@ -89,10 +92,10 @@ function SignUp() {
             : formData.email.length === 0
             ? null
             : '유효하지 않은 이메일입니다'}
-        </label>
-        <label>
+        </InputContainer>
+        <InputContainer>
           password
-          <InputTextLine name='password' onChange={handleChange('password')} />
+          <InputTextLine name='password' type='password' onChange={handleChange('password')} />
           {isVaild('password') ? (
             '유효한 비밀번호입니다'
           ) : formData.password.length === 0 ? null : (
@@ -101,12 +104,27 @@ function SignUp() {
               숫자 및 특수문자를 1개 이상 포함하여야합니다
             </p>
           )}
-        </label>
-        <label>
+        </InputContainer>
+        <InputContainer>
           phone
-          <InputTextLine placeholder='선택 사항'/>
-        </label>
-        <SendButton>SignUp</SendButton>
+          <InputTextLine
+            name='pn'
+            placeholder='선택 사항, 숫자만 입력해 주세요'
+            onChange={handleChange('pn')}
+          />
+          {formData.pn.length === 0
+            ? null
+            : isVaild('pn')
+            ? '유효한 전화번호입니다'
+            : '유효하지 않은 전화번호입니다'}
+        </InputContainer>
+        <SendButton
+          disabled={
+            !(isVaild('name') && isVaild('email') && isVaild('password'))
+          }
+        >
+          SignUp
+        </SendButton>
       </FormContainer>
     </Container>
   );

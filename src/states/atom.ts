@@ -1,4 +1,4 @@
-import { atom } from "recoil";
+import { atom } from 'recoil';
 
 export const textState = atom({
   key: 'textState',
@@ -7,5 +7,5 @@ export const textState = atom({
 
 export const loginState = atom({
   key: 'loginState',
-  default: ''
-})
+  default: JSON.stringify({ isLogin: false, email: '' }),
+});

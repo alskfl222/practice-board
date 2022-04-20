@@ -1,3 +1,7 @@
+const webpack = require('webpack')
+const dotenv = require('dotenv')
+dotenv.config();
+
 const path = require('path');
 
 module.exports = {
@@ -30,6 +34,12 @@ module.exports = {
       },
     ],
   },
+
+  plugins: [
+    new webpack.DefinePlugin({
+      "process.env": JSON.stringify(process.env)
+    }),
+  ],
 
   output: {
     path: path.join(__dirname, 'dist'),
