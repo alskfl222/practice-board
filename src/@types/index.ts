@@ -13,6 +13,8 @@ export interface PostType {
   createdAt: Date;
   postType?: string;
   filename?: string;
+  view?: number;
+  isFile?: number;
 }
 export interface PostQueryType {
   postType: string;
@@ -34,10 +36,10 @@ export interface SigninResponseType extends ResponseType {
 export interface PostResponseType extends ResponseType {
   data?: {
     posts: PostType[],
-    totalCount: number,
-    page: number,
-    pageSize: number,
-    keyword: string,
+    totalCount?: number,
+    page?: number,
+    pageSize?: number,
+    keyword?: string,
   }
 }
 

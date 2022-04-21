@@ -7,5 +7,5 @@ export const textState = atom({
 
 export const loginState = atom({
   key: 'loginState',
-  default: JSON.stringify({ isLogin: false, email: '' }),
+  default: JSON.stringify({ isLogin: false }),
 });

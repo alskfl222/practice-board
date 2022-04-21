@@ -46,7 +46,7 @@ function Signin() {
       .then((res) => {
         localStorage.setItem('token', res.data!.token);
         setLogin((state) =>
-          JSON.stringify({ isLogin: true, email: formData.email })
+          JSON.stringify({ isLogin: true })
         );
         setTimeout(() => navigate('/post'), 2000);
       })
