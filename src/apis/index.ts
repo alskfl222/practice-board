@@ -1,13 +1,12 @@
 import axios from 'axios';
 import {
   UserType,
-  PostQueryType,
-  SigninResponseType,
-  PostResponseType,
   SignupResponseType,
+  SigninResponseType,
+  PostQueryType,
+  PostType,
+  PostResponseType,
 } from '../@types';
-
-axios.defaults.headers.post['token'] = localStorage.getItem('token') || ''
 
 export function signin(data: Partial<UserType>): Promise<SigninResponseType> {
   return axios
@@ -36,6 +35,14 @@ export function getPost(id: string): Promise<PostResponseType> {
     .then((response) => response.data);
 }
 
-export function createPost(data: any) {
-  return axios.post(`${process.env.API_URL}/post`, data)
+export function createPost(data: PostType) {
+  const token = localStorage.getItem('token') || '';
+  return axios
+    .post(`${process.env.API_URL}/post`, data, {
+      headers: {
+        token,
+      },
+      withCredentials: true,
+    })
+    .then((response) => response.data);
 }

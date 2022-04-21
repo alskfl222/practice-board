@@ -3,6 +3,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import { PostQueryType, PostEventType, PostType } from '../@types';
 import { getPostList } from '../apis';
 import NavigationBar from '../components/NavigationBar';
+import InputTextLine from '../components/InputTextLine';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -64,7 +65,7 @@ function PostList() {
       .catch((err) => console.error(err));
   }
 
-  const onChange = (type: string) => (e: PostEventType) => {
+  const onChange = (type: keyof PostQueryType) => (e: PostEventType) => {
     e.preventDefault();
     setIsLoading(true);
     let value: string = '';

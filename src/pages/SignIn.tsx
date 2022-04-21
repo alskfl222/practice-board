@@ -25,29 +25,27 @@ const InputContainer = styled.label`
 `;
 
 function Signin() {
-  const [formData, setFormData] = useState<Partial<UserType>>({
+  const [data, setData] = useState<Partial<UserType>>({
     email: '',
     password: '',
   });
   const navigate = useNavigate();
   const [login, setLogin] = useRecoilState(loginState);
-  const handleChange =
+  const onChange =
     (key: keyof UserType) =>
-    (e: React.FormEvent<HTMLInputElement>): void => {
-      setFormData((data: Partial<UserType>) => {
-        const newData = { ...data };
-        newData[key] = (e.target as HTMLInputElement).value;
-        return newData;
+    (e: React.ChangeEvent<HTMLInputElement>): void => {
+      setData((data: Partial<UserType>) => {
+        return { ...data, [key]: e.target.value };
       });
     };
   const onSubmit = (e: React.SyntheticEvent): void => {
     e.preventDefault();
-    signin(formData)
+    signin(data)
       .then((response) => {
-        console.log(response.data)
+        console.log(response.data);
         localStorage.setItem('token', response.data!.token);
         setLogin((state) => JSON.stringify({ isLogin: true }));
-        setTimeout(() => navigate('/post'), 2000);
+        setTimeout(() => navigate('/post'), 1000);
       })
       .catch((err) => console.error(err));
   };
@@ -60,14 +58,19 @@ function Signin() {
       <FormContainer name='signin-form' onSubmit={onSubmit}>
         <InputContainer>
           email
-          <InputTextLine name='email' onChange={handleChange('email')} />
+          <InputTextLine
+            name='email'
+            value={data.email}
+            onChange={onChange('email')}
+          />
         </InputContainer>
         <InputContainer>
           password
           <InputTextLine
             name='password'
+            value={data.password}
             type='password'
-            onChange={handleChange('password')}
+            onChange={onChange('password')}
           />
         </InputContainer>
         <SendButton>Login</SendButton>

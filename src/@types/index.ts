@@ -58,13 +58,14 @@ export interface SignupResponseType extends ResponseType {
   data?: object;
 }
 
-// * components type
+// * components props type
 export interface InputTextLineType {
-  name: string;
-  type: string;
-  placeholder: string;
-  value: string;
-  onChange: (e: PostEventType) => void;
+  id?: string;
+  name?: string;
+  type?: string;
+  placeholder?: string;
+  value?: string;
+  onChange?: (e: PostEventType) => void;
 }
 
 export interface SendButtonType {
