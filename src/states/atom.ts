@@ -5,7 +5,9 @@ export const textState = atom({
   default: '',
 });
 
-export const loginState = atom({
-  key: 'loginState',
-  default: JSON.stringify({ isLogin: false }),
+export const signState = atom({
+  key: 'signState',
+  default: localStorage.getItem('token')
+    ? JSON.stringify({ isLogin: true })
+    : JSON.stringify({ isLogin: false }),
 });

@@ -39,26 +39,19 @@ export function getPost(id: string): Promise<PostResponseType> {
 
 export function createPost(data: PostType) {
   return axios
-    .post(`${process.env.API_URL}/post`, data, {
-      withCredentials: true,
-    })
+    .post(`${process.env.API_URL}/post`, data)
     .then((response) => response.data);
 }
 
 export function editPost(data: Partial<PostType>) {
-  return axios.post(`${process.env.API_URL}/post/edit`, data, {
-    withCredentials: true,
-  });
+  return axios.post(`${process.env.API_URL}/post/edit`, data);
 }
 
 export function deletePost(id: PostType['id']) {
   return axios
     .post(
       `${process.env.API_URL}/post/delete`,
-      { id },
-      {
-        withCredentials: true,
-      }
+      { id }
     )
     .then((response) => response.data);
 }

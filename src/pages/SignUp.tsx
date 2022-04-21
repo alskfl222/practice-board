@@ -9,6 +9,7 @@ import { theme } from '../styles/theme';
 
 import { UserType } from '../@types';
 import { register } from '../apis';
+import NavigationBar from '../components/NavigationBar';
 
 const Container = styled.div`
   padding: 1rem;
@@ -80,7 +81,7 @@ function SignUp() {
 
   return (
     <Container>
-      <PageTitle>SignUp PAGE</PageTitle>
+      <NavigationBar>SignUp PAGE</NavigationBar>
       <FormContainer name='signup-form' onSubmit={onSubmit}>
         <InputContainer>
           name

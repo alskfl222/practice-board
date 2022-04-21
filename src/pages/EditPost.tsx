@@ -74,13 +74,10 @@ function EditPost() {
       .catch((err) => console.error(err));
   };
 
-  const clearData = () => {
-    setPostData(initData);
-  };
-
   useEffect(() => {
     fetchPost();
   }, []);
+
   return (
     <Container>
       <NavigationBar>EditPost Page</NavigationBar>
@@ -96,7 +93,6 @@ function EditPost() {
                 onChange={onChange('title')}
               />
               <button onClick={onSubmit}>EDIT</button>
-              <button onClick={clearData}>CLEAR</button>
             </PostControllerContainer>
           </PageHeader>
           <PageBody>

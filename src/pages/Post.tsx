@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import { loginState } from '../states/atom';
+import { signState } from '../states/atom';
 import { getPost } from '../apis';
 import { PostType } from '../@types';
 
 function Post() {
-  const userJSON = useRecoilValue(loginState);
+  const userJSON = useRecoilValue(signState);
   const { isLogin } = JSON.parse(userJSON);
   const params = useParams();
   const { id } = params;
@@ -21,7 +21,7 @@ function Post() {
   });
   const [isLoading, setIsLoading] = useState<boolean>(true);
   console.log(isLogin, id);
-  
+
   function fetchPost() {
     getPost(id!)
       .then((response) => {
@@ -43,8 +43,8 @@ function Post() {
   }, []);
 
   console.log(typeof postData.createdAt);
-  const dateString = new Date(postData.createdAt!).toLocaleDateString()
-  
+  const dateString = new Date(postData.createdAt!).toLocaleDateString();
+
   return (
     <div>
       Post PAGE <br />
@@ -52,8 +52,7 @@ function Post() {
       {!isLoading ? (
         <div>
           <div>
-            <div>{postData.author}</div>{' '}
-            <div>{dateString}</div>
+            <div>{postData.author}</div> <div>{dateString}</div>
           </div>
           <div>{postData.contents}</div>
         </div>

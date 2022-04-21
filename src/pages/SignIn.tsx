@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { loginState } from '../states/atom';
+import { signState } from '../states/atom';
 import { UserType } from '../@types';
 import { signin } from '../apis';
 import InputTextLine from '../components/InputTextLine';
@@ -30,7 +30,7 @@ function Signin() {
     password: '',
   });
   const navigate = useNavigate();
-  const [login, setLogin] = useRecoilState(loginState);
+  const [login, setLogin] = useRecoilState(signState);
   const onChange =
     (key: keyof UserType) =>
     (e: React.ChangeEvent<HTMLInputElement>): void => {

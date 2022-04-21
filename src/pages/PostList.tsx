@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
+import { signState } from '../states/atom';
 import { PostQueryType, PostEventType, PostType } from '../@types';
 import { getPostList, deletePost } from '../apis';
 import NavigationBar from '../components/NavigationBar';
@@ -43,6 +45,7 @@ function PostList() {
     page: 1,
     keyword: '',
   };
+  const { isLogin } = JSON.parse(useRecoilValue(signState));
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [query, setQuery] = useState<PostQueryType>(initQuery);
   const [totalCount, setTotalCount] = useState<number>(1);
@@ -53,7 +56,7 @@ function PostList() {
     setIsLoading(true);
     getPostList(query)
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         if (response.data!.posts) {
           setPostList(response.data!.posts);
           setTotalCount(response.data!.totalCount || 1);
@@ -79,8 +82,21 @@ function PostList() {
       ) as HTMLInputElement;
       value = keywordInput.value;
     }
-    console.log(e, e.target, e.target.tagName, value);
-    setQuery((state) => ({ ...query, [type]: value }));
+
+    if (type === 'pageSize' && totalPageCount > totalCount / parseInt(value)) {
+      console.log('No Page');
+      setQuery((state) => ({
+        ...query,
+        pageSize: parseInt(value),
+        page: Math.ceil(totalCount / parseInt(value)),
+      }));
+    } else {
+      setQuery((state) => ({
+        ...query,
+        [type]: Number.isNaN(value) ? parseInt(value) : value,
+      }));
+    }
+
     const queryString = Object.entries(query)
       .map((item) =>
         item[0] !== type ? `${item[0]}=${item[1]}` : `${type}=${value}`
@@ -93,7 +109,10 @@ function PostList() {
   function onDelete(id: PostType['id']) {
     console.log(id);
     deletePost(id)
-      .then((response) => console.log(response))
+      .then((response) => {
+        console.log(response);
+        fetchPostList();
+      })
       .catch((err) => console.error(err));
   }
 
@@ -145,6 +164,7 @@ function PostList() {
   useEffect(() => {
     fetchPostList();
   }, [searchParams]);
+  console.log(isLogin);
 
   return (
     <Container>
@@ -156,11 +176,13 @@ function PostList() {
         <button onClick={onChange('keyword')}>Search</button>
         <button onClick={clearQuery}>Clear</button>
       </FilterContainer>
-      <div>
-        <button onClick={() => navigate('/post/create')}>
-          CreatePost Page
-        </button>
-      </div>
+      {isLogin ? (
+        <div>
+          <button onClick={() => navigate('/post/create')}>
+            CreatePost Page
+          </button>
+        </div>
+      ) : null}
       {!isLoading ? (
         <>
           <PostListContainer>
