@@ -1,26 +1,32 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
-import styled from 'styled-components';
-import { signState } from '../states/atom';
 import { UserType } from '../@types';
+import { useRecoilState } from 'recoil';
+import { signState } from '../states/atom';
 import { signin } from '../apis';
+import NavigationBar from '../components/NavigationBar';
 import InputTextLine from '../components/InputTextLine';
 import SendButton from '../components/SendButton';
+import styled from 'styled-components';
 import { theme } from '../styles/theme';
-import NavigationBar from '../components/NavigationBar';
 
 const Container = styled.div`
-  padding: 1rem;
-`;
-const FormContainer = styled.form`
-  margin-top: 2rem;
+  width: 100%;
   display: flex;
   flex-direction: column;
+  gap: 2rem;
+`;
+const FormContainer = styled.form`
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 1rem;
 `;
 const InputContainer = styled.label`
+  width: 80%;
   display: flex;
+  justify-content: space-between;
   gap: 1rem;
 `;
 
@@ -51,13 +57,10 @@ function SignIn() {
   };
   return (
     <Container>
-      <NavigationBar>SignIn Page</NavigationBar>
-      <div>
-        <a onClick={() => navigate('/signup')}>Go to SignUp Page</a>
-      </div>
+      <NavigationBar>로그인</NavigationBar>
       <FormContainer name='signin-form' onSubmit={onSubmit}>
         <InputContainer>
-          email
+          E-mail
           <InputTextLine
             name='email'
             value={data.email}
@@ -65,7 +68,7 @@ function SignIn() {
           />
         </InputContainer>
         <InputContainer>
-          password
+          비밀번호
           <InputTextLine
             name='password'
             value={data.password}
@@ -74,6 +77,9 @@ function SignIn() {
           />
         </InputContainer>
         <SendButton>Login</SendButton>
+        <div>
+          <a onClick={() => navigate('/signup')}>Go to SignUp Page</a>
+        </div>
       </FormContainer>
     </Container>
   );

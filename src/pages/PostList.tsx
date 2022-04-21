@@ -14,12 +14,29 @@ const Container = styled.div`
   gap: 2rem;
 `;
 const FilterContainer = styled.div`
+  padding: 1rem 2rem;
   display: flex;
+  justify-content: space-around;
+  gap: 1rem;
+  select {
+    width: 20%;
+  }
+`;
+const KeywordInput = styled.input`
+  flex-grow: 1;
+  min-width: 0;
+`;
+const FilterButton = styled.button`
+  flex-shrink: 0;
+  width: 3rem;
 `;
 const PostListContainer = styled.div`
+  padding: 1rem 2rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  font-size: 1.5rem;
+  font-weight: 500;
 `;
 const PostContainer = styled.div`
   &:hover {
@@ -63,9 +80,9 @@ function PostList() {
         } else {
           setPostList([]);
         }
-        setIsLoading(false);
       })
-      .catch((err) => console.error(err));
+      .catch((err) => console.error(err))
+      .finally(() => setIsLoading(false));
   }
 
   const onChange = (type: keyof PostQueryType) => (e: PostEventType) => {
@@ -84,7 +101,7 @@ function PostList() {
     }
 
     if (type === 'pageSize' && totalPageCount > totalCount / parseInt(value)) {
-      console.log('No Page');
+      console.log('Non-Exist Page');
       setQuery((state) => ({
         ...query,
         pageSize: parseInt(value),
@@ -123,7 +140,7 @@ function PostList() {
         defaultValue={`${query.pageSize}`}
         onChange={onChange('pageSize')}
       >
-        <optgroup label='PageSize'>
+        <optgroup label='페이지 개수'>
           <option value='5'>5개</option>
           <option value='10'>10개</option>
         </optgroup>
@@ -137,15 +154,15 @@ function PostList() {
         defaultValue={`${query.postType}`}
         onChange={onChange('postType')}
       >
-        <optgroup label='PostType'>
-          <option value='notice'>notice</option>
+        <optgroup label='종류'>
+          <option value='notice'>공지</option>
         </optgroup>
       </select>
     );
   }
   function PostKeywordInput() {
     return (
-      <input
+      <KeywordInput
         id='keyword-input'
         placeholder='검색어'
         onKeyUp={(e: PostEventType) => {
@@ -153,7 +170,7 @@ function PostList() {
             onChange('keyword')(e);
           }
         }}
-      ></input>
+      ></KeywordInput>
     );
   }
   function clearQuery() {
@@ -168,19 +185,17 @@ function PostList() {
 
   return (
     <Container>
-      <NavigationBar>PostList PAGE</NavigationBar>
+      <NavigationBar>게시판 목록</NavigationBar>
       <FilterContainer>
         <PageSizeSelect />
         <PostTypeSelect />
         <PostKeywordInput />
-        <button onClick={onChange('keyword')}>Search</button>
-        <button onClick={clearQuery}>Clear</button>
+        <FilterButton onClick={onChange('keyword')}>검색</FilterButton>
+        <FilterButton onClick={clearQuery}>초기화</FilterButton>
       </FilterContainer>
       {isLogin ? (
         <div>
-          <button onClick={() => navigate('/post/create')}>
-            CreatePost Page
-          </button>
+          <button onClick={() => navigate('/post/create')}>글쓰기</button>
         </div>
       ) : null}
       {!isLoading ? (
@@ -224,7 +239,7 @@ function PostList() {
           </PageContainer>
         </>
       ) : (
-        '게시글을 불러오는 중입니다'
+        <PostListContainer>게시글을 불러오는 중입니다</PostListContainer>
       )}
     </Container>
   );

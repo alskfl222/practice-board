@@ -12,9 +12,11 @@ import { register } from '../apis';
 import NavigationBar from '../components/NavigationBar';
 
 const Container = styled.div`
-  padding: 1rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 `;
-const PageTitle = styled.div``;
 const FormContainer = styled.form`
   margin-top: 2rem;
   display: flex;

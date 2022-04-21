@@ -11,7 +11,13 @@ const Container = styled.div`
   align-items: center;
   gap: 1rem;
 
+  header {
+    display: flex;
+    align-items: center;
+    height: 7rem;
+  }
   h1 {
+    padding: 1rem;
     font-size: 3rem;
   }
 `;
@@ -20,6 +26,7 @@ const HorizonDivider = styled.div`
   width: 70%;
   box-shadow: 0 0.5px 0 0.5px black;
 `;
+
 const AnchorContainer = styled.div`
   padding: 3rem;
   display: flex;
@@ -39,7 +46,9 @@ function Home() {
   const navigate = useNavigate();
   return (
     <Container>
-      <h1>HOME PAGE</h1>
+      <header>
+        <h1>HOME PAGE</h1>
+      </header>
       <HorizonDivider />
       <AnchorContainer>
         <PageAnchor onClick={() => navigate('/signin')}>SIGNIN</PageAnchor>

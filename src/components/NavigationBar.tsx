@@ -6,10 +6,13 @@ import { NavigationBarType } from '../@types';
 import styled from 'styled-components';
 
 const Container = styled.div`
-  width: 100%;
-  height: 4rem;
+  height: 10rem;
+  padding: 2rem;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+  box-shadow: 0 0.5px 5px 0.5px #0003;
 `;
 const NavigationTop = styled.div`
   width: 100%;
@@ -17,11 +20,31 @@ const NavigationTop = styled.div`
   justify-content: space-between;
   align-items: center;
 `;
+const HomeAnchor = styled.a`
+  font-size: 1.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  &:hover {
+    font-weight: 700;
+  }
+`;
+const SignButton = styled.button`
+  border: none;
+  background-color: transparent;
+  font-size: 1.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  &:hover {
+    font-weight: 700;
+  }
+`;
 const NavigationBottom = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: 2.5rem;
+  font-weight: 700;
 `;
 
 function NavigationBar(props: NavigationBarType) {
@@ -33,18 +56,18 @@ function NavigationBar(props: NavigationBarType) {
   return (
     <Container>
       <NavigationTop>
-        <a onClick={() => navigate('/')}>HOME</a>
+        <HomeAnchor onClick={() => navigate('/')}>HOME</HomeAnchor>
         {isLogin ? (
-          <button
+          <SignButton
             onClick={() => {
               setUser(JSON.stringify({ isLogin: false }));
-              localStorage.removeItem('token')
+              localStorage.removeItem('token');
             }}
           >
             LOGOUT
-          </button>
+          </SignButton>
         ) : !(pathname === '/signin' || pathname === '/signup') ? (
-          <button onClick={() => navigate('/signin')}>LOGIN</button>
+          <SignButton onClick={() => navigate('/signin')}>LOGIN</SignButton>
         ) : null}
       </NavigationTop>
       <NavigationBottom>{props.children}</NavigationBottom>

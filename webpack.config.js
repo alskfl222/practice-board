@@ -6,7 +6,6 @@ const path = require('path');
 
 module.exports = {
   mode: 'development',
-  // devtool: 'eval',
 
   resolve: {
     extensions: ['.js', '.ts', '.tsx'],
@@ -32,6 +31,10 @@ module.exports = {
           },
         },
       },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader']
+      }
     ],
   },
 
