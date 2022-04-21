@@ -13,7 +13,6 @@ import NavigationBar from '../components/NavigationBar';
 const Container = styled.div`
   padding: 1rem;
 `;
-const PageTitle = styled.div``;
 const FormContainer = styled.form`
   margin-top: 2rem;
   display: flex;

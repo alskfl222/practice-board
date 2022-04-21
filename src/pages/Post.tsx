@@ -42,7 +42,7 @@ function Post() {
   }, []);
 
   console.log(typeof postData.createdAt);
-  const dateString = new Date(postData.createdAt).toLocaleDateString()
+  const dateString = new Date(postData.createdAt!).toLocaleDateString()
   
   return (
     <div>

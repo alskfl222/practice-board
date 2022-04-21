@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 // * data type
 export interface UserType {
@@ -8,11 +8,11 @@ export interface UserType {
   pn: string;
 }
 export interface PostType {
-  id: number;
+  id?: number;
   title: string;
   contents: string;
-  author: string;
-  createdAt: string;
+  author?: string;
+  createdAt?: string;
   postType?: string;
   filename?: string;
   view?: number;
@@ -22,7 +22,16 @@ export interface PostQueryType {
   postType: string;
   pageSize: number;
   page: number;
+  keyword: string;
 }
+
+//* React event type
+export type PostEventType = React.ChangeEvent<HTMLSelectElement> &
+  React.ChangeEvent<HTMLInputElement> &
+  React.ChangeEvent<HTMLTextAreaElement> &
+  React.MouseEvent<HTMLAnchorElement> &
+  React.MouseEvent<HTMLButtonElement> &
+  React.KeyboardEvent<HTMLInputElement>;
 
 // * api response type
 export interface ResponseType {
@@ -46,7 +55,7 @@ export interface PostResponseType extends ResponseType {
   };
 }
 export interface SignupResponseType extends ResponseType {
-  data?: object
+  data?: object;
 }
 
 // * components type
@@ -54,7 +63,8 @@ export interface InputTextLineType {
   name: string;
   type: string;
   placeholder: string;
-  onChange: (e: React.FormEvent<HTMLInputElement>) => void;
+  value: string;
+  onChange: (e: PostEventType) => void;
 }
 
 export interface SendButtonType {

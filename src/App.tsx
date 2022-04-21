@@ -9,6 +9,7 @@ import NotFound from './pages/NotFound';
 import Signin from './pages/Signin';
 import SignUp from './pages/SignUp';
 import PostList from './pages/PostList';
+import CreatePost from './pages/CreatePost';
 import Post from './pages/Post';
 
 import { theme } from './styles/theme';
@@ -37,6 +38,7 @@ function App() {
             <Route path='signin' element={<Signin />} />
             <Route path='signup' element={<SignUp />} />
             <Route path='post' element={<PostList />} />
+            <Route path='post/create' element={<CreatePost />} />
             <Route path='post/:id' element={<Post />} />
             {/* nested? */}
             <Route path='*' element={<NotFound />} />

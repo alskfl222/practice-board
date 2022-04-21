@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-import { PostQueryType, PostType } from '../@types';
+import { PostQueryType, PostEventType, PostType } from '../@types';
 import { getPostList } from '../apis';
 import NavigationBar from '../components/NavigationBar';
+import styled from 'styled-components';
 
 const Container = styled.div`
   width: 100%;
@@ -37,17 +37,17 @@ const PageContainer = styled.div`
 function PostList() {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+  const initQuery: PostQueryType = {
+    postType: 'notice',
+    pageSize: 10,
+    page: 1,
+    keyword: '',
+  };
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [query, setQuery] = useState<PostQueryType>({
-    postType: searchParams.get('postType') || 'notice',
-    pageSize: searchParams.get('pageSize')
-      ? parseInt(searchParams.get('pageSize')!)
-      : 10,
-    page: searchParams.get('page') ? parseInt(searchParams.get('page')!) : 1,
-  });
+  const [query, setQuery] = useState<PostQueryType>(initQuery);
   const [totalCount, setTotalCount] = useState<number>(1);
   const [postList, setPostList] = useState<PostType[]>([]);
-  const totalPageCount = Math.ceil(totalCount / query.pageSize)
+  const totalPageCount = Math.ceil(totalCount / query.pageSize);
 
   function fetchPostList() {
     getPostList(query)
@@ -55,7 +55,6 @@ function PostList() {
         // console.log(response.data);
         if (response.data!.posts) {
           setPostList(response.data!.posts);
-
           setTotalCount(response.data!.totalCount || 1);
         } else {
           setPostList([]);
@@ -65,30 +64,35 @@ function PostList() {
       .catch((err) => console.error(err));
   }
 
-  const onChange =
-    (type: string) =>
-    (
-      e: React.ChangeEvent<HTMLSelectElement> &
-        React.MouseEvent<HTMLAnchorElement>
-    ) => {
-      e.preventDefault();
-      console.log(e.target);
-      const value = e.target.value ? e.target.value : e.target.innerText;
-      setQuery((state) => ({ ...query, [type]: value }));
-      const queryString = Object.entries(query)
-        .map((item) =>
-          item[0] !== type ? `${item[0]}=${item[1]}` : `${type}=${value}`
-        )
-        .join('&');
-      // console.log(queryString);
-      setSearchParams(queryString);
-    };
-  // console.log('Render!');
+  const onChange = (type: string) => (e: PostEventType) => {
+    e.preventDefault();
+    setIsLoading(true);
+    let value: string = '';
+    if (type === 'pageSize' || type === 'postType') {
+      value = e.target.value;
+    }
+    if (type === 'page') value = e.target.innerText;
+    if (type === 'keyword') {
+      const keywordInput = document.querySelector(
+        '#keyword-input'
+      ) as HTMLInputElement;
+      value = keywordInput.value;
+    }
+    console.log(e, e.target, e.target.tagName, value);
+    setQuery((state) => ({ ...query, [type]: value }));
+    const queryString = Object.entries(query)
+      .map((item) =>
+        item[0] !== type ? `${item[0]}=${item[1]}` : `${type}=${value}`
+      )
+      .join('&');
+    // console.log(queryString);
+    setSearchParams(queryString);
+  };
 
   function PageSizeSelect() {
     return (
       <select
-        name='pagesize'
+        name='page-size'
         defaultValue={`${query.pageSize}`}
         onChange={onChange('pageSize')}
       >
@@ -102,7 +106,7 @@ function PostList() {
   function PostTypeSelect() {
     return (
       <select
-        name='postype'
+        name='post-type'
         defaultValue={`${query.postType}`}
         onChange={onChange('postType')}
       >
@@ -111,6 +115,23 @@ function PostList() {
         </optgroup>
       </select>
     );
+  }
+  function PostKeywordInput() {
+    return (
+      <input
+        id='keyword-input'
+        placeholder='검색어'
+        onKeyUp={(e: PostEventType) => {
+          if (e.key === 'Enter') {
+            onChange('keyword')(e);
+          }
+        }}
+      ></input>
+    );
+  }
+  function clearQuery() {
+    setQuery(initQuery);
+    setSearchParams('');
   }
 
   useEffect(() => {
@@ -123,7 +144,15 @@ function PostList() {
       <FilterContainer>
         <PageSizeSelect />
         <PostTypeSelect />
+        <PostKeywordInput />
+        <button onClick={onChange('keyword')}>Search</button>
+        <button onClick={clearQuery}>Clear</button>
       </FilterContainer>
+      <div>
+        <button onClick={() => navigate('/post/create')}>
+          CreatePost Page
+        </button>
+      </div>
       {!isLoading ? (
         <>
           <PostListContainer>
