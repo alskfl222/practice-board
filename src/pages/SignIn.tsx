@@ -24,7 +24,7 @@ const InputContainer = styled.label`
   gap: 1rem;
 `;
 
-function Signin() {
+function SignIn() {
   const [data, setData] = useState<Partial<UserType>>({
     email: '',
     password: '',
@@ -79,4 +79,4 @@ function Signin() {
   );
 }
 
-export default Signin;
+export default SignIn;
