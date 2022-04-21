@@ -32,8 +32,12 @@ function PostList() {
     page: searchParams.get('page') ? parseInt(searchParams.get('page')!) : 1,
   });
   const [postList, setPostList] = useState<PostType[]>([]);
+  const totalPageCount =
+    postList.length !== 0 ? Math.ceil(postList.length / query.pageSize) : 1;
+  const totalPage = new Array(totalPageCount + 1).fill('');
+  console.log(totalPage);
 
-  function fetchPosts() {
+  function fetchPostList() {
     getPostList(query)
       .then((response) => {
         console.log(response.data);
@@ -41,12 +45,19 @@ function PostList() {
       })
       .catch((err) => console.error(err));
   }
+
   const onChange =
-    (type: string) => (e: React.ChangeEvent<HTMLSelectElement>) => {
-      const value = e.target.value;
-      // setQuery((state) => {
-      //   return { ...query, pageSize: value };
-      // });
+    (type: string) =>
+    (
+      e: React.ChangeEvent<HTMLSelectElement> &
+        React.MouseEvent<HTMLAnchorElement>
+    ) => {
+      e.preventDefault();
+      console.log(e.target)
+      const value = e.target.value ? e.target.value : e.target.innerText;
+      setQuery((state) => {
+        return { ...query, [type]: value };
+      });
       const queryString = Object.entries(query)
         .map((item) => {
           return item[0] !== type
@@ -54,19 +65,24 @@ function PostList() {
             : `${type}=${value}`;
         })
         .join('&');
-      console.log(queryString);
+      // console.log(queryString);
       setSearchParams(queryString);
     };
+  console.log('Render!');
 
-  // useEffect(() => {
-  //   fetchPosts();
-  // }, [searchParams]);
+  useEffect(() => {
+    fetchPostList();
+  }, [searchParams]);
 
   return (
     <Container>
       <PageTitle>PostList PAGE</PageTitle>
       <FilterContainer>
-        <select name='pagesize' defaultValue='10' onChange={onChangePageSize}>
+        <select
+          name='pagesize'
+          defaultValue='10'
+          onChange={onChange('pageSize')}
+        >
           <optgroup label='PageSize'>
             <option value='5'>5개</option>
             <option value='10'>10개</option>
@@ -82,7 +98,15 @@ function PostList() {
           );
         })}
       </PostListContainer>
-      <PageContainer></PageContainer>
+      <PageContainer>
+        {totalPage.map((_, index) => {
+          return (
+            <a onClick={onChange('page')}>
+              {index + 1}
+            </a>
+          );
+        })}
+      </PageContainer>
     </Container>
   );
 }
