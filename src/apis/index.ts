@@ -8,6 +8,8 @@ import {
   PostResponseType,
 } from '../@types';
 
+axios.defaults.headers.post['token'] = localStorage.getItem('token') || '';
+
 export function signin(data: Partial<UserType>): Promise<SigninResponseType> {
   return axios
     .post(`${process.env.API_URL}/user`, data)
@@ -36,13 +38,27 @@ export function getPost(id: string): Promise<PostResponseType> {
 }
 
 export function createPost(data: PostType) {
-  const token = localStorage.getItem('token') || '';
   return axios
     .post(`${process.env.API_URL}/post`, data, {
-      headers: {
-        token,
-      },
       withCredentials: true,
     })
+    .then((response) => response.data);
+}
+
+export function editPost(data: Partial<PostType>) {
+  return axios.post(`${process.env.API_URL}/post/edit`, data, {
+    withCredentials: true,
+  });
+}
+
+export function deletePost(id: PostType['id']) {
+  return axios
+    .post(
+      `${process.env.API_URL}/post/delete`,
+      { id },
+      {
+        withCredentials: true,
+      }
+    )
     .then((response) => response.data);
 }

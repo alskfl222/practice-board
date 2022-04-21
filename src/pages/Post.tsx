@@ -21,6 +21,7 @@ function Post() {
   });
   const [isLoading, setIsLoading] = useState<boolean>(true);
   console.log(isLogin, id);
+  
   function fetchPost() {
     getPost(id!)
       .then((response) => {

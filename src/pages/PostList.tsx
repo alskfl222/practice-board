@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { PostQueryType, PostEventType, PostType } from '../@types';
-import { getPostList } from '../apis';
+import { getPostList, deletePost } from '../apis';
 import NavigationBar from '../components/NavigationBar';
-import InputTextLine from '../components/InputTextLine';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -51,9 +50,10 @@ function PostList() {
   const totalPageCount = Math.ceil(totalCount / query.pageSize);
 
   function fetchPostList() {
+    setIsLoading(true);
     getPostList(query)
       .then((response) => {
-        // console.log(response.data);
+        console.log(response.data);
         if (response.data!.posts) {
           setPostList(response.data!.posts);
           setTotalCount(response.data!.totalCount || 1);
@@ -89,6 +89,13 @@ function PostList() {
     // console.log(queryString);
     setSearchParams(queryString);
   };
+
+  function onDelete(id: PostType['id']) {
+    console.log(id);
+    deletePost(id)
+      .then((response) => console.log(response))
+      .catch((err) => console.error(err));
+  }
 
   function PageSizeSelect() {
     return (
@@ -161,9 +168,27 @@ function PostList() {
               ? postList.map((post) => (
                   <PostContainer
                     key={post.id}
-                    onClick={() => navigate(`/post/${post.id}`)}
+                    onClick={() => {
+                      navigate(`/post/${post.id}`);
+                    }}
                   >
-                    {post.id} - {post.title}
+                    {post.id} - {post.title} -{' '}
+                    <button
+                      onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                        e.stopPropagation();
+                        navigate(`/post/edit/${post.id}`);
+                      }}
+                    >
+                      EDIT
+                    </button>
+                    <button
+                      onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                        e.stopPropagation();
+                        onDelete(post.id);
+                      }}
+                    >
+                      DELETE
+                    </button>
                   </PostContainer>
                 ))
               : '게시 글이 없습니다'}

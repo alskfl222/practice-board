@@ -62,10 +62,10 @@ function CreatePost() {
   return (
     <Container>
       <NavigationBar>CreatePost Page</NavigationBar>
+      <div>
+        <button onClick={() => navigate('/post')}>PostList Page</button>
+      </div>
       <PageHeader>
-        <div>
-          <button onClick={() => navigate('/post')}>PostList Page</button>
-        </div>
         <PostControllerContainer>
           <select onChange={onChange('postType')}>
             <option value='notice'>notice</option>
