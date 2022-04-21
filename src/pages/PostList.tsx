@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 import { PostQueryType, PostType } from '../@types';
 import { getPostList } from '../apis';
-import styled from 'styled-components';
 import PageTitle from '../components/PageTitle';
 
 const Container = styled.div`
@@ -66,26 +66,21 @@ function PostList() {
       .catch((err) => console.error(err));
   }
 
-  const onChange =
-    (type: string) =>
+  const onChange = (type: string) =>
     (
       e: React.ChangeEvent<HTMLSelectElement> &
-        React.MouseEvent<HTMLAnchorElement>
+        React.MouseEvent<HTMLAnchorElement>,
     ) => {
       e.preventDefault();
       console.log(e.target);
       const value = e.target.value ? e.target.value : e.target.innerText;
-      setQuery((state) => {
-        return { ...query, [type]: value };
-      });
+      setQuery((state) => ({ ...query, [type]: value }));
       const queryString = Object.entries(query)
-        .map((item) => {
-          return item[0] !== type
-            ? `${item[0]}=${item[1]}`
-            : `${type}=${value}`;
-        })
+        .map((item) => (item[0] !== type
+          ? `${item[0]}=${item[1]}`
+          : `${type}=${value}`))
         .join('&');
-      // console.log(queryString);
+        // console.log(queryString);
       setSearchParams(queryString);
     };
   // console.log('Render!');
@@ -133,28 +128,24 @@ function PostList() {
         <>
           <PostListContainer>
             {postList.length !== 0
-              ? postList.map((post) => {
-                  return (
-                    <PostContainer
-                      key={post.id}
-                      onClick={() =>
-                        navigate(`/post/${post.id}`)
-                      }
-                    >
-                      {post.id} - {post.title}
-                    </PostContainer>
-                  );
-                })
+              ? postList.map((post) => (
+                <PostContainer
+                  key={post.id}
+                  onClick={() =>
+                    navigate(`/post/${post.id}`)
+                  }
+                >
+                  {post.id} - {post.title}
+                </PostContainer>
+              ))
               : '게시 글이 없습니다'}
           </PostListContainer>
           <PageContainer>
-            {new Array(pageCount).fill('').map((_, index) => {
-              return (
-                <a key={index + 1} onClick={onChange('page')}>
-                  {index + 1}
-                </a>
-              );
-            })}
+            {new Array(pageCount).fill('').map((_, index) => (
+              <a key={index + 1} onClick={onChange('page')}>
+                {index + 1}
+              </a>
+            ))}
           </PageContainer>
         </>
       ) : (

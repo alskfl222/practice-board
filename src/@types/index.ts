@@ -1,3 +1,5 @@
+import React from "react";
+
 // * data type
 export interface UserType<T> {
   name: T;
@@ -10,7 +12,7 @@ export interface PostType {
   title: string;
   contents: string;
   author: string;
-  createdAt: Date;
+  createdAt: string;
   postType?: string;
   filename?: string;
   view?: number;
@@ -35,12 +37,13 @@ export interface SigninResponseType extends ResponseType {
 }
 export interface PostResponseType extends ResponseType {
   data?: {
-    posts: PostType[],
-    totalCount?: number,
-    page?: number,
-    pageSize?: number,
-    keyword?: string,
-  }
+    posts?: PostType[];
+    post?: PostType;
+    totalCount?: number;
+    page?: number;
+    pageSize?: number;
+    keyword?: string;
+  };
 }
 
 // * components type

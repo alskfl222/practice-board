@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 
+import styled from 'styled-components';
 import InputTextLine from '../components/InputTextLine';
 import SendButton from '../components/SendButton';
 
-import styled from 'styled-components';
 import { theme } from '../styles/theme';
 
 import { UserType } from '../@types';
@@ -34,31 +34,30 @@ function SignUp() {
   const isVaild = (key: string): boolean => {
     const { name, email, password, pn } = formData;
     switch (key) {
-      case 'name':
-        const nameCondition = name.length > 2;
-        if (nameCondition) return true;
-        return false;
-      case 'email':
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const emailCondition = emailRegex.test(email);
-        if (emailCondition) return true;
-        return false;
-      case 'password':
-        const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*\W).{8,15}$/;
-        const passwordCondition = passwordRegex.test(password);
-        if (passwordCondition) return true;
-        return false;
-      case 'pn':
-        const pnRegex = /^0(2([0-9]{7,8})|[1|3-9]([0-9]{8,9}))$/;
-        const pnCondition = pnRegex.test(pn);
-        if (pnCondition) return true;
-        return false;
-      default:
-        return false;
+    case 'name':
+      const nameCondition = name.length > 2;
+      if (nameCondition) return true;
+      return false;
+    case 'email':
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const emailCondition = emailRegex.test(email);
+      if (emailCondition) return true;
+      return false;
+    case 'password':
+      const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*\W).{8,15}$/;
+      const passwordCondition = passwordRegex.test(password);
+      if (passwordCondition) return true;
+      return false;
+    case 'pn':
+      const pnRegex = /^0(2([0-9]{7,8})|[1|3-9]([0-9]{8,9}))$/;
+      const pnCondition = pnRegex.test(pn);
+      if (pnCondition) return true;
+      return false;
+    default:
+      return false;
     }
   };
-  const handleChange =
-    (key: string) =>
+  const handleChange = (key: string) =>
     (e: React.FormEvent<HTMLInputElement>): void => {
       setFormData((data: any) => {
         const newData = { ...data };
@@ -81,8 +80,8 @@ function SignUp() {
           {isVaild('name')
             ? '유효한 이름입니다'
             : formData.name.length === 0
-            ? null
-            : '이름은 3글자 이상이어야 합니다'}
+              ? null
+              : '이름은 3글자 이상이어야 합니다'}
         </InputContainer>
         <InputContainer>
           email
@@ -90,8 +89,8 @@ function SignUp() {
           {isVaild('email')
             ? '유효한 이메일입니다'
             : formData.email.length === 0
-            ? null
-            : '유효하지 않은 이메일입니다'}
+              ? null
+              : '유효하지 않은 이메일입니다'}
         </InputContainer>
         <InputContainer>
           password
@@ -115,8 +114,8 @@ function SignUp() {
           {formData.pn.length === 0
             ? null
             : isVaild('pn')
-            ? '유효한 전화번호입니다'
-            : '유효하지 않은 전화번호입니다'}
+              ? '유효한 전화번호입니다'
+              : '유효하지 않은 전화번호입니다'}
         </InputContainer>
         <SendButton
           disabled={

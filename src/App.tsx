@@ -2,15 +2,15 @@ import React from 'react';
 import { RecoilRoot } from 'recoil';
 import { Routes, Route } from 'react-router-dom';
 
+import styled from 'styled-components';
 import Home from './pages/Home';
 import CharCounter from './pages/CharCounter';
 import NotFound from './pages/NotFound';
 import Signin from './pages/Signin';
-import SignUp from './pages/SignUp'
+import SignUp from './pages/SignUp';
 import PostList from './pages/PostList';
 import Post from './pages/Post';
 
-import styled from 'styled-components';
 import { theme } from './styles/theme';
 
 const Container = styled.div`

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
+import styled from 'styled-components';
 import { loginState } from '../states/atom';
 import { UserType } from '../@types';
 import { signin } from '../apis';
 import InputTextLine from '../components/InputTextLine';
 import SendButton from '../components/SendButton';
-import styled from 'styled-components';
 import { theme } from '../styles/theme';
 
 const Container = styled.div`
@@ -31,8 +31,7 @@ function Signin() {
   });
   const navigate = useNavigate();
   const [login, setLogin] = useRecoilState(loginState);
-  const handleChange =
-    (key: keyof UserType<string>) =>
+  const handleChange = (key: keyof UserType<string>) =>
     (e: React.FormEvent<HTMLInputElement>): void => {
       setFormData((data: Partial<UserType<string>>) => {
         const newData = { ...data };
@@ -46,8 +45,7 @@ function Signin() {
       .then((res) => {
         localStorage.setItem('token', res.data!.token);
         setLogin((state) =>
-          JSON.stringify({ isLogin: true })
-        );
+          JSON.stringify({ isLogin: true }));
         setTimeout(() => navigate('/post'), 2000);
       })
       .catch((err) => console.error(err));
