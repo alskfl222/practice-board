@@ -108,7 +108,7 @@ function SignUp() {
           phone
           <InputTextLine
             name='pn'
-            placeholder='선택 사항, 숫자만 입력해 주세요'
+            placeholder='숫자만 입력해 주세요'
             onChange={handleChange('pn')}
           />
           {formData.pn.length === 0

@@ -8,6 +8,7 @@ import { signin } from '../apis';
 import InputTextLine from '../components/InputTextLine';
 import SendButton from '../components/SendButton';
 import { theme } from '../styles/theme';
+import NavigationBar from '../components/NavigationBar';
 
 const Container = styled.div`
   padding: 1rem;
@@ -31,7 +32,8 @@ function Signin() {
   });
   const navigate = useNavigate();
   const [login, setLogin] = useRecoilState(loginState);
-  const handleChange = (key: keyof UserType<string>) =>
+  const handleChange =
+    (key: keyof UserType<string>) =>
     (e: React.FormEvent<HTMLInputElement>): void => {
       setFormData((data: Partial<UserType<string>>) => {
         const newData = { ...data };
@@ -44,15 +46,17 @@ function Signin() {
     signin(formData)
       .then((res) => {
         localStorage.setItem('token', res.data!.token);
-        setLogin((state) =>
-          JSON.stringify({ isLogin: true }));
+        setLogin((state) => JSON.stringify({ isLogin: true }));
         setTimeout(() => navigate('/post'), 2000);
       })
       .catch((err) => console.error(err));
   };
   return (
     <Container>
-      <PageTitle>Signin PAGE</PageTitle>
+      <NavigationBar>SignIn Page</NavigationBar>
+      <div>
+        <a onClick={() => navigate('/signup')}>Go to SignUp Page</a>
+      </div>
       <FormContainer name='signin-form' onSubmit={onSubmit}>
         <InputContainer>
           email

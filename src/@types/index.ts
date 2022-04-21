@@ -58,3 +58,7 @@ export interface SendButtonType {
   disabled?: boolean;
   children: string;
 }
+
+export interface NavigationBarType {
+  children?: string;
+}

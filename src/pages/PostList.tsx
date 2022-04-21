@@ -3,7 +3,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { PostQueryType, PostType } from '../@types';
 import { getPostList } from '../apis';
-import PageTitle from '../components/PageTitle';
+import NavigationBar from '../components/NavigationBar';
 
 const Container = styled.div`
   width: 100%;
@@ -37,7 +37,7 @@ const PageContainer = styled.div`
 function PostList() {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [query, setQuery] = useState<PostQueryType>({
     postType: searchParams.get('postType') || 'notice',
     pageSize: searchParams.get('pageSize')
@@ -45,8 +45,9 @@ function PostList() {
       : 10,
     page: searchParams.get('page') ? parseInt(searchParams.get('page')!) : 1,
   });
-  const [pageCount, setPageCount] = useState<number>(1);
+  const [totalCount, setTotalCount] = useState<number>(1);
   const [postList, setPostList] = useState<PostType[]>([]);
+  const totalPageCount = Math.ceil(totalCount / query.pageSize)
 
   function fetchPostList() {
     getPostList(query)
@@ -54,10 +55,8 @@ function PostList() {
         // console.log(response.data);
         if (response.data!.posts) {
           setPostList(response.data!.posts);
-          const totalPageCount = response.data!.totalCount
-            ? Math.ceil(response.data!.totalCount / query.pageSize)
-            : 1;
-          setPageCount(totalPageCount);
+
+          setTotalCount(response.data!.totalCount || 1);
         } else {
           setPostList([]);
         }
@@ -66,21 +65,22 @@ function PostList() {
       .catch((err) => console.error(err));
   }
 
-  const onChange = (type: string) =>
+  const onChange =
+    (type: string) =>
     (
       e: React.ChangeEvent<HTMLSelectElement> &
-        React.MouseEvent<HTMLAnchorElement>,
+        React.MouseEvent<HTMLAnchorElement>
     ) => {
       e.preventDefault();
       console.log(e.target);
       const value = e.target.value ? e.target.value : e.target.innerText;
       setQuery((state) => ({ ...query, [type]: value }));
       const queryString = Object.entries(query)
-        .map((item) => (item[0] !== type
-          ? `${item[0]}=${item[1]}`
-          : `${type}=${value}`))
+        .map((item) =>
+          item[0] !== type ? `${item[0]}=${item[1]}` : `${type}=${value}`
+        )
         .join('&');
-        // console.log(queryString);
+      // console.log(queryString);
       setSearchParams(queryString);
     };
   // console.log('Render!');
@@ -113,13 +113,13 @@ function PostList() {
     );
   }
 
-  useEffect(() => {
-    fetchPostList();
-  }, [searchParams]);
+  // useEffect(() => {
+  //   fetchPostList();
+  // }, [searchParams]);
 
   return (
     <Container>
-      <PageTitle>PostList PAGE</PageTitle>
+      <NavigationBar>PostList PAGE</NavigationBar>
       <FilterContainer>
         <PageSizeSelect />
         <PostTypeSelect />
@@ -129,19 +129,17 @@ function PostList() {
           <PostListContainer>
             {postList.length !== 0
               ? postList.map((post) => (
-                <PostContainer
-                  key={post.id}
-                  onClick={() =>
-                    navigate(`/post/${post.id}`)
-                  }
-                >
-                  {post.id} - {post.title}
-                </PostContainer>
-              ))
+                  <PostContainer
+                    key={post.id}
+                    onClick={() => navigate(`/post/${post.id}`)}
+                  >
+                    {post.id} - {post.title}
+                  </PostContainer>
+                ))
               : '게시 글이 없습니다'}
           </PostListContainer>
           <PageContainer>
-            {new Array(pageCount).fill('').map((_, index) => (
+            {new Array(totalPageCount).fill('').map((_, index) => (
               <a key={index + 1} onClick={onChange('page')}>
                 {index + 1}
               </a>
