@@ -34,7 +34,7 @@ function App() {
           <Routes>
             <Route index element={<Home />} />
             <Route path='counter' element={<CharCounter />} />
-            <Route path='login' element={<Signin />} />
+            <Route path='signin' element={<Signin />} />
             <Route path='signup' element={<SignUp />} />
             <Route path='post' element={<PostList />} />
             <Route path='post/:id' element={<Post />} />

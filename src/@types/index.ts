@@ -1,11 +1,11 @@
 import React from "react";
 
 // * data type
-export interface UserType<T> {
-  name: T;
-  email: T;
-  password: T;
-  pn: T;
+export interface UserType {
+  name: string;
+  email: string;
+  password: string;
+  pn: string;
 }
 export interface PostType {
   id: number;
@@ -44,6 +44,9 @@ export interface PostResponseType extends ResponseType {
     pageSize?: number;
     keyword?: string;
   };
+}
+export interface SignupResponseType extends ResponseType {
+  data?: object
 }
 
 // * components type

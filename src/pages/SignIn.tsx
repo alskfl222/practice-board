@@ -26,16 +26,16 @@ const InputContainer = styled.label`
 `;
 
 function Signin() {
-  const [formData, setFormData] = useState<Partial<UserType<string>>>({
+  const [formData, setFormData] = useState<Partial<UserType>>({
     email: '',
     password: '',
   });
   const navigate = useNavigate();
   const [login, setLogin] = useRecoilState(loginState);
   const handleChange =
-    (key: keyof UserType<string>) =>
+    (key: keyof UserType) =>
     (e: React.FormEvent<HTMLInputElement>): void => {
-      setFormData((data: Partial<UserType<string>>) => {
+      setFormData((data: Partial<UserType>) => {
         const newData = { ...data };
         newData[key] = (e.target as HTMLInputElement).value;
         return newData;
@@ -44,8 +44,9 @@ function Signin() {
   const onSubmit = (e: React.SyntheticEvent): void => {
     e.preventDefault();
     signin(formData)
-      .then((res) => {
-        localStorage.setItem('token', res.data!.token);
+      .then((response) => {
+        console.log(response.data)
+        localStorage.setItem('token', response.data!.token);
         setLogin((state) => JSON.stringify({ isLogin: true }));
         setTimeout(() => navigate('/post'), 2000);
       })

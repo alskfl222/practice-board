@@ -11,7 +11,8 @@ function Home() {
   return (
     <Container>
       <p>HOME PAGE</p>
-      <button onClick={() => navigate('/login')}>LOGIN</button>
+      <button onClick={() => navigate('/signin')}>SIGNIN</button>
+      <button onClick={() => navigate('/post')}>POST</button>
     </Container>
   );
 }

@@ -4,17 +4,18 @@ import {
   PostQueryType,
   SigninResponseType,
   PostResponseType,
+  SignupResponseType,
 } from '../@types';
 
-export function signin(
-  data: Partial<UserType<string>>,
-): Promise<SigninResponseType> {
+axios.defaults.headers.post['token'] = localStorage.getItem('token') || ''
+
+export function signin(data: Partial<UserType>): Promise<SigninResponseType> {
   return axios
     .post(`${process.env.API_URL}/user`, data)
     .then((response) => response.data);
 }
 
-export function register(data: UserType<string>): Promise<any> {
+export function register(data: UserType): Promise<SignupResponseType> {
   return axios
     .post(`${process.env.API_URL}/user/register`, data)
     .then((response) => response.data);
@@ -36,5 +37,5 @@ export function getPost(id: string): Promise<PostResponseType> {
 }
 
 export function createPost(data: any) {
-  return axios.post(`${process.env.API_URL}/post`, data);
+  return axios.post(`${process.env.API_URL}/post`, data)
 }

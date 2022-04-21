@@ -113,9 +113,9 @@ function PostList() {
     );
   }
 
-  // useEffect(() => {
-  //   fetchPostList();
-  // }, [searchParams]);
+  useEffect(() => {
+    fetchPostList();
+  }, [searchParams]);
 
   return (
     <Container>
