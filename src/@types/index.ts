@@ -64,6 +64,7 @@ export interface InputTextLineType {
   id?: string;
   name?: string;
   type?: string;
+  width?: string;
   placeholder?: string;
   value?: string;
   onChange?: (e: PostEventType) => void;

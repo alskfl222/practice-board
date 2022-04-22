@@ -4,7 +4,34 @@ import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import { PostType } from '../@types';
 import signState from '../states/atom';
-import { getPost } from '../apis';
+import { getPost, deletePost } from '../apis';
+import NavigationBar from '../components/NavigationBar';
+
+const Container = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+`;
+const PostHeader = styled.header`
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-around;
+  gap: 1rem;
+`;
+const ControlButton = styled.button`
+  padding: .5rem 0;
+  border: 1px solid black;
+  border-radius: 1rem;
+  background-color: transparent;
+  cursor: pointer;
+  &:hover {
+    background-color: #0003;
+  }
+`;
+const PostContentContainer = styled.div``;
+const PostContentHeader = styled.div``;
+const PostContentBody = styled.div``;
 
 function Post() {
   const userJSON = useRecoilValue(signState);
@@ -35,7 +62,18 @@ function Post() {
       })
       .catch((err) => {
         console.error(err);
+        navigate('/404');
       });
+  }
+
+  function onDelete(id: PostType['id']) {
+    console.log(id);
+    deletePost(id)
+      .then((response) => {
+        console.log(response);
+        navigate('/post');
+      })
+      .catch((err) => console.error(err));
   }
 
   useEffect(() => {
@@ -46,20 +84,36 @@ function Post() {
   const dateString = new Date(postData.createdAt!).toLocaleDateString();
 
   return (
-    <div>
-      Post PAGE <br />
-      <button onClick={() => navigate('/post')}>POST LIST</button>
-      {!isLoading ? (
+    <Container>
+      <NavigationBar>게시글</NavigationBar>
+      <PostHeader>
+        <ControlButton onClick={() => navigate('/post')}>
+          게시글 목록으로
+        </ControlButton>
         <div>
-          <div>
-            <div>{postData.author}</div> <div>{dateString}</div>
-          </div>
-          <div>{postData.contents}</div>
+          <ControlButton
+            onClick={() => {
+              navigate(`/post/edit/${id}`);
+            }}
+          >
+            수정
+          </ControlButton>
+          <ControlButton onClick={() => onDelete(parseInt(id!))}>
+            삭제
+          </ControlButton>
         </div>
+      </PostHeader>
+      {!isLoading ? (
+        <PostContentContainer>
+          <PostContentHeader>
+            <div>{postData.author}</div> <div>{dateString}</div>
+          </PostContentHeader>
+          <PostContentBody>{postData.contents}</PostContentBody>
+        </PostContentContainer>
       ) : (
-        '내용을 불러오고 있습니다'
+        <p>내용을 불러오고 있습니다</p>
       )}
-    </div>
+    </Container>
   );
 }
 

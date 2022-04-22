@@ -4,7 +4,7 @@ import { InputTextLineType } from '../@types';
 import { theme } from '../styles/theme';
 
 const CuntomInput = styled.input`
-  width: 200px;
+  width: ${(props) => props.width};
   border: none;
   border-bottom: 1px solid black;
   background-color: transparent;
@@ -14,10 +14,18 @@ const CuntomInput = styled.input`
 `;
 
 function InputTextLine(props: Partial<InputTextLineType>) {
-  const { name, value = '', type = 'text', placeholder, onChange } = props;
+  const {
+    name,
+    width = '200px',
+    value = '',
+    type = 'text',
+    placeholder,
+    onChange,
+  } = props;
   return (
     <CuntomInput
       type={type}
+      width={width}
       name={name}
       placeholder={placeholder}
       value={value}

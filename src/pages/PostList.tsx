@@ -20,15 +20,44 @@ const FilterContainer = styled.div`
   gap: 1rem;
   select {
     width: 20%;
+    padding: 0 0.2rem;
   }
 `;
 const KeywordInput = styled.input`
   flex-grow: 1;
   min-width: 0;
+  padding: 0.2rem;
 `;
 const FilterButton = styled.button`
   flex-shrink: 0;
   width: 3rem;
+  padding: 0.5rem 0;
+  border: 1px solid black;
+  border-radius: 1rem;
+  background-color: transparent;
+  cursor: pointer;
+  &:hover {
+    background-color: #0003;
+  }
+`;
+const PostAddButtonContainer = styled.div`
+  position: fixed;
+  bottom: 5rem;
+  right: 5rem;
+  z-index: 9999;
+`;
+const PostAddButton = styled.button`
+  flex-shrink: 0;
+  width: 4rem;
+  height: 4rem;
+  border: none;
+  border-radius: 50%;
+  background-color: transparent;
+  box-shadow: 0 0 5px 1px #0003;
+  cursor: pointer;
+  &:hover {
+    background-color: #0003;
+  }
 `;
 const PostListContainer = styled.div`
   padding: 1rem 2rem;
@@ -57,6 +86,10 @@ const PageAnchor = styled.a`
     font-weight: 700;
   }
 `;
+const messageType = {
+  noPost: '게시글이 없습니다',
+  error: '문제가 발생했습니다',
+};
 
 function PostList() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -72,6 +105,7 @@ function PostList() {
   const [query, setQuery] = useState<PostQueryType>(initQuery);
   const [totalCount, setTotalCount] = useState<number>(1);
   const [postList, setPostList] = useState<PostType[]>([]);
+  const [message, setMessage] = useState<string>(messageType.noPost);
   const totalPageCount = Math.ceil(totalCount / query.pageSize);
 
   function fetchPostList() {
@@ -84,9 +118,13 @@ function PostList() {
           setTotalCount(response.data!.totalCount || 1);
         } else {
           setPostList([]);
+          setMessage(messageType.noPost);
         }
       })
-      .catch((err) => console.error(err))
+      .catch((err) => {
+        setMessage(messageType.error);
+        console.error(err);
+      })
       .finally(() => setIsLoading(false));
   }
 
@@ -100,14 +138,14 @@ function PostList() {
     if (type === 'page') value = e.target.innerText;
     if (type === 'keyword') {
       const keywordInput = document.querySelector(
-        '#keyword-input',
+        '#keyword-input'
       ) as HTMLInputElement;
       value = keywordInput.value;
     }
 
     if (
-      type === 'pageSize'
-      && totalPageCount > Math.floor(totalCount / parseInt(value))
+      type === 'pageSize' &&
+      totalPageCount > Math.floor(totalCount / parseInt(value))
     ) {
       console.log('Non-Exist Page');
       setQuery((beforeQuery) => ({
@@ -124,7 +162,8 @@ function PostList() {
 
     const queryString = Object.entries(query)
       .map((item) =>
-        (item[0] !== type ? `${item[0]}=${item[1]}` : `${type}=${value}`))
+        item[0] !== type ? `${item[0]}=${item[1]}` : `${type}=${value}`
+      )
       .join('&');
     // console.log(queryString);
     setSearchParams(queryString);
@@ -200,42 +239,44 @@ function PostList() {
         <FilterButton onClick={onChange('keyword')}>검색</FilterButton>
         <FilterButton onClick={clearQuery}>초기화</FilterButton>
       </FilterContainer>
-      {isLogin ? (
-        <div>
-          <button onClick={() => navigate('/post/create')}>글쓰기</button>
-        </div>
-      ) : null}
+      {/* {isLogin ? ( */}
+        <PostAddButtonContainer>
+          <PostAddButton onClick={() => navigate('/post/create')}>
+            글쓰기
+          </PostAddButton>
+        </PostAddButtonContainer>
+      {/* ) : null} */}
       {!isLoading ? (
         <>
           <PostListContainer>
             {postList.length !== 0
               ? postList.map((post) => (
-                <PostContainer
-                  key={post.id}
-                  onClick={() => {
-                    navigate(`/post/${post.id}`);
-                  }}
-                >
-                  {post.id} - {post.title} -{' '}
-                  <button
-                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                      e.stopPropagation();
-                      navigate(`/post/edit/${post.id}`);
+                  <PostContainer
+                    key={post.id}
+                    onClick={() => {
+                      navigate(`/post/${post.id}`);
                     }}
                   >
+                    {post.id} - {post.title} -{' '}
+                    <button
+                      onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                        e.stopPropagation();
+                        navigate(`/post/edit/${post.id}`);
+                      }}
+                    >
                       수정
-                  </button>
-                  <button
-                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                      e.stopPropagation();
-                      onDelete(post.id);
-                    }}
-                  >
+                    </button>
+                    <button
+                      onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                        e.stopPropagation();
+                        onDelete(post.id);
+                      }}
+                    >
                       삭제
-                  </button>
-                </PostContainer>
-              ))
-              : '게시 글이 없습니다'}
+                    </button>
+                  </PostContainer>
+                ))
+              : message}
           </PostListContainer>
           <PageContainer>
             {new Array(totalPageCount).fill('').map((_, index) => (
@@ -250,7 +291,7 @@ function PostList() {
           </PageContainer>
         </>
       ) : (
-        <PostListContainer>게시글을 불러오는 중입니다</PostListContainer>
+        <PostListContainer>{message}</PostListContainer>
       )}
     </Container>
   );

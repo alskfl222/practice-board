@@ -4,35 +4,66 @@ import styled from 'styled-components';
 import { PostType, PostEventType } from '../@types';
 import { createPost } from '../apis';
 import NavigationBar from '../components/NavigationBar';
-import InputTextLine from '../components/InputTextLine';
 
 const Container = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 2rem;
+  gap: 1rem;
 `;
 const PageHeader = styled.div`
-  width: 100%;
-  padding: 2rem 0;
+  padding: 2rem;
+  padding-bottom: 0;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   gap: 1rem;
 `;
-const PostControllerContainer = styled.div`
+const PostButton = styled.button`
+  flex-shrink: 0;
+  padding: 0.5rem;
+  border: 1px solid black;
+  border-radius: 1rem;
+  background-color: transparent;
+  cursor: pointer;
+  &:disabled {
+    background-color: #ccc;
+    cursor: default;
+    &:hover {
+      background-color: #ccc;
+    }
+  }
+  &:hover {
+    background-color: #0003;
+  }
+`;
+const PostControllerContainer = styled.div`  
+  width: 70%;
   display: flex;
   gap: 1rem;
-  justify-content: center;
+  justify-content: flex-end;
+`;
+const TitleInput = styled.input`
+  flex-grow: 1;
+  min-width: 0;
+  padding: 0.2rem;
+  padding-left: 1rem;
+`;
+const HorizonDivider = styled.div`
+  align-self: center;
+  width: 80%;
+  margin: 2rem 0;
+  box-shadow: 0 0.5px 0 0.5px black;
 `;
 const PageBody = styled.div`
   width: 100%;
+  padding: 0 2rem;
   display: flex;
-  justify-content: center;
 `;
 const PostContentTextarea = styled.textarea`
   width: 100%;
-  margin: 2rem;
+  height: 20rem;
+  padding: 2rem;
+  border-radius: 1rem;
 `;
 
 function CreatePost() {
@@ -43,6 +74,11 @@ function CreatePost() {
     postType: 'notice',
   };
   const [data, setData] = useState<PostType>(initData);
+
+  const isValid =
+    data.title.trim().length > 0 && data.contents.trim().length > 0
+      ? true
+      : false;
 
   const onChange = (type: string) => (e: PostEventType) => {
     const { value } = e.target;
@@ -61,24 +97,30 @@ function CreatePost() {
   };
   return (
     <Container>
-      <NavigationBar>CreatePost Page</NavigationBar>
-      <div>
-        <button onClick={() => navigate('/post')}>PostList Page</button>
-      </div>
+      <NavigationBar>게시글 생성</NavigationBar>
       <PageHeader>
+        <PostButton onClick={() => navigate('/post')}>게시글 목록</PostButton>
         <PostControllerContainer>
           <select onChange={onChange('postType')}>
-            <option value='notice'>notice</option>
-            <option value=''>normal</option>
+            <option value='notice'>공지</option>
+            <option value=''>일반</option>
           </select>
-          <InputTextLine value={data.title} onChange={onChange('title')} />
-          <button onClick={onSubmit}>CREATE</button>
-          <button onClick={clearData}>CLEAR</button>
+          <TitleInput
+            value={data.title}
+            placeholder='제목을 입력해주세요'
+            onChange={onChange('title')}
+          />
+          <PostButton disabled={!isValid} onClick={onSubmit}>
+            생성
+          </PostButton>
+          <PostButton onClick={clearData}>초기화</PostButton>
         </PostControllerContainer>
       </PageHeader>
+      <HorizonDivider />
       <PageBody>
         <PostContentTextarea
           value={data.contents}
+          placeholder='내용을 입력해주세요'
           onChange={onChange('contents')}
         ></PostContentTextarea>
       </PageBody>
