@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { PostType, PostEventType } from '../@types';
 import { getPost, editPost } from '../apis';
 import NavigationBar from '../components/NavigationBar';
+import SendButton from '../components/SendButton';
 
 const Container = styled.div`
   width: 100%;
@@ -17,24 +18,6 @@ const PageHeader = styled.div`
   display: flex;
   justify-content: space-between;
   gap: 1rem;
-`;
-const PostButton = styled.button`
-  flex-shrink: 0;
-  padding: 0.5rem;
-  border: 1px solid black;
-  border-radius: 1rem;
-  background-color: transparent;
-  cursor: pointer;
-  &:disabled {
-    background-color: #ccc;
-    cursor: default;
-    &:hover {
-      background-color: #ccc;
-    }
-  }
-  &:hover {
-    background-color: #0003;
-  }
 `;
 const PostControllerContainer = styled.div`
   width: 70%;
@@ -70,7 +53,7 @@ const PostContentTextarea = styled.textarea`
 function EditPost() {
   const navigate = useNavigate();
   const params = useParams();
-  const { id } = params;
+  const id = parseInt(params.id!);
   const initData: PostType = {
     title: '',
     contents: '',
@@ -78,13 +61,12 @@ function EditPost() {
   const [data, setData] = useState<PostType>(initData);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const isValid =
+  const isValid = !!(
     data.title.trim().length > 0 && data.contents.trim().length > 0
-      ? true
-      : false;
+  );
 
   function fetchPost() {
-    getPost(id!)
+    getPost(id)
       .then((response) => {
         // console.log(response.data);
         if (response.data!.post) {
@@ -111,24 +93,24 @@ function EditPost() {
       .catch((err) => console.error(err));
   };
 
-  // useEffect(() => {
-  //   fetchPost();
-  // }, []);
+  useEffect(() => {
+    fetchPost();
+  }, []);
 
   return (
     <Container>
       <NavigationBar>게시글 수정</NavigationBar>
       <PageHeader>
-        <PostButton onClick={() => navigate('/post')}>게시글 목록</PostButton>
+        <SendButton onClick={() => navigate('/post')}>게시글 목록</SendButton>
         <PostControllerContainer>
           <TitleInput
             value={data.title}
             placeholder='제목을 입력해주세요'
             onChange={onChange('title')}
           />
-          <PostButton disabled={!isValid} onClick={onSubmit}>
+          <SendButton disabled={!isValid} onClick={onSubmit}>
             수정
-          </PostButton>
+          </SendButton>
         </PostControllerContainer>
       </PageHeader>
       <HorizonDivider />

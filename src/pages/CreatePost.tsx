@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { PostType, PostEventType } from '../@types';
 import { createPost } from '../apis';
 import NavigationBar from '../components/NavigationBar';
+import SendButton from '../components/SendButton';
 
 const Container = styled.div`
   width: 100%;
@@ -17,24 +18,6 @@ const PageHeader = styled.div`
   display: flex;
   justify-content: space-between;
   gap: 1rem;
-`;
-const PostButton = styled.button`
-  flex-shrink: 0;
-  padding: 0.5rem;
-  border: 1px solid black;
-  border-radius: 1rem;
-  background-color: transparent;
-  cursor: pointer;
-  &:disabled {
-    background-color: #ccc;
-    cursor: default;
-    &:hover {
-      background-color: #ccc;
-    }
-  }
-  &:hover {
-    background-color: #0003;
-  }
 `;
 const PostControllerContainer = styled.div`  
   width: 70%;
@@ -75,10 +58,7 @@ function CreatePost() {
   };
   const [data, setData] = useState<PostType>(initData);
 
-  const isValid =
-    data.title.trim().length > 0 && data.contents.trim().length > 0
-      ? true
-      : false;
+  const isValid = !!(data.title.trim().length > 0 && data.contents.trim().length > 0);
 
   const onChange = (type: string) => (e: PostEventType) => {
     const { value } = e.target;
@@ -99,7 +79,7 @@ function CreatePost() {
     <Container>
       <NavigationBar>게시글 생성</NavigationBar>
       <PageHeader>
-        <PostButton onClick={() => navigate('/post')}>게시글 목록</PostButton>
+        <SendButton onClick={() => navigate('/post')}>게시글 목록</SendButton>
         <PostControllerContainer>
           <select onChange={onChange('postType')}>
             <option value='notice'>공지</option>
@@ -110,10 +90,10 @@ function CreatePost() {
             placeholder='제목을 입력해주세요'
             onChange={onChange('title')}
           />
-          <PostButton disabled={!isValid} onClick={onSubmit}>
+          <SendButton disabled={!isValid} onClick={onSubmit}>
             생성
-          </PostButton>
-          <PostButton onClick={clearData}>초기화</PostButton>
+          </SendButton>
+          <SendButton onClick={clearData}>초기화</SendButton>
         </PostControllerContainer>
       </PageHeader>
       <HorizonDivider />

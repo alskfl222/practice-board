@@ -24,10 +24,8 @@ const Inner = styled.div`
   width: calc(100vw - 2rem);
   min-width: calc(480px - 2rem);
   max-width: 900px;
-  height: 100vh;
-  min-height: 720px;
+  min-height: 100vh;
   background-color: ${theme.background.brightGray};
-  overflow: hidden;
 `;
 
 function App() {

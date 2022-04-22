@@ -30,6 +30,7 @@ const InputContainer = styled.label`
   width: 50%;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 1rem;
 `;
 const HorizonDivider = styled.div`
@@ -39,11 +40,11 @@ const HorizonDivider = styled.div`
 `;
 
 function SignIn() {
+  const navigate = useNavigate();
   const [data, setData] = useState<Partial<UserType>>({
     email: '',
     password: '',
   });
-  const navigate = useNavigate();
   const setLogin = useSetRecoilState(signState);
   const onChange = (key: keyof UserType) =>
     (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -85,10 +86,8 @@ function SignIn() {
           />
         </InputContainer>
         <HorizonDivider />
-        <SendButton>Login</SendButton>
-        <div>
-          <a onClick={() => navigate('/signup')}>회원가입 페이지</a>
-        </div>
+        <SendButton>로그인</SendButton>
+        <a onClick={() => navigate('/signup')}>회원가입 페이지</a>
       </FormContainer>
     </Container>
   );

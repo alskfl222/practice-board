@@ -73,6 +73,7 @@ export interface InputTextLineType {
 export interface SendButtonType {
   disabled?: boolean;
   children: string;
+  onClick?: (e: PostEventType) => void;
 }
 
 export interface NavigationBarType {

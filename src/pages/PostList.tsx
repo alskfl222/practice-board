@@ -6,9 +6,13 @@ import signState from '../states/atom';
 import { PostQueryType, PostEventType, PostType } from '../@types';
 import { getPostList, deletePost } from '../apis';
 import NavigationBar from '../components/NavigationBar';
+import { dummyPostList } from '../temp/dummyData';
+import SendButton from '../components/SendButton';
 
 const Container = styled.div`
+  position: relative;
   width: 100%;
+  margin-bottom: 5rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -40,41 +44,56 @@ const FilterButton = styled.button`
     background-color: #0003;
   }
 `;
-const PostAddButtonContainer = styled.div`
-  position: fixed;
-  bottom: 5rem;
-  right: 5rem;
-  z-index: 9999;
-`;
-const PostAddButton = styled.button`
-  flex-shrink: 0;
-  width: 4rem;
-  height: 4rem;
-  border: none;
-  border-radius: 50%;
-  background-color: transparent;
-  box-shadow: 0 0 5px 1px #0003;
-  cursor: pointer;
-  &:hover {
-    background-color: #0003;
-  }
-`;
 const PostListContainer = styled.div`
-  padding: 1rem 2rem;
+  min-height: calc(100vh - 25rem);
+  margin: 0 2rem;
+  padding: 2rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  font-size: 1.5rem;
+  border: 1px solid black;
+  border-radius: 1rem;
+  font-size: 1.2rem;
   font-weight: 500;
 `;
+const PostListHeader = styled.div`
+  width: 100%;
+  padding: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+`;
+const HorizonDivider = styled.div`
+  align-self: center;
+  width: 100%;
+  box-shadow: 0 0.5px 0 0.5px black;
+`;
 const PostContainer = styled.div`
+  width: 100%;
+  padding: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 1rem;
   &:hover {
     background-color: #0003;
   }
+`;
+const PostIndexContainer = styled.div`
+  width: 10%;
+  text-align: center;
+`;
+const PostTitleContainer = styled.div``;
+const PostControllerContainer = styled.div`
+  position: relative;
+  width: 15%;
+  z-index: 999;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
 `;
 const PageContainer = styled.div`
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 2rem;
 
   a:hover {
@@ -85,6 +104,11 @@ const PageAnchor = styled.a`
   &.current {
     font-weight: 700;
   }
+`;
+const PostAddButtonContainer = styled.div`
+  position: absolute;
+  right: 5rem;
+  z-index: 9999;
 `;
 const messageType = {
   noPost: '게시글이 없습니다',
@@ -104,7 +128,7 @@ function PostList() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [query, setQuery] = useState<PostQueryType>(initQuery);
   const [totalCount, setTotalCount] = useState<number>(1);
-  const [postList, setPostList] = useState<PostType[]>([]);
+  const [postList, setPostList] = useState<PostType[]>(dummyPostList);
   const [message, setMessage] = useState<string>(messageType.noPost);
   const totalPageCount = Math.ceil(totalCount / query.pageSize);
 
@@ -138,14 +162,14 @@ function PostList() {
     if (type === 'page') value = e.target.innerText;
     if (type === 'keyword') {
       const keywordInput = document.querySelector(
-        '#keyword-input'
+        '#keyword-input',
       ) as HTMLInputElement;
       value = keywordInput.value;
     }
 
     if (
-      type === 'pageSize' &&
-      totalPageCount > Math.floor(totalCount / parseInt(value))
+      type === 'pageSize'
+      && totalPageCount > Math.floor(totalCount / parseInt(value))
     ) {
       console.log('Non-Exist Page');
       setQuery((beforeQuery) => ({
@@ -162,8 +186,7 @@ function PostList() {
 
     const queryString = Object.entries(query)
       .map((item) =>
-        item[0] !== type ? `${item[0]}=${item[1]}` : `${type}=${value}`
-      )
+        (item[0] !== type ? `${item[0]}=${item[1]}` : `${type}=${value}`))
       .join('&');
     // console.log(queryString);
     setSearchParams(queryString);
@@ -239,43 +262,45 @@ function PostList() {
         <FilterButton onClick={onChange('keyword')}>검색</FilterButton>
         <FilterButton onClick={clearQuery}>초기화</FilterButton>
       </FilterContainer>
-      {/* {isLogin ? ( */}
-        <PostAddButtonContainer>
-          <PostAddButton onClick={() => navigate('/post/create')}>
-            글쓰기
-          </PostAddButton>
-        </PostAddButtonContainer>
-      {/* ) : null} */}
       {!isLoading ? (
         <>
           <PostListContainer>
+            <PostListHeader>
+              <PostIndexContainer>번호</PostIndexContainer>
+              <PostTitleContainer>제목</PostTitleContainer>
+              <PostControllerContainer></PostControllerContainer>
+            </PostListHeader>
+            <HorizonDivider />
             {postList.length !== 0
               ? postList.map((post) => (
-                  <PostContainer
-                    key={post.id}
-                    onClick={() => {
-                      navigate(`/post/${post.id}`);
-                    }}
-                  >
-                    {post.id} - {post.title} -{' '}
-                    <button
+                <PostContainer
+                  key={post.id}
+                  onClick={() => {
+                    navigate(`/post/${post.id}`);
+                  }}
+                >
+                  <PostIndexContainer>{post.id}</PostIndexContainer>
+                  <PostTitleContainer>{post.title}</PostTitleContainer>
+                  <PostControllerContainer>
+                    <SendButton
                       onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                         e.stopPropagation();
                         navigate(`/post/edit/${post.id}`);
                       }}
                     >
-                      수정
-                    </button>
-                    <button
+                        수정
+                    </SendButton>
+                    <SendButton
                       onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                         e.stopPropagation();
                         onDelete(post.id);
                       }}
                     >
-                      삭제
-                    </button>
-                  </PostContainer>
-                ))
+                        삭제
+                    </SendButton>
+                  </PostControllerContainer>
+                </PostContainer>
+              ))
               : message}
           </PostListContainer>
           <PageContainer>
@@ -288,6 +313,13 @@ function PostList() {
                 {index + 1}
               </PageAnchor>
             ))}
+            {/* {isLogin ? ( */}
+            <PostAddButtonContainer>
+              <SendButton onClick={() => navigate('/post/create')}>
+                글쓰기
+              </SendButton>
+            </PostAddButtonContainer>
+            {/* ) : null} */}
           </PageContainer>
         </>
       ) : (

@@ -8,7 +8,7 @@ import {
   PostResponseType,
 } from '../@types';
 
-axios.defaults.headers.post.token = localStorage.getItem('token') || '';
+// axios.defaults.headers.post.token = localStorage.getItem('token') || '';
 
 export function signin(data: Partial<UserType>): Promise<SigninResponseType> {
   return axios
@@ -31,7 +31,7 @@ export function getPostList(query: PostQueryType): Promise<PostResponseType> {
     .then((response) => response.data);
 }
 
-export function getPost(id: string): Promise<PostResponseType> {
+export function getPost(id: PostType['id']): Promise<PostResponseType> {
   return axios
     .get(`${process.env.API_URL}/post/${id}`)
     .then((response) => response.data);
@@ -39,12 +39,21 @@ export function getPost(id: string): Promise<PostResponseType> {
 
 export function createPost(data: PostType) {
   return axios
-    .post(`${process.env.API_URL}/post`, data)
+    .post(`${process.env.API_URL}/post`, data, {
+      headers: {
+        token: localStorage.getItem('token') || '',
+      },
+    })
     .then((response) => response.data);
 }
 
 export function editPost(data: Partial<PostType>) {
-  return axios.post(`${process.env.API_URL}/post/edit`, data);
+  return axios.post(`${process.env.API_URL}/post/edit`, data, {
+    headers: {
+      token: localStorage.getItem('token') || '',
+      'Access-Control-Allow-Origin': true,
+    },
+  });
 }
 
 export function deletePost(id: PostType['id']) {
@@ -52,6 +61,11 @@ export function deletePost(id: PostType['id']) {
     .post(
       `${process.env.API_URL}/post/delete`,
       { id },
+      {
+        headers: {
+          token: localStorage.getItem('token') || '',
+        },
+      }
     )
     .then((response) => response.data);
 }

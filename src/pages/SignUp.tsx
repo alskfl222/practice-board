@@ -30,6 +30,7 @@ const InputContainer = styled.label`
   width: 50%;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 1rem;
 `;
 const MessageContainer = styled.div`
@@ -54,7 +55,7 @@ function SignUp() {
     const { name, email, password, passwordConfirm, pn } = formData;
     switch (key) {
     case 'name':
-      const nameCondition = name.length > 2;
+      const nameCondition = name.trim().length >= 3 && name.trim().length <= 10;
       if (nameCondition) return true;
       return false;
     case 'email':
@@ -111,9 +112,11 @@ function SignUp() {
         </InputContainer>
         <MessageContainer>
           {isVaild('name') ? (
-            <p>유효한 이름입니다</p>
-          ) : formData.name.length === 0 ? <p></p> : (
-            <p>이름은 3글자 이상이어야 합니다</p>
+            null
+          ) : formData.name.length === 0 ? (
+            <p></p>
+          ) : (
+            <p>이름은 3글자 이상 10글자 이하여야 합니다</p>
           )}
         </MessageContainer>
         <InputContainer>
@@ -126,7 +129,7 @@ function SignUp() {
         </InputContainer>
         <MessageContainer>
           {isVaild('email') ? (
-            <p>유효한 이메일입니다</p>
+            null
           ) : formData.email.length === 0 ? null : (
             <p>유효하지 않은 이메일입니다</p>
           )}
@@ -142,7 +145,7 @@ function SignUp() {
         </InputContainer>
         <MessageContainer>
           {isVaild('password') ? (
-            <p>유효한 비밀번호입니다</p>
+            null
           ) : formData.password.length === 0 ? null : (
             <p>
               비밀번호는 최소 8글자, 최대 15글자이면서 <br />
@@ -154,14 +157,14 @@ function SignUp() {
           비밀번호 확인
           <InputTextLine
             name='password-confirm'
-            value={formData.password}
-            type='password-confirm'
-            onChange={onChange('password')}
+            value={formData.passwordConfirm}
+            type='password'
+            onChange={onChange('passwordConfirm')}
           />
         </InputContainer>
         <MessageContainer>
           {isVaild('password-confirm') ? (
-            <p>위에 입력한 비밀번호와 일치합니다</p>
+            null
           ) : formData.password.length === 0 ? null : (
             <p>위에 입력한 비밀번호와 일치하지 않습니다</p>
           )}
@@ -189,9 +192,7 @@ function SignUp() {
         >
           회원가입
         </SendButton>
-        <div>
-          <a onClick={() => navigate('/signin')}>로그인 페이지</a>
-        </div>
+        <a onClick={() => navigate('/signin')}>로그인 페이지</a>
       </FormContainer>
     </Container>
   );

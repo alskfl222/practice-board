@@ -5,6 +5,7 @@ import { theme } from '../styles/theme';
 
 const CuntomInput = styled.input`
   width: ${(props) => props.width};
+  padding: .5rem 1rem;
   border: none;
   border-bottom: 1px solid black;
   background-color: transparent;
