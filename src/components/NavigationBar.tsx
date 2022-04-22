@@ -57,7 +57,7 @@ function NavigationBar(props: NavigationBarType) {
     <Container>
       <NavigationTop>
         <HomeAnchor onClick={() => navigate('/')}>홈</HomeAnchor>
-        {isLogin && (
+        {isLogin && pathname !== '/signin' && (
           <SignButton
             onClick={() => {
               setUser(JSON.stringify({ isLogin: false }));
