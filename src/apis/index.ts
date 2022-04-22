@@ -8,7 +8,7 @@ import {
   PostResponseType,
 } from '../@types';
 
-axios.defaults.headers.post['token'] = localStorage.getItem('token') || '';
+axios.defaults.headers.post.token = localStorage.getItem('token') || '';
 
 export function signin(data: Partial<UserType>): Promise<SigninResponseType> {
   return axios
@@ -51,7 +51,7 @@ export function deletePost(id: PostType['id']) {
   return axios
     .post(
       `${process.env.API_URL}/post/delete`,
-      { id }
+      { id },
     )
     .then((response) => response.data);
 }

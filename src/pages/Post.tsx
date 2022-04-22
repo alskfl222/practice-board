@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import { signState } from '../states/atom';
-import { getPost } from '../apis';
 import { PostType } from '../@types';
+import signState from '../states/atom';
+import { getPost } from '../apis';
 
 function Post() {
   const userJSON = useRecoilValue(signState);

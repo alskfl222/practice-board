@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
+import styled from 'styled-components';
 import { UserType } from '../@types';
-import { useRecoilState } from 'recoil';
-import { signState } from '../states/atom';
+import signState from '../states/atom';
 import { signin } from '../apis';
 import NavigationBar from '../components/NavigationBar';
 import InputTextLine from '../components/InputTextLine';
 import SendButton from '../components/SendButton';
-import styled from 'styled-components';
-import { theme } from '../styles/theme';
 
 const Container = styled.div`
   width: 100%;
@@ -45,13 +44,13 @@ function SignIn() {
     password: '',
   });
   const navigate = useNavigate();
-  const [login, setLogin] = useRecoilState(signState);
-  const onChange =
-    (key: keyof UserType) =>
+  const setLogin = useSetRecoilState(signState);
+  const onChange = (key: keyof UserType) =>
     (e: React.ChangeEvent<HTMLInputElement>): void => {
-      setData((data: Partial<UserType>) => {
-        return { ...data, [key]: e.target.value };
-      });
+      setData((beforeData: Partial<UserType>) => ({
+        ...beforeData,
+        [key]: e.target.value,
+      }));
     };
   const onSubmit = (e: React.SyntheticEvent): void => {
     e.preventDefault();
@@ -59,7 +58,7 @@ function SignIn() {
       .then((response) => {
         console.log(response.data);
         localStorage.setItem('token', response.data!.token);
-        setLogin((state) => JSON.stringify({ isLogin: true }));
+        setLogin(JSON.stringify({ isLogin: true }));
         setTimeout(() => navigate('/post'), 1000);
       })
       .catch((err) => console.error(err));

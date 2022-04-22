@@ -5,8 +5,6 @@ import styled from 'styled-components';
 import InputTextLine from '../components/InputTextLine';
 import SendButton from '../components/SendButton';
 
-import { theme } from '../styles/theme';
-
 import { UserType } from '../@types';
 import { register } from '../apis';
 import NavigationBar from '../components/NavigationBar';
@@ -55,43 +53,39 @@ function SignUp() {
   const isVaild = (key: string): boolean => {
     const { name, email, password, passwordConfirm, pn } = formData;
     switch (key) {
-      case 'name':
-        const nameCondition = name.length > 2;
-        if (nameCondition) return true;
-        return false;
-      case 'email':
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const emailCondition = emailRegex.test(email);
-        if (emailCondition) return true;
-        return false;
-      case 'password':
-        const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*\W).{8,15}$/;
-        const passwordCondition = passwordRegex.test(password);
-        if (passwordCondition) return true;
-        return false;
-      case 'password-confirm':
-        const compare = formData.password;
-        const passwordConfirmCondition =
-          passwordConfirm &&
-          passwordConfirm.length > 0 &&
-          compare === passwordConfirm;
-        if (passwordConfirmCondition) return true;
-        return false;
-      case 'pn':
-        const pnRegex = /^0(2([0-9]{7,8})|[1|3-9]([0-9]{8,9}))$/;
-        const pnCondition = pnRegex.test(pn);
-        if (pnCondition) return true;
-        return false;
-      default:
-        return false;
+    case 'name':
+      const nameCondition = name.length > 2;
+      if (nameCondition) return true;
+      return false;
+    case 'email':
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const emailCondition = emailRegex.test(email);
+      if (emailCondition) return true;
+      return false;
+    case 'password':
+      const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*\W).{8,15}$/;
+      const passwordCondition = passwordRegex.test(password);
+      if (passwordCondition) return true;
+      return false;
+    case 'password-confirm':
+      const compare = formData.password;
+      const passwordConfirmCondition = passwordConfirm
+          && passwordConfirm.length > 0
+          && compare === passwordConfirm;
+      if (passwordConfirmCondition) return true;
+      return false;
+    case 'pn':
+      const pnRegex = /^0(2([0-9]{7,8})|[1|3-9]([0-9]{8,9}))$/;
+      const pnCondition = pnRegex.test(pn);
+      if (pnCondition) return true;
+      return false;
+    default:
+      return false;
     }
   };
-  const onChange =
-    (key: keyof UserType) =>
+  const onChange = (key: keyof UserType) =>
     (e: React.ChangeEvent<HTMLInputElement>): void => {
-      setFormData((data: UserType) => {
-        return { ...data, [key]: e.target.value };
-      });
+      setFormData((data: UserType) => ({ ...data, [key]: e.target.value }));
     };
   const onSubmit = (e: React.SyntheticEvent): void => {
     e.preventDefault();

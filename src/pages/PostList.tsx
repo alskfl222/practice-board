@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-import { signState } from '../states/atom';
+import styled from 'styled-components';
+import signState from '../states/atom';
 import { PostQueryType, PostEventType, PostType } from '../@types';
 import { getPostList, deletePost } from '../apis';
 import NavigationBar from '../components/NavigationBar';
-import styled from 'styled-components';
 
 const Container = styled.div`
   width: 100%;
@@ -56,7 +56,7 @@ const PageAnchor = styled.a`
   &.current {
     font-weight: 700;
   }
-`
+`;
 
 function PostList() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -93,36 +93,38 @@ function PostList() {
   const onChange = (type: keyof PostQueryType) => (e: PostEventType) => {
     e.preventDefault();
     setIsLoading(true);
-    let value: string = '';
+    let value = '';
     if (type === 'pageSize' || type === 'postType') {
       value = e.target.value;
     }
     if (type === 'page') value = e.target.innerText;
     if (type === 'keyword') {
       const keywordInput = document.querySelector(
-        '#keyword-input'
+        '#keyword-input',
       ) as HTMLInputElement;
       value = keywordInput.value;
     }
 
-    if (type === 'pageSize' && totalPageCount > totalCount / parseInt(value)) {
+    if (
+      type === 'pageSize'
+      && totalPageCount > Math.floor(totalCount / parseInt(value))
+    ) {
       console.log('Non-Exist Page');
-      setQuery((state) => ({
-        ...query,
+      setQuery((beforeQuery) => ({
+        ...beforeQuery,
         pageSize: parseInt(value),
         page: Math.ceil(totalCount / parseInt(value)),
       }));
     } else {
-      setQuery((state) => ({
-        ...query,
+      setQuery((beforeQuery) => ({
+        ...beforeQuery,
         [type]: Number.isNaN(value) ? parseInt(value) : value,
       }));
     }
 
     const queryString = Object.entries(query)
       .map((item) =>
-        item[0] !== type ? `${item[0]}=${item[1]}` : `${type}=${value}`
-      )
+        (item[0] !== type ? `${item[0]}=${item[1]}` : `${type}=${value}`))
       .join('&');
     // console.log(queryString);
     setSearchParams(queryString);
@@ -208,31 +210,31 @@ function PostList() {
           <PostListContainer>
             {postList.length !== 0
               ? postList.map((post) => (
-                  <PostContainer
-                    key={post.id}
-                    onClick={() => {
-                      navigate(`/post/${post.id}`);
+                <PostContainer
+                  key={post.id}
+                  onClick={() => {
+                    navigate(`/post/${post.id}`);
+                  }}
+                >
+                  {post.id} - {post.title} -{' '}
+                  <button
+                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                      e.stopPropagation();
+                      navigate(`/post/edit/${post.id}`);
                     }}
                   >
-                    {post.id} - {post.title} -{' '}
-                    <button
-                      onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                        e.stopPropagation();
-                        navigate(`/post/edit/${post.id}`);
-                      }}
-                    >
                       수정
-                    </button>
-                    <button
-                      onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                        e.stopPropagation();
-                        onDelete(post.id);
-                      }}
-                    >
+                  </button>
+                  <button
+                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                      e.stopPropagation();
+                      onDelete(post.id);
+                    }}
+                  >
                       삭제
-                    </button>
-                  </PostContainer>
-                ))
+                  </button>
+                </PostContainer>
+              ))
               : '게시 글이 없습니다'}
           </PostListContainer>
           <PageContainer>

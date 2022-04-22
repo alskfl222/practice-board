@@ -1,9 +1,9 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
-import { signState } from '../states/atom';
-import { NavigationBarType } from '../@types';
 import styled from 'styled-components';
+import signState from '../states/atom';
+import { NavigationBarType } from '../@types';
 
 const Container = styled.div`
   height: 10rem;
@@ -51,7 +51,7 @@ function NavigationBar(props: NavigationBarType) {
   const location = useLocation();
   const navigate = useNavigate();
   const [user, setUser] = useRecoilState(signState);
-  const isLogin = JSON.parse(user).isLogin;
+  const { isLogin } = JSON.parse(user);
   const { pathname } = location;
   return (
     <Container>

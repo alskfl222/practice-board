@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 import { PostType, PostEventType } from '../@types';
 import { createPost } from '../apis';
 import NavigationBar from '../components/NavigationBar';
 import InputTextLine from '../components/InputTextLine';
-import styled from 'styled-components';
 
 const Container = styled.div`
   width: 100%;
@@ -45,8 +45,8 @@ function CreatePost() {
   const [data, setData] = useState<PostType>(initData);
 
   const onChange = (type: string) => (e: PostEventType) => {
-    const value: string = e.target.value;
-    setData((state) => ({ ...data, [type]: value }));
+    const { value } = e.target;
+    setData((beforeData) => ({ ...beforeData, [type]: value }));
   };
 
   const onSubmit = () => {

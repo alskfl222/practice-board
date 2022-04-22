@@ -1,8 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import styled from 'styled-components';
-import { theme } from '../styles/theme';
 
 const Container = styled.div`
   padding: 2rem;

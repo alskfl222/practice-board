@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import styled from 'styled-components';
 import { PostType, PostEventType } from '../@types';
 import { getPost, editPost } from '../apis';
 import NavigationBar from '../components/NavigationBar';
 import InputTextLine from '../components/InputTextLine';
-import styled from 'styled-components';
 
 const Container = styled.div`
   width: 100%;
@@ -63,8 +63,8 @@ function EditPost() {
   }
 
   const onChange = (type: string) => (e: PostEventType) => {
-    const value: string = e.target.value;
-    setPostData((state) => ({ ...postData, [type]: value }));
+    const { value } = e.target;
+    setPostData((beforeData) => ({ ...beforeData, [type]: value }));
   };
 
   const onSubmit = () => {
@@ -80,9 +80,9 @@ function EditPost() {
 
   return (
     <Container>
-      <NavigationBar>EditPost Page</NavigationBar>
+      <NavigationBar>게시글 수정</NavigationBar>
       <div>
-        <button onClick={() => navigate('/post')}>PostList Page</button>
+        <button onClick={() => navigate('/post')}>게시글 목록</button>
       </div>
       {!isLoading ? (
         <>
@@ -92,7 +92,7 @@ function EditPost() {
                 value={postData.title}
                 onChange={onChange('title')}
               />
-              <button onClick={onSubmit}>EDIT</button>
+              <button onClick={onSubmit}>수정</button>
             </PostControllerContainer>
           </PageHeader>
           <PageBody>
@@ -103,7 +103,7 @@ function EditPost() {
           </PageBody>
         </>
       ) : (
-        '게시글을 불러오고 있습니다'
+        <p>게시글을 불러오고 있습니다</p>
       )}
     </Container>
   );
