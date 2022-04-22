@@ -67,12 +67,14 @@ export interface InputTextLineType {
   width?: string;
   placeholder?: string;
   value?: string;
+  // eslint-disable-next-line no-unused-vars
   onChange?: (e: PostEventType) => void;
 }
 
 export interface SendButtonType {
   disabled?: boolean;
   children: string;
+  // eslint-disable-next-line no-unused-vars
   onClick?: (e: PostEventType) => void;
 }
 

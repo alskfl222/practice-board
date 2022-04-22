@@ -1,4 +1,4 @@
-export const dummyPostList = [
+const dummyPostList = [
   {
     id: 1,
     title: 'dummy title 1',
@@ -93,3 +93,5 @@ export const dummyPostList = [
     author: 'author 18',
   },
 ];
+
+export default dummyPostList;

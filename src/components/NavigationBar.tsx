@@ -57,18 +57,20 @@ function NavigationBar(props: NavigationBarType) {
     <Container>
       <NavigationTop>
         <HomeAnchor onClick={() => navigate('/')}>홈</HomeAnchor>
-        {isLogin ? (
+        {isLogin && (
           <SignButton
             onClick={() => {
               setUser(JSON.stringify({ isLogin: false }));
               localStorage.removeItem('token');
+              navigate('/');
             }}
           >
             로그아웃
           </SignButton>
-        ) : !(pathname === '/signin' || pathname === '/signup') ? (
+        )}
+        {!isLogin && !(pathname === '/signin' || pathname === '/signup') && (
           <SignButton onClick={() => navigate('/signin')}>로그인</SignButton>
-        ) : null}
+        )}
       </NavigationTop>
       <NavigationBottom>{props.children}</NavigationBottom>
     </Container>

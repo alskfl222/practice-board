@@ -57,7 +57,6 @@ function SignIn() {
     e.preventDefault();
     signin(data)
       .then((response) => {
-        console.log(response.data);
         localStorage.setItem('token', response.data!.token);
         setLogin(JSON.stringify({ isLogin: true }));
         setTimeout(() => navigate('/post'), 1000);

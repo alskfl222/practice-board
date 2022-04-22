@@ -44,7 +44,7 @@ const HorizonDivider = styled.div`
 
 function SignUp() {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState<UserType>({
+  const [data, setData] = useState<UserType>({
     name: '',
     email: '',
     password: '',
@@ -52,7 +52,7 @@ function SignUp() {
     pn: '',
   });
   const isVaild = (key: string): boolean => {
-    const { name, email, password, passwordConfirm, pn } = formData;
+    const { name, email, password, passwordConfirm, pn } = data;
     switch (key) {
     case 'name':
       const nameCondition = name.trim().length >= 3 && name.trim().length <= 10;
@@ -68,11 +68,9 @@ function SignUp() {
       const passwordCondition = passwordRegex.test(password);
       if (passwordCondition) return true;
       return false;
-    case 'password-confirm':
-      const compare = formData.password;
-      const passwordConfirmCondition = passwordConfirm
-          && passwordConfirm.length > 0
-          && compare === passwordConfirm;
+    case 'passwordConfirm':
+      const compare = data.password;
+      const passwordConfirmCondition = passwordConfirm!.length > 0 && compare === passwordConfirm;
       if (passwordConfirmCondition) return true;
       return false;
     case 'pn':
@@ -86,11 +84,11 @@ function SignUp() {
   };
   const onChange = (key: keyof UserType) =>
     (e: React.ChangeEvent<HTMLInputElement>): void => {
-      setFormData((data: UserType) => ({ ...data, [key]: e.target.value }));
+      setData((beforeData: UserType) => ({ ...beforeData, [key]: e.target.value }));
     };
   const onSubmit = (e: React.SyntheticEvent): void => {
     e.preventDefault();
-    register(formData)
+    register(data)
       .then((response) => {
         console.log(response);
         navigate('/signin');
@@ -106,14 +104,12 @@ function SignUp() {
           이름
           <InputTextLine
             name='name'
-            value={formData.name}
+            value={data.name}
             onChange={onChange('name')}
           />
         </InputContainer>
         <MessageContainer>
-          {isVaild('name') ? (
-            null
-          ) : formData.name.length === 0 ? (
+          {isVaild('name') || data.name.length === 0 ? (
             <p></p>
           ) : (
             <p>이름은 3글자 이상 10글자 이하여야 합니다</p>
@@ -123,14 +119,12 @@ function SignUp() {
           E-mail
           <InputTextLine
             name='email'
-            value={formData.email}
+            value={data.email}
             onChange={onChange('email')}
           />
         </InputContainer>
         <MessageContainer>
-          {isVaild('email') ? (
-            null
-          ) : formData.email.length === 0 ? null : (
+          {isVaild('email') || data.email.length === 0 ? null : (
             <p>유효하지 않은 이메일입니다</p>
           )}
         </MessageContainer>
@@ -138,15 +132,13 @@ function SignUp() {
           비밀번호
           <InputTextLine
             name='password'
-            value={formData.password}
+            value={data.password}
             type='password'
             onChange={onChange('password')}
           />
         </InputContainer>
         <MessageContainer>
-          {isVaild('password') ? (
-            null
-          ) : formData.password.length === 0 ? null : (
+          {isVaild('password') || data.password.length === 0 ? null : (
             <p>
               비밀번호는 최소 8글자, 최대 15글자이면서 <br />
               숫자 및 특수문자를 1개 이상 포함하여야합니다
@@ -157,30 +149,28 @@ function SignUp() {
           비밀번호 확인
           <InputTextLine
             name='password-confirm'
-            value={formData.passwordConfirm}
+            value={data.passwordConfirm}
             type='password'
             onChange={onChange('passwordConfirm')}
           />
         </InputContainer>
         <MessageContainer>
-          {isVaild('password-confirm') ? (
-            null
-          ) : formData.password.length === 0 ? null : (
-            <p>위에 입력한 비밀번호와 일치하지 않습니다</p>
-          )}
+          {isVaild('passwordConfirm')
+          || data.passwordConfirm!.length === 0 ? null : (
+              <p>위에 입력한 비밀번호와 일치하지 않습니다</p>
+            )}
         </MessageContainer>
         <InputContainer>
           전화번호
           <InputTextLine
             name='pn'
+            value={data.pn}
             placeholder='숫자만 입력해 주세요'
             onChange={onChange('pn')}
           />
         </InputContainer>
         <MessageContainer>
-          {formData.pn.length === 0 ? null : isVaild('pn') ? (
-            <p> 유효한 전화번호입니다</p>
-          ) : (
+          {data.pn.length === 0 || isVaild('pn') ? null : (
             <p>유효하지 않은 전화번호입니다</p>
           )}
         </MessageContainer>

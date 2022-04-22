@@ -33,7 +33,15 @@ const ControlButton = styled.button`
     background-color: #0003;
   }
 `;
-const PostTitle = styled.h2``;
+const PostTitle = styled.h2`
+  flex-grow: 1;
+  padding: 0 2rem;
+  text-align: center;
+  overflow: hidden;
+  word-break: keep-all;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+`;
 const PostControllerContainer = styled.div`
   display: flex;
   gap: 1rem;
@@ -79,7 +87,6 @@ function Post() {
     author: '불러오는 중입니다',
     createdAt: new Date().toString(),
   });
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   console.log(isLogin, id);
 
   function fetchPost() {
@@ -88,7 +95,6 @@ function Post() {
         // console.log(response.data);
         if (response.data!.post) {
           setData(response.data!.post);
-          setIsLoading(false);
         } else {
           navigate('/post');
         }
@@ -108,44 +114,39 @@ function Post() {
       .catch((err) => console.error(err));
   }
 
-  // useEffect(() => {
-  //   fetchPost();
-  // }, []);
+  useEffect(() => {
+    fetchPost();
+  }, []);
   const dateString = new Date(data.createdAt!).toLocaleDateString();
 
   return (
     <Container>
       <NavigationBar>게시글</NavigationBar>
-      {!isLoading ? (
-        <>
-          <PostHeader>
-            <ControlButton onClick={() => navigate('/post')}>
-              게시글 목록으로
-            </ControlButton>
-            <PostTitle>{data.title}</PostTitle>
-            <PostControllerContainer>
-              <ControlButton
-                onClick={() => {
-                  navigate(`/post/edit/${id}`);
-                }}
-              >
-                수정
-              </ControlButton>
-              <ControlButton onClick={onDelete}>삭제</ControlButton>
-            </PostControllerContainer>
-          </PostHeader>
-          <HorizonDivider />
-          <PageBody>
-            <PostContentHeader>
-              <div>{data.author}</div> <div>{dateString}</div>
-            </PostContentHeader>
-            <HorizonDivider />
-            <PostContentBody>{data.contents}</PostContentBody>
-          </PageBody>
-        </>
-      ) : (
-        <p>내용을 불러오고 있습니다</p>
-      )}
+
+      <PostHeader>
+        <ControlButton onClick={() => navigate('/post')}>
+          게시글 목록
+        </ControlButton>
+        <PostTitle>{data.title}</PostTitle>
+        <PostControllerContainer>
+          <ControlButton
+            onClick={() => {
+              navigate(`/post/edit/${id}`);
+            }}
+          >
+            수정
+          </ControlButton>
+          <ControlButton onClick={onDelete}>삭제</ControlButton>
+        </PostControllerContainer>
+      </PostHeader>
+      <HorizonDivider />
+      <PageBody>
+        <PostContentHeader>
+          <div>{data.author}</div> <div>{dateString}</div>
+        </PostContentHeader>
+        <HorizonDivider />
+        <PostContentBody>{data.contents}</PostContentBody>
+      </PageBody>
     </Container>
   );
 }

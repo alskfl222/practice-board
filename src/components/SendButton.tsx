@@ -4,6 +4,7 @@ import { SendButtonType } from '../@types';
 import { theme } from '../styles/theme';
 
 const CustomSubmit = styled.button`
+  min-width: 3rem;
   padding: 0.5rem;
   border: 1px solid ${theme.border.gray707070};
   border-radius: 1rem;

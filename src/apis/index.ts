@@ -51,7 +51,6 @@ export function editPost(data: Partial<PostType>) {
   return axios.post(`${process.env.API_URL}/post/edit`, data, {
     headers: {
       token: localStorage.getItem('token') || '',
-      'Access-Control-Allow-Origin': true,
     },
   });
 }
@@ -65,7 +64,7 @@ export function deletePost(id: PostType['id']) {
         headers: {
           token: localStorage.getItem('token') || '',
         },
-      }
+      },
     )
     .then((response) => response.data);
 }

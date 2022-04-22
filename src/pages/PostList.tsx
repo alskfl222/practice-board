@@ -6,7 +6,6 @@ import signState from '../states/atom';
 import { PostQueryType, PostEventType, PostType } from '../@types';
 import { getPostList, deletePost } from '../apis';
 import NavigationBar from '../components/NavigationBar';
-import { dummyPostList } from '../temp/dummyData';
 import SendButton from '../components/SendButton';
 
 const Container = styled.div`
@@ -78,12 +77,22 @@ const PostContainer = styled.div`
   }
 `;
 const PostIndexContainer = styled.div`
+  flex-shrink: 0;
   width: 10%;
+  border-right: 1px solid black;
   text-align: center;
 `;
-const PostTitleContainer = styled.div``;
+const PostTitleContainer = styled.div`
+  flex-grow: 1;
+  padding: 0 2rem;
+  overflow: hidden;
+  word-break: keep-all;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+`;
 const PostControllerContainer = styled.div`
   position: relative;
+  flex-shrink: 0;
   width: 15%;
   z-index: 999;
   display: flex;
@@ -111,6 +120,7 @@ const PostAddButtonContainer = styled.div`
   z-index: 9999;
 `;
 const messageType = {
+  loading: '게시글을 불러오고 있습니다',
   noPost: '게시글이 없습니다',
   error: '문제가 발생했습니다',
 };
@@ -125,11 +135,11 @@ function PostList() {
     keyword: '',
   };
   const { isLogin } = JSON.parse(useRecoilValue(signState));
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [query, setQuery] = useState<PostQueryType>(initQuery);
   const [totalCount, setTotalCount] = useState<number>(1);
-  const [postList, setPostList] = useState<PostType[]>(dummyPostList);
-  const [message, setMessage] = useState<string>(messageType.noPost);
+  const [postList, setPostList] = useState<PostType[]>([]);
+  const [message, setMessage] = useState<string>(messageType.loading);
   const totalPageCount = Math.ceil(totalCount / query.pageSize);
 
   function fetchPostList() {
@@ -154,6 +164,7 @@ function PostList() {
 
   const onChange = (type: keyof PostQueryType) => (e: PostEventType) => {
     e.preventDefault();
+    setMessage(messageType.loading);
     setIsLoading(true);
     let value = '';
     if (type === 'pageSize' || type === 'postType') {
@@ -250,7 +261,6 @@ function PostList() {
   useEffect(() => {
     fetchPostList();
   }, [searchParams]);
-  console.log(isLogin);
 
   return (
     <Container>
@@ -313,13 +323,13 @@ function PostList() {
                 {index + 1}
               </PageAnchor>
             ))}
-            {/* {isLogin ? ( */}
-            <PostAddButtonContainer>
-              <SendButton onClick={() => navigate('/post/create')}>
-                글쓰기
-              </SendButton>
-            </PostAddButtonContainer>
-            {/* ) : null} */}
+            {isLogin ? (
+              <PostAddButtonContainer>
+                <SendButton onClick={() => navigate('/post/create')}>
+                  글쓰기
+                </SendButton>
+              </PostAddButtonContainer>
+            ) : null}
           </PageContainer>
         </>
       ) : (

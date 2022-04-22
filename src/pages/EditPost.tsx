@@ -53,7 +53,7 @@ const PostContentTextarea = styled.textarea`
 function EditPost() {
   const navigate = useNavigate();
   const params = useParams();
-  const id = parseInt(params.id!);
+  const id = parseInt(params.id || '-1');
   const initData: PostType = {
     title: '',
     contents: '',
@@ -89,7 +89,10 @@ function EditPost() {
   const onSubmit = () => {
     console.log(data);
     editPost(data)
-      .then((response) => console.log(response.data))
+      .then((response) => {
+        console.log(response.data);
+        navigate('/post');
+      })
       .catch((err) => console.error(err));
   };
 
