@@ -47,12 +47,12 @@ function Home() {
   return (
     <Container>
       <header>
-        <h1>HOME PAGE</h1>
+        <h1>홈페이지</h1>
       </header>
       <HorizonDivider />
       <AnchorContainer>
-        <PageAnchor onClick={() => navigate('/signin')}>SIGNIN</PageAnchor>
-        <PageAnchor onClick={() => navigate('/post')}>POST</PageAnchor>
+        <PageAnchor onClick={() => navigate('/signin')}>로그인</PageAnchor>
+        <PageAnchor onClick={() => navigate('/post')}>게시글 목록</PageAnchor>
       </AnchorContainer>
     </Container>
   );

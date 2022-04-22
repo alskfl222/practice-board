@@ -21,23 +21,39 @@ const FormContainer = styled.form`
   margin-top: 2rem;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 1rem;
+
+  a {
+    text-decoration: underline;
+  }
 `;
 const InputContainer = styled.label`
+  width: 50%;
   display: flex;
+  justify-content: space-between;
   gap: 1rem;
+`;
+const MessageContainer = styled.div`
+  font-size: 0.8rem;
+`;
+const HorizonDivider = styled.div`
+  width: 80%;
+  margin: 2rem 0;
+  box-shadow: 0 0.5px 0 0.5px black;
 `;
 
 function SignUp() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<UserType>({
     name: '',
     email: '',
     password: '',
+    passwordConfirm: '',
     pn: '',
   });
   const isVaild = (key: string): boolean => {
-    const { name, email, password, pn } = formData;
+    const { name, email, password, passwordConfirm, pn } = formData;
     switch (key) {
       case 'name':
         const nameCondition = name.length > 2;
@@ -53,6 +69,14 @@ function SignUp() {
         const passwordCondition = passwordRegex.test(password);
         if (passwordCondition) return true;
         return false;
+      case 'password-confirm':
+        const compare = formData.password;
+        const passwordConfirmCondition =
+          passwordConfirm &&
+          passwordConfirm.length > 0 &&
+          compare === passwordConfirm;
+        if (passwordConfirmCondition) return true;
+        return false;
       case 'pn':
         const pnRegex = /^0(2([0-9]{7,8})|[1|3-9]([0-9]{8,9}))$/;
         const pnCondition = pnRegex.test(pn);
@@ -62,83 +86,118 @@ function SignUp() {
         return false;
     }
   };
-  const handleChange =
-    (key: string) =>
-    (e: React.FormEvent<HTMLInputElement>): void => {
-      setFormData((data: any) => {
-        const newData = { ...data };
-        newData[key] = (e.target as HTMLInputElement).value;
-        return newData;
+  const onChange =
+    (key: keyof UserType) =>
+    (e: React.ChangeEvent<HTMLInputElement>): void => {
+      setFormData((data: UserType) => {
+        return { ...data, [key]: e.target.value };
       });
     };
   const onSubmit = (e: React.SyntheticEvent): void => {
     e.preventDefault();
     register(formData)
       .then((response) => {
-        console.log(response)
-        navigate('/signin')
+        console.log(response);
+        navigate('/signin');
       })
       .catch((err) => console.error(err));
   };
 
   return (
     <Container>
-      <NavigationBar>SignUp PAGE</NavigationBar>
+      <NavigationBar>회원가입</NavigationBar>
       <FormContainer name='signup-form' onSubmit={onSubmit}>
         <InputContainer>
-          name
-          <InputTextLine name='name' onChange={handleChange('name')} />
-          {isVaild('name')
-            ? '유효한 이름입니다'
-            : formData.name.length === 0
-            ? null
-            : '이름은 3글자 이상이어야 합니다'}
+          이름
+          <InputTextLine
+            name='name'
+            value={formData.name}
+            onChange={onChange('name')}
+          />
         </InputContainer>
+        <MessageContainer>
+          {isVaild('name') ? (
+            <p>유효한 이름입니다</p>
+          ) : formData.name.length === 0 ? <p></p> : (
+            <p>이름은 3글자 이상이어야 합니다</p>
+          )}
+        </MessageContainer>
         <InputContainer>
-          email
-          <InputTextLine name='email' onChange={handleChange('email')} />
-          {isVaild('email')
-            ? '유효한 이메일입니다'
-            : formData.email.length === 0
-            ? null
-            : '유효하지 않은 이메일입니다'}
+          E-mail
+          <InputTextLine
+            name='email'
+            value={formData.email}
+            onChange={onChange('email')}
+          />
         </InputContainer>
+        <MessageContainer>
+          {isVaild('email') ? (
+            <p>유효한 이메일입니다</p>
+          ) : formData.email.length === 0 ? null : (
+            <p>유효하지 않은 이메일입니다</p>
+          )}
+        </MessageContainer>
         <InputContainer>
-          password
+          비밀번호
           <InputTextLine
             name='password'
+            value={formData.password}
             type='password'
-            onChange={handleChange('password')}
+            onChange={onChange('password')}
           />
+        </InputContainer>
+        <MessageContainer>
           {isVaild('password') ? (
-            '유효한 비밀번호입니다'
+            <p>유효한 비밀번호입니다</p>
           ) : formData.password.length === 0 ? null : (
             <p>
               비밀번호는 최소 8글자, 최대 15글자이면서 <br />
               숫자 및 특수문자를 1개 이상 포함하여야합니다
             </p>
           )}
-        </InputContainer>
+        </MessageContainer>
         <InputContainer>
-          phone
+          비밀번호 확인
+          <InputTextLine
+            name='password-confirm'
+            value={formData.password}
+            type='password-confirm'
+            onChange={onChange('password')}
+          />
+        </InputContainer>
+        <MessageContainer>
+          {isVaild('password-confirm') ? (
+            <p>위에 입력한 비밀번호와 일치합니다</p>
+          ) : formData.password.length === 0 ? null : (
+            <p>위에 입력한 비밀번호와 일치하지 않습니다</p>
+          )}
+        </MessageContainer>
+        <InputContainer>
+          전화번호
           <InputTextLine
             name='pn'
             placeholder='숫자만 입력해 주세요'
-            onChange={handleChange('pn')}
+            onChange={onChange('pn')}
           />
-          {formData.pn.length === 0
-            ? null
-            : isVaild('pn')
-            ? '유효한 전화번호입니다'
-            : '유효하지 않은 전화번호입니다'}
         </InputContainer>
+        <MessageContainer>
+          {formData.pn.length === 0 ? null : isVaild('pn') ? (
+            <p> 유효한 전화번호입니다</p>
+          ) : (
+            <p>유효하지 않은 전화번호입니다</p>
+          )}
+        </MessageContainer>
+        <HorizonDivider />
         <SendButton
           disabled={
             !(isVaild('name') && isVaild('email') && isVaild('password'))
           }
         >
-          SignUp
+          회원가입
         </SendButton>
+        <div>
+          <a onClick={() => navigate('/signin')}>로그인 페이지</a>
+        </div>
       </FormContainer>
     </Container>
   );

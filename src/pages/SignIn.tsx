@@ -21,13 +21,22 @@ const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 2rem;
+
+  a {
+    text-decoration: underline;
+  }
 `;
 const InputContainer = styled.label`
-  width: 80%;
+  width: 50%;
   display: flex;
   justify-content: space-between;
   gap: 1rem;
+`;
+const HorizonDivider = styled.div`
+  width: 80%;
+  margin: 2rem 0;
+  box-shadow: 0 0.5px 0 0.5px black;
 `;
 
 function SignIn() {
@@ -76,9 +85,10 @@ function SignIn() {
             onChange={onChange('password')}
           />
         </InputContainer>
+        <HorizonDivider />
         <SendButton>Login</SendButton>
         <div>
-          <a onClick={() => navigate('/signup')}>Go to SignUp Page</a>
+          <a onClick={() => navigate('/signup')}>회원가입 페이지</a>
         </div>
       </FormContainer>
     </Container>

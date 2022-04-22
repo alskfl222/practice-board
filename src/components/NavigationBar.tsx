@@ -56,7 +56,7 @@ function NavigationBar(props: NavigationBarType) {
   return (
     <Container>
       <NavigationTop>
-        <HomeAnchor onClick={() => navigate('/')}>HOME</HomeAnchor>
+        <HomeAnchor onClick={() => navigate('/')}>홈</HomeAnchor>
         {isLogin ? (
           <SignButton
             onClick={() => {
@@ -64,10 +64,10 @@ function NavigationBar(props: NavigationBarType) {
               localStorage.removeItem('token');
             }}
           >
-            LOGOUT
+            로그아웃
           </SignButton>
         ) : !(pathname === '/signin' || pathname === '/signup') ? (
-          <SignButton onClick={() => navigate('/signin')}>LOGIN</SignButton>
+          <SignButton onClick={() => navigate('/signin')}>로그인</SignButton>
         ) : null}
       </NavigationTop>
       <NavigationBottom>{props.children}</NavigationBottom>

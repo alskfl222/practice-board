@@ -5,6 +5,7 @@ export interface UserType {
   name: string;
   email: string;
   password: string;
+  passwordConfirm?: string;
   pn: string;
 }
 export interface PostType {

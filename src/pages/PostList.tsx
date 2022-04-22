@@ -52,6 +52,11 @@ const PageContainer = styled.div`
     background-color: #0003;
   }
 `;
+const PageAnchor = styled.a`
+  &.current {
+    font-weight: 700;
+  }
+`
 
 function PostList() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -216,7 +221,7 @@ function PostList() {
                         navigate(`/post/edit/${post.id}`);
                       }}
                     >
-                      EDIT
+                      수정
                     </button>
                     <button
                       onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
@@ -224,7 +229,7 @@ function PostList() {
                         onDelete(post.id);
                       }}
                     >
-                      DELETE
+                      삭제
                     </button>
                   </PostContainer>
                 ))
@@ -232,9 +237,13 @@ function PostList() {
           </PostListContainer>
           <PageContainer>
             {new Array(totalPageCount).fill('').map((_, index) => (
-              <a key={index + 1} onClick={onChange('page')}>
+              <PageAnchor
+                className={index + 1 === query.page ? 'current' : ''}
+                key={index + 1}
+                onClick={onChange('page')}
+              >
                 {index + 1}
-              </a>
+              </PageAnchor>
             ))}
           </PageContainer>
         </>

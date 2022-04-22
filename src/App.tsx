@@ -17,6 +17,7 @@ import { theme } from './styles/theme';
 const Container = styled.div`
   display: flex;
   justify-content: center;
+  background-color: ${theme.background.baseColor};
   overflow-x: hidden;
 `;
 const Inner = styled.div`
