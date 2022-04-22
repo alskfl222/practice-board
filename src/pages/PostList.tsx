@@ -31,18 +31,7 @@ const KeywordInput = styled.input`
   min-width: 0;
   padding: 0.2rem;
 `;
-const FilterButton = styled.button`
-  flex-shrink: 0;
-  width: 3rem;
-  padding: 0.5rem 0;
-  border: 1px solid black;
-  border-radius: 1rem;
-  background-color: transparent;
-  cursor: pointer;
-  &:hover {
-    background-color: #0003;
-  }
-`;
+
 const PostListContainer = styled.div`
   min-height: calc(100vh - 25rem);
   margin: 0 2rem;
@@ -71,6 +60,7 @@ const PostContainer = styled.div`
   padding: 0.5rem;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   border-radius: 1rem;
   &:hover {
     background-color: #0003;
@@ -78,12 +68,15 @@ const PostContainer = styled.div`
 `;
 const PostIndexContainer = styled.div`
   flex-shrink: 0;
-  width: 10%;
+  width: 4rem;
   border-right: 1px solid black;
   text-align: center;
+
 `;
 const PostTitleContainer = styled.div`
+  position: relative;
   flex-grow: 1;
+  z-index: 99;
   padding: 0 2rem;
   overflow: hidden;
   word-break: keep-all;
@@ -93,7 +86,6 @@ const PostTitleContainer = styled.div`
 const PostControllerContainer = styled.div`
   position: relative;
   flex-shrink: 0;
-  width: 15%;
   z-index: 999;
   display: flex;
   justify-content: flex-end;
@@ -268,8 +260,8 @@ function PostList() {
         <PageSizeSelect />
         <PostTypeSelect />
         <PostKeywordInput />
-        <FilterButton onClick={onChange('keyword')}>검색</FilterButton>
-        <FilterButton onClick={clearQuery}>초기화</FilterButton>
+        <SendButton onClick={onChange('keyword')}>검색</SendButton>
+        <SendButton onClick={clearQuery}>초기화</SendButton>
       </FilterContainer>
       {!isLoading ? (
         <>

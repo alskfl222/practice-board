@@ -90,7 +90,6 @@ function Post() {
   function fetchPost() {
     getPost(id)
       .then((response) => {
-        // console.log(response.data);
         if (response.data && response.data.post) {
           setData(response.data.post);
         } else {
@@ -106,7 +105,6 @@ function Post() {
   function onDelete() {
     deletePost(id)
       .then((response) => {
-        console.log(response);
         navigate('/post');
       })
       .catch((err) => console.error(err));

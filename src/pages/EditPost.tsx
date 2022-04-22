@@ -7,6 +7,7 @@ import { PostType, PostEventType } from '../@types';
 import { getPost, editPost } from '../apis';
 import NavigationBar from '../components/NavigationBar';
 import SendButton from '../components/SendButton';
+import { theme } from '../styles/theme';
 
 const Container = styled.div`
   width: 100%;
@@ -40,10 +41,21 @@ const HorizonDivider = styled.div`
   box-shadow: 0 0.5px 0 0.5px black;
 `;
 const PageBody = styled.div`
-  width: 100%;
+  width: calc(100% -4rem);
+  min-height: 20rem;
+  margin: 0 2rem;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid black;
+  border-radius: 1rem;
+  background-color: ${theme.background.white};
+`;
+const PostContentHeader = styled.div`
   padding: 0 2rem;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  font-weight: 500;
 `;
 const PostContentTextarea = styled.textarea`
   width: 100%;
@@ -58,11 +70,16 @@ function EditPost() {
   const id = parseInt(params.id || '-1', 10);
   const isLogin = useRecoilValue(signState);
   const initData: PostType = {
-    title: '',
-    contents: '',
+    id: 0,
+    title: '불러오는 중입니다',
+    contents: '불러오는 중입니다',
+    author: '불러오는 중입니다',
+    createdAt: new Date().toString(),
   };
   const [data, setData] = useState<PostType>(initData);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const dateString = new Date(
+    data.createdAt || '9999-99-99'
+  ).toLocaleDateString();
 
   const isValid = !!(
     data.title.trim().length > 0 && data.contents.trim().length > 0
@@ -74,7 +91,6 @@ function EditPost() {
         // console.log(response.data);
         if (response.data && response.data.post) {
           setData(response.data.post);
-          setIsLoading(false);
         } else {
           navigate('/post');
         }
@@ -120,17 +136,17 @@ function EditPost() {
         </PostControllerContainer>
       </PageHeader>
       <HorizonDivider />
-      {!isLoading ? (
-        <PageBody>
-          <PostContentTextarea
-            value={data.contents}
-            placeholder='내용을 입력해주세요'
-            onChange={onChange('contents')}
-          ></PostContentTextarea>
-        </PageBody>
-      ) : (
-        <p>게시글을 불러오고 있습니다</p>
-      )}
+      <PageBody>
+        <PostContentHeader>
+          <div>{data.author}</div> <div>{dateString}</div>
+        </PostContentHeader>
+        <HorizonDivider />
+        <PostContentTextarea
+          value={data.contents}
+          placeholder='내용을 입력해주세요'
+          onChange={onChange('contents')}
+        ></PostContentTextarea>
+      </PageBody>
     </Container>
   );
 }
