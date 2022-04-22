@@ -6,6 +6,12 @@ import { createPost } from '../apis';
 import NavigationBar from '../components/NavigationBar';
 import SendButton from '../components/SendButton';
 
+// * rendering 최적화 중심 refactoring
+// ! styled-components 중복 관리
+// ! useCallback, useMemo 사용
+// ! 함수 쪼개기
+// ! onClick 익명함수 x
+
 const Container = styled.div`
   width: 100%;
   display: flex;

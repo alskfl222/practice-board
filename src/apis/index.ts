@@ -8,6 +8,8 @@ import {
   PostResponseType,
 } from '../@types';
 
+// ! api 분리
+
 // axios.defaults.headers.post.token = localStorage.getItem('token') || '';
 
 export function signin(data: Partial<UserType>): Promise<SigninResponseType> {

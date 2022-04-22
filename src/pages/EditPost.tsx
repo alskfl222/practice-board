@@ -78,7 +78,7 @@ function EditPost() {
   };
   const [data, setData] = useState<PostType>(initData);
   const dateString = new Date(
-    data.createdAt || '9999-99-99'
+    data.createdAt || '9999-99-99',
   ).toLocaleDateString();
 
   const isValid = !!(

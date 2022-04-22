@@ -41,7 +41,6 @@ function App() {
             <Route path='post/create' element={<CreatePost />} />
             <Route path='post/edit/:id' element={<EditPost />} />
             <Route path='post/:id' element={<Post />} />
-            {/* nested? */}
             <Route path='*' element={<NotFound />} />
           </Routes>
         </Inner>

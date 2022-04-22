@@ -84,7 +84,7 @@ function Post() {
     createdAt: new Date().toString(),
   });
   const dateString = new Date(
-    data.createdAt || '9999-99-99',
+    data.createdAt || '9999-99-99'
   ).toLocaleDateString();
 
   function fetchPost() {
@@ -105,6 +105,7 @@ function Post() {
   function onDelete() {
     deletePost(id)
       .then((response) => {
+        console.log(response);
         navigate('/post');
       })
       .catch((err) => console.error(err));
