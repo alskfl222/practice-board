@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import { PostType } from '../@types';
-import signState from '../states/atom';
 import { getPost, deletePost } from '../apis';
 import NavigationBar from '../components/NavigationBar';
 import { theme } from '../styles/theme';
@@ -75,10 +73,8 @@ const PostContentBody = styled.div`
 `;
 
 function Post() {
-  const userJSON = useRecoilValue(signState);
-  const { isLogin } = JSON.parse(userJSON);
   const params = useParams();
-  const id = parseInt(params.id!);
+  const id = parseInt(params.id || '-1', 10);
   const navigate = useNavigate();
   const [data, setData] = useState<PostType>({
     id: 0,
@@ -87,14 +83,16 @@ function Post() {
     author: '불러오는 중입니다',
     createdAt: new Date().toString(),
   });
-  console.log(isLogin, id);
+  const dateString = new Date(
+    data.createdAt || '9999-99-99',
+  ).toLocaleDateString();
 
   function fetchPost() {
     getPost(id)
       .then((response) => {
         // console.log(response.data);
-        if (response.data!.post) {
-          setData(response.data!.post);
+        if (response.data && response.data.post) {
+          setData(response.data.post);
         } else {
           navigate('/post');
         }
@@ -117,7 +115,6 @@ function Post() {
   useEffect(() => {
     fetchPost();
   }, []);
-  const dateString = new Date(data.createdAt!).toLocaleDateString();
 
   return (
     <Container>

@@ -57,9 +57,13 @@ function SignIn() {
     e.preventDefault();
     signin(data)
       .then((response) => {
-        localStorage.setItem('token', response.data!.token);
-        setLogin(JSON.stringify({ isLogin: true }));
-        setTimeout(() => navigate('/post'), 1000);
+        if (response.data) {
+          localStorage.setItem('token', response.data.token);
+          setLogin(JSON.stringify({ isLogin: true }));
+          setTimeout(() => navigate('/post'), 1000);
+        } else {
+          window.location.reload();
+        }
       })
       .catch((err) => console.error(err));
   };

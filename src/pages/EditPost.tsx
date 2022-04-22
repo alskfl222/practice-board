@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
+import signState from '../states/atom';
 import { PostType, PostEventType } from '../@types';
 import { getPost, editPost } from '../apis';
 import NavigationBar from '../components/NavigationBar';
@@ -53,7 +55,8 @@ const PostContentTextarea = styled.textarea`
 function EditPost() {
   const navigate = useNavigate();
   const params = useParams();
-  const id = parseInt(params.id || '-1');
+  const id = parseInt(params.id || '-1', 10);
+  const isLogin = useRecoilValue(signState);
   const initData: PostType = {
     title: '',
     contents: '',
@@ -69,8 +72,8 @@ function EditPost() {
     getPost(id)
       .then((response) => {
         // console.log(response.data);
-        if (response.data!.post) {
-          setData(response.data!.post);
+        if (response.data && response.data.post) {
+          setData(response.data.post);
           setIsLoading(false);
         } else {
           navigate('/post');
@@ -81,22 +84,22 @@ function EditPost() {
       });
   }
 
-  const onChange = (type: string) => (e: PostEventType) => {
+  const onChange = (type: keyof PostType) => (e: PostEventType) => {
     const { value } = e.target;
     setData((beforeData) => ({ ...beforeData, [type]: value }));
   };
 
   const onSubmit = () => {
-    console.log(data);
-    editPost(data)
-      .then((response) => {
-        console.log(response.data);
-        navigate('/post');
-      })
-      .catch((err) => console.error(err));
+    editPost(data).catch((err) => {
+      console.error(err);
+    });
+    navigate('/post');
   };
 
   useEffect(() => {
+    if (!isLogin) {
+      navigate('/post');
+    }
     fetchPost();
   }, []);
 

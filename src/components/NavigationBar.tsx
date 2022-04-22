@@ -49,10 +49,10 @@ const NavigationBottom = styled.div`
 
 function NavigationBar(props: NavigationBarType) {
   const location = useLocation();
+  const { pathname } = location;
   const navigate = useNavigate();
   const [user, setUser] = useRecoilState(signState);
   const { isLogin } = JSON.parse(user);
-  const { pathname } = location;
   return (
     <Container>
       <NavigationTop>

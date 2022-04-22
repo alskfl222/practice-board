@@ -146,10 +146,9 @@ function PostList() {
     setIsLoading(true);
     getPostList(query)
       .then((response) => {
-        // console.log(response.data);
-        if (response.data!.posts) {
-          setPostList(response.data!.posts);
-          setTotalCount(response.data!.totalCount || 1);
+        if (response.data && response.data.posts) {
+          setPostList(response.data.posts);
+          setTotalCount(response.data.totalCount || 1);
         } else {
           setPostList([]);
           setMessage(messageType.noPost);
@@ -180,18 +179,18 @@ function PostList() {
 
     if (
       type === 'pageSize'
-      && totalPageCount > Math.floor(totalCount / parseInt(value))
+      && totalPageCount > Math.floor(totalCount / parseInt(value, 10))
     ) {
       console.log('Non-Exist Page');
       setQuery((beforeQuery) => ({
         ...beforeQuery,
-        pageSize: parseInt(value),
-        page: Math.ceil(totalCount / parseInt(value)),
+        pageSize: parseInt(value, 10),
+        page: Math.ceil(totalCount / parseInt(value, 10)),
       }));
     } else {
       setQuery((beforeQuery) => ({
         ...beforeQuery,
-        [type]: Number.isNaN(value) ? parseInt(value) : value,
+        [type]: Number.isNaN(value) ? parseInt(value, 10) : value,
       }));
     }
 

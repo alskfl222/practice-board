@@ -51,40 +51,47 @@ function SignUp() {
     passwordConfirm: '',
     pn: '',
   });
-  const isVaild = (key: string): boolean => {
+  const isVaild = (key: keyof UserType): boolean => {
     const { name, email, password, passwordConfirm, pn } = data;
-    switch (key) {
-    case 'name':
+    if (key === 'name') {
       const nameCondition = name.trim().length >= 3 && name.trim().length <= 10;
       if (nameCondition) return true;
       return false;
-    case 'email':
+    }
+    if (key === 'email') {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       const emailCondition = emailRegex.test(email);
       if (emailCondition) return true;
       return false;
-    case 'password':
+    }
+    if (key === 'password') {
       const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*\W).{8,15}$/;
       const passwordCondition = passwordRegex.test(password);
       if (passwordCondition) return true;
       return false;
-    case 'passwordConfirm':
+    }
+    if (key === 'passwordConfirm') {
       const compare = data.password;
-      const passwordConfirmCondition = passwordConfirm!.length > 0 && compare === passwordConfirm;
+      const passwordConfirmCondition = passwordConfirm
+        && passwordConfirm.length > 0
+        && compare === passwordConfirm;
       if (passwordConfirmCondition) return true;
       return false;
-    case 'pn':
+    }
+    if (key === 'pn') {
       const pnRegex = /^0(2([0-9]{7,8})|[1|3-9]([0-9]{8,9}))$/;
       const pnCondition = pnRegex.test(pn);
       if (pnCondition) return true;
       return false;
-    default:
-      return false;
     }
+    return false;
   };
   const onChange = (key: keyof UserType) =>
     (e: React.ChangeEvent<HTMLInputElement>): void => {
-      setData((beforeData: UserType) => ({ ...beforeData, [key]: e.target.value }));
+      setData((beforeData: UserType) => ({
+        ...beforeData,
+        [key]: e.target.value,
+      }));
     };
   const onSubmit = (e: React.SyntheticEvent): void => {
     e.preventDefault();
@@ -156,7 +163,7 @@ function SignUp() {
         </InputContainer>
         <MessageContainer>
           {isVaild('passwordConfirm')
-          || data.passwordConfirm!.length === 0 ? null : (
+          || (data.passwordConfirm && data.passwordConfirm.length === 0) ? null : (
               <p>위에 입력한 비밀번호와 일치하지 않습니다</p>
             )}
         </MessageContainer>
