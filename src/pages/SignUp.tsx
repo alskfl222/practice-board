@@ -8,23 +8,14 @@ import SendButton from '../components/SendButton';
 import { UserType } from '../@types';
 import { register } from '../apis';
 import NavigationBar from '../components/NavigationBar';
+import { PageContainer } from '../styles';
 
-const Container = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-`;
 const FormContainer = styled.form`
   margin-top: 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-
-  a {
-    text-decoration: underline;
-  }
 `;
 const InputContainer = styled.label`
   width: 50%;
@@ -104,7 +95,7 @@ function SignUp() {
   };
 
   return (
-    <Container>
+    <PageContainer>
       <NavigationBar>회원가입</NavigationBar>
       <FormContainer name='signup-form' onSubmit={onSubmit}>
         <InputContainer>
@@ -191,7 +182,7 @@ function SignUp() {
         </SendButton>
         <a onClick={() => navigate('/signin')}>로그인 페이지</a>
       </FormContainer>
-    </Container>
+    </PageContainer>
   );
 }
 

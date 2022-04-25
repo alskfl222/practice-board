@@ -8,13 +8,8 @@ import { getPost, editPost } from '../apis';
 import NavigationBar from '../components/NavigationBar';
 import SendButton from '../components/SendButton';
 import { theme } from '../styles/theme';
+import { PageContainer, HorizonDivider } from '../styles';
 
-const Container = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-`;
 const PageHeader = styled.div`
   padding: 2rem;
   padding-bottom: 0;
@@ -34,12 +29,7 @@ const TitleInput = styled.input`
   padding: 0.2rem;
   padding-left: 1rem;
 `;
-const HorizonDivider = styled.div`
-  align-self: center;
-  width: 80%;
-  margin: 2rem 0;
-  box-shadow: 0 0.5px 0 0.5px black;
-`;
+
 const PageBody = styled.div`
   width: calc(100% -4rem);
   min-height: 20rem;
@@ -120,7 +110,7 @@ function EditPost() {
   }, []);
 
   return (
-    <Container>
+    <PageContainer>
       <NavigationBar>게시글 수정</NavigationBar>
       <PageHeader>
         <SendButton onClick={() => navigate('/post')}>게시글 목록</SendButton>
@@ -147,7 +137,7 @@ function EditPost() {
           onChange={onChange('contents')}
         ></PostContentTextarea>
       </PageBody>
-    </Container>
+    </PageContainer>
   );
 }
 

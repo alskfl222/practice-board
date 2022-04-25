@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { RecoilRoot } from 'recoil';
 import { Routes, Route } from 'react-router-dom';
 
@@ -49,4 +49,4 @@ function App() {
   );
 }
 
-export default App;
+export default memo(App);

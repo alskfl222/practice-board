@@ -5,13 +5,8 @@ import { PostType } from '../@types';
 import { getPost, deletePost } from '../apis';
 import NavigationBar from '../components/NavigationBar';
 import { theme } from '../styles/theme';
+import { PageContainer, HorizonDivider } from '../styles';
 
-const Container = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-`;
 const PostHeader = styled.header`
   padding: 2rem;
   padding-bottom: 0;
@@ -45,12 +40,7 @@ const PostControllerContainer = styled.div`
   gap: 1rem;
   justify-content: flex-end;
 `;
-const HorizonDivider = styled.div`
-  align-self: center;
-  width: 80%;
-  margin: 2rem 1rem 0;
-  box-shadow: 0 0.5px 0 0.5px black;
-`;
+
 const PageBody = styled.div`
   width: calc(100% -4rem);
   min-height: 20rem;
@@ -84,7 +74,7 @@ function Post() {
     createdAt: new Date().toString(),
   });
   const dateString = new Date(
-    data.createdAt || '9999-99-99'
+    data.createdAt || '9999-99-99',
   ).toLocaleDateString();
 
   function fetchPost() {
@@ -111,14 +101,13 @@ function Post() {
       .catch((err) => console.error(err));
   }
 
-  useEffect(() => {
-    fetchPost();
-  }, []);
+  // useEffect(() => {
+  //   fetchPost();
+  // }, []);
 
   return (
-    <Container>
+    <PageContainer gap='2rem'>
       <NavigationBar>게시글</NavigationBar>
-
       <PostHeader>
         <ControlButton onClick={() => navigate('/post')}>
           게시글 목록
@@ -143,7 +132,7 @@ function Post() {
         <HorizonDivider />
         <PostContentBody>{data.contents}</PostContentBody>
       </PageBody>
-    </Container>
+    </PageContainer>
   );
 }
 

@@ -5,7 +5,7 @@ import { theme } from '../styles/theme';
 
 const CuntomInput = styled.input`
   width: ${(props) => props.width};
-  padding: .5rem 1rem;
+  padding: 0.5rem 1rem;
   border: none;
   border-bottom: 1px solid black;
   background-color: transparent;
@@ -31,7 +31,7 @@ function InputTextLine(props: Partial<InputTextLineType>) {
       placeholder={placeholder}
       value={value}
       onChange={onChange}
-    ></CuntomInput>
+    />
   );
 }
 

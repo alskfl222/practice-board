@@ -1,29 +1,19 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { PageContainer } from '../styles';
+import { HorizonDivider } from '../styles';
 
-const Container = styled.div`
-  padding: 2rem;
+const HomeHeader = styled.header`
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 1rem;
-
-  header {
-    display: flex;
-    align-items: center;
-    height: 7rem;
-  }
-  h1 {
-    padding: 1rem;
-    font-size: 3rem;
-  }
+  height: 7rem;
+`;
+const HomeTitle = styled.h1`
+  padding: 1rem;
+  font-size: 3rem;
 `;
 
-const HorizonDivider = styled.div`
-  width: 70%;
-  box-shadow: 0 0.5px 0 0.5px black;
-`;
 
 const AnchorContainer = styled.div`
   padding: 3rem;
@@ -43,16 +33,16 @@ const PageAnchor = styled.a`
 function Home() {
   const navigate = useNavigate();
   return (
-    <Container>
-      <header>
-        <h1>홈페이지</h1>
-      </header>
+    <PageContainer padding='2rem' alignItems='center'>
+      <HomeHeader>
+        <HomeTitle>홈페이지</HomeTitle>
+      </HomeHeader>
       <HorizonDivider />
       <AnchorContainer>
         <PageAnchor onClick={() => navigate('/signin')}>로그인</PageAnchor>
         <PageAnchor onClick={() => navigate('/post')}>게시글 목록</PageAnchor>
       </AnchorContainer>
-    </Container>
+    </PageContainer>
   );
 }
 

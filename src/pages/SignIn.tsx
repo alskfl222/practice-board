@@ -8,13 +8,8 @@ import { signin } from '../apis';
 import NavigationBar from '../components/NavigationBar';
 import InputTextLine from '../components/InputTextLine';
 import SendButton from '../components/SendButton';
+import { PageContainer } from '../styles';
 
-const Container = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-`;
 const FormContainer = styled.form`
   padding: 2rem;
   display: flex;
@@ -22,9 +17,6 @@ const FormContainer = styled.form`
   align-items: center;
   gap: 2rem;
 
-  a {
-    text-decoration: underline;
-  }
 `;
 const InputContainer = styled.label`
   width: 50%;
@@ -68,7 +60,7 @@ function SignIn() {
       .catch((err) => console.error(err));
   };
   return (
-    <Container>
+    <PageContainer gap='2rem'>
       <NavigationBar>로그인</NavigationBar>
       <FormContainer name='signin-form' onSubmit={onSubmit}>
         <InputContainer>
@@ -92,7 +84,7 @@ function SignIn() {
         <SendButton>로그인</SendButton>
         <a onClick={() => navigate('/signup')}>회원가입 페이지</a>
       </FormContainer>
-    </Container>
+    </PageContainer>
   );
 }
 

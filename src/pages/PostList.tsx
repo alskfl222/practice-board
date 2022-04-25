@@ -7,15 +7,8 @@ import { PostQueryType, PostEventType, PostType } from '../@types';
 import { getPostList, deletePost } from '../apis';
 import NavigationBar from '../components/NavigationBar';
 import SendButton from '../components/SendButton';
+import { PageContainer } from '../styles';
 
-const Container = styled.div`
-  position: relative;
-  width: 100%;
-  margin-bottom: 5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-`;
 const FilterContainer = styled.div`
   padding: 1rem 2rem;
   display: flex;
@@ -71,7 +64,6 @@ const PostIndexContainer = styled.div`
   width: 4rem;
   border-right: 1px solid black;
   text-align: center;
-
 `;
 const PostTitleContainer = styled.div`
   position: relative;
@@ -91,7 +83,7 @@ const PostControllerContainer = styled.div`
   justify-content: flex-end;
   gap: 0.5rem;
 `;
-const PageContainer = styled.div`
+const PageAnchorContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -254,7 +246,7 @@ function PostList() {
   }, [searchParams]);
 
   return (
-    <Container>
+    <PageContainer>
       <NavigationBar>게시판 목록</NavigationBar>
       <FilterContainer>
         <PageSizeSelect />
@@ -283,28 +275,36 @@ function PostList() {
                   <PostIndexContainer>{post.id}</PostIndexContainer>
                   <PostTitleContainer>{post.title}</PostTitleContainer>
                   <PostControllerContainer>
-                    <SendButton
-                      onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                        e.stopPropagation();
-                        navigate(`/post/edit/${post.id}`);
-                      }}
-                    >
-                        수정
-                    </SendButton>
-                    <SendButton
-                      onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                        e.stopPropagation();
-                        onDelete(post.id);
-                      }}
-                    >
-                        삭제
-                    </SendButton>
+                    {isLogin && (
+                      <>
+                        <SendButton
+                          onClick={(
+                            e: React.MouseEvent<HTMLButtonElement>,
+                          ) => {
+                            e.stopPropagation();
+                            navigate(`/post/edit/${post.id}`);
+                          }}
+                        >
+                            수정
+                        </SendButton>
+                        <SendButton
+                          onClick={(
+                            e: React.MouseEvent<HTMLButtonElement>,
+                          ) => {
+                            e.stopPropagation();
+                            onDelete(post.id);
+                          }}
+                        >
+                            삭제
+                        </SendButton>
+                      </>
+                    )}
                   </PostControllerContainer>
                 </PostContainer>
               ))
               : message}
           </PostListContainer>
-          <PageContainer>
+          <PageAnchorContainer>
             {new Array(totalPageCount).fill('').map((_, index) => (
               <PageAnchor
                 className={index + 1 === query.page ? 'current' : ''}
@@ -321,12 +321,12 @@ function PostList() {
                 </SendButton>
               </PostAddButtonContainer>
             ) : null}
-          </PageContainer>
+          </PageAnchorContainer>
         </>
       ) : (
         <PostListContainer>{message}</PostListContainer>
       )}
-    </Container>
+    </PageContainer>
   );
 }
 

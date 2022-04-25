@@ -2,12 +2,8 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import NavigationBar from '../components/NavigationBar';
+import { PageContainer } from '../styles';
 
-const Container = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-`;
 const MessageContainer = styled.div`
   padding-top: 5rem;
   height: calc(100vh - 10rem);
@@ -23,13 +19,13 @@ function NotFound() {
     setTimeout(() => navigate('/'), 2000);
   }, []);
   return (
-    <Container>
+    <PageContainer>
       <NavigationBar>404</NavigationBar>
       <MessageContainer>
         페이지를 찾을 수 없습니다 <br />
         잠시 후 홈으로 이동합니다
       </MessageContainer>
-    </Container>
+    </PageContainer>
   );
 }
 
