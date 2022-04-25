@@ -21,8 +21,8 @@ export interface PostType {
 }
 export interface PostQueryType {
   postType: string;
-  pageSize: number;
-  page: number;
+  pageSize: string;
+  page: string;
   keyword: string;
 }
 

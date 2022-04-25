@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import signState from '../states/atom';
@@ -51,13 +51,12 @@ const NavigationBottom = styled.div`
 function NavigationBar(props: NavigationBarType) {
   const location = useLocation();
   const { pathname } = location;
-  const navigate = useNavigate();
   const [user, setUser] = useRecoilState(signState);
   const { isLogin } = JSON.parse(user);
   return (
     <Container>
       <NavigationTop>
-        <HomeAnchor onClick={() => navigate('/')}>홈</HomeAnchor>
+        <HomeAnchor href='/'>홈</HomeAnchor>
         {isLogin && pathname !== '/signin' && (
           <SignButton
             onClick={() => {

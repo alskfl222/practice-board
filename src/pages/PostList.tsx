@@ -114,25 +114,26 @@ const messageType = {
 function PostList() {
   const location = useLocation();
   const { search } = location;
-  const pageQuery = new URLSearchParams(search);
+  const initQuery = new URLSearchParams(search);
+  const query = new URLSearchParams({
+    postType: initQuery.get('postType') || 'notice',
+    pageSize: initQuery.get('pageSize') || '10',
+    page: initQuery.get('page') || '1',
+    keyword: initQuery.get('keyword') || '',
+  });
   const navigate = useNavigate();
-  const initQuery: PostQueryType = {
-    postType: pageQuery.get('postType') || 'notice',
-    pageSize: parseInt(pageQuery.get('pageSize')!, 10) || 10,
-    page: parseInt(pageQuery.get('page')!, 10),
-    keyword: pageQuery.get('keyword') || '',
-  };
   const { isLogin } = JSON.parse(useRecoilValue(signState));
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [query, setQuery] = useState<PostQueryType>(initQuery);
   const [totalCount, setTotalCount] = useState<number>(1);
   const [postList, setPostList] = useState<PostType[]>([]);
   const [message, setMessage] = useState<string>(messageType.loading);
-  const totalPageCount = Math.ceil(totalCount / query.pageSize);
+  const totalPageCount = Math.ceil(
+    totalCount / parseInt(query.get('pageSize')!, 10)
+  );
 
   const fetchPostList = useCallback(() => {
     setIsLoading(true);
-    const queryString = makeQueryString(query);
+    const queryString = query.toString();
     axios
       .get(`${process.env.API_URL}/post?${queryString}`)
       .then((response) => {
@@ -167,23 +168,20 @@ function PostList() {
         ) as HTMLInputElement;
         value = keywordInput.value;
       }
-      let newQuery: PostQueryType;
+
       if (
         type === 'pageSize' &&
         totalPageCount > Math.floor(totalCount / parseInt(value, 10))
       ) {
-        newQuery = {
-          ...query,
-          pageSize: parseInt(value, 10),
-          page: Math.ceil(totalCount / parseInt(value, 10)),
-        };
+        query.set('pageSize', value);
+        query.set(
+          'page',
+          Math.ceil(totalCount / parseInt(value, 10)).toString()
+        );
       } else {
-        newQuery = {
-          ...query,
-          [type]: Number.isNaN(value) ? parseInt(value, 10) : value,
-        };
+        query.set(type, value);
       }
-      const queryString = makeQueryString(newQuery);
+      const queryString = query.toString();
       navigate(`/post?${queryString}`);
     },
     []
@@ -211,7 +209,7 @@ function PostList() {
     return (
       <select
         name='page-size'
-        value={`${query.pageSize}`}
+        value={`${query.get('pageSize')}`}
         onChange={onChange('pageSize')}
       >
         <optgroup label='페이지 개수'>
@@ -225,7 +223,7 @@ function PostList() {
     return (
       <select
         name='post-type'
-        defaultValue={`${query.postType}`}
+        value={`${query.get('postType')}`}
         onChange={onChange('postType')}
       >
         <optgroup label='종류'>
@@ -247,13 +245,10 @@ function PostList() {
       ></KeywordInput>
     );
   }
-  function clearQuery() {
-    setQuery(initQuery);
-  }
 
   useEffect(() => {
     fetchPostList();
-  }, []);
+  }, [location]);
 
   return (
     <PageContainer>
@@ -263,7 +258,6 @@ function PostList() {
         <PostTypeSelect />
         <PostKeywordInput />
         <SendButton onClick={onChange('keyword')}>검색</SendButton>
-        <SendButton onClick={clearQuery}>초기화</SendButton>
       </FilterContainer>
       {!isLoading ? (
         <>
@@ -315,7 +309,9 @@ function PostList() {
           <PageAnchorContainer>
             {new Array(totalPageCount).fill('').map((_, index) => (
               <PageAnchor
-                className={index + 1 === query.page ? 'current' : ''}
+                className={
+                  `${index + 1}` === query.get('page') ? 'current' : ''
+                }
                 key={index + 1}
                 onClick={onChange('page')}
               >
@@ -324,7 +320,7 @@ function PostList() {
             ))}
             {isLogin ? (
               <PostAddButtonContainer>
-                <SendButton onClick={() => navigate('/post/create')}>
+                <SendButton onClick={navigateTo('/post/create')}>
                   글쓰기
                 </SendButton>
               </PostAddButtonContainer>

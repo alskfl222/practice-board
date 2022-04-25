@@ -56,12 +56,12 @@ function Post() {
         if (response.data && response.data.post) {
           setData(response.data.post);
         } else {
-          navigateTo('/post');
+          navigate('/post');
         }
       })
       .catch((err) => {
         console.error(err);
-        navigateTo('/404');
+        navigate('/404');
       });
   }
 

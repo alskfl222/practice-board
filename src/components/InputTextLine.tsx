@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { PostEventType } from '../@types';
 import { theme } from '../styles/theme';
 
-interface InputTextLineType {
+interface InputTextLineProps {
   id?: string;
   name?: string;
   type?: string;
@@ -14,7 +14,7 @@ interface InputTextLineType {
   onChange?: (e: PostEventType) => void;
 }
 
-const InputTextLineInput = styled.input<InputTextLineType>`
+const InputTextLineInput = styled.input<InputTextLineProps>`
   width: ${({ width }) => width || '200px'};
   padding: 0.5rem 1rem;
   border: none;
@@ -25,7 +25,7 @@ const InputTextLineInput = styled.input<InputTextLineType>`
   }
 `;
 
-function InputTextLine(props: InputTextLineType) {
+function InputTextLine(props: InputTextLineProps) {
   const {
     name,
     width = '200px',

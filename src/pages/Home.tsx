@@ -1,5 +1,4 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { PageContainer, HorizonDivider } from '../styles';
 
@@ -29,7 +28,6 @@ const PageAnchor = styled.a`
 `;
 
 function Home() {
-  const navigate = useNavigate();
   return (
     <PageContainer padding='2rem' alignItems='center'>
       <HomeHeader>
@@ -37,8 +35,8 @@ function Home() {
       </HomeHeader>
       <HorizonDivider />
       <AnchorContainer>
-        <PageAnchor onClick={() => navigate('/signin')}>로그인</PageAnchor>
-        <PageAnchor onClick={() => navigate('/post')}>게시글 목록</PageAnchor>
+        <PageAnchor href='/signin'>로그인</PageAnchor>
+        <PageAnchor href='/post'>게시글 목록</PageAnchor>
       </AnchorContainer>
     </PageContainer>
   );
