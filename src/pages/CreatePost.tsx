@@ -13,11 +13,6 @@ import {
 } from '../styles';
 import { navigateTo } from '../utils';
 
-// * rendering 최적화 중심 refactoring
-// ! styled-components 중복 관리
-// ! useCallback, memo 사용
-// ! 함수 쪼개기
-
 function CreatePost() {
   const initData: PostType = {
     title: '',

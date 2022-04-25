@@ -6,17 +6,16 @@ import axios from 'axios';
 import signState from '../states/atom';
 import { PostQueryType, PostEventType, PostType } from '../@types';
 import NavigationBar from '../components/NavigationBar';
+import PostListHeader from '../components/PostListHeader';
 import {
   PageContainer,
   SendButton,
   HorizonDivider,
-  PostHeader,
   PostBody,
-  TitleInput,
 } from '../styles';
 import { navigateTo } from '../utils';
 
-const PostListHeader = styled.div`
+const PostListColumnHeader = styled.div`
   width: 100%;
   padding: 0.5rem;
   display: flex;
@@ -75,18 +74,21 @@ const PostControllerContainer = styled.div`
   justify-content: flex-end;
   gap: 0.5rem;
 `;
-const PageAnchorContainer = styled.div`
+const PageButtonContainer = styled.div`
   padding: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 2rem;
 `;
-const PageAnchor = styled.a`
+const PageButton = styled.button`
+  border: none;
+  background-color: transparent;
   &:hover {
     background-color: #0003;
   }
   &.current {
+    font-size: 1.2rem;
     font-weight: 700;
   }
 `;
@@ -201,48 +203,16 @@ function PostList() {
   return (
     <PageContainer>
       <NavigationBar>게시판 목록</NavigationBar>
-      <PostHeader padding='1rem 2rem'>
-        <select
-          name='page-size'
-          value={`${query.get('pageSize')}`}
-          onChange={onChange('pageSize')}
-        >
-          <optgroup label='페이지 개수'>
-            <option value='5'>5개</option>
-            <option value='10'>10개</option>
-          </optgroup>
-        </select>
-        <select
-          name='post-type'
-          value={`${query.get('postType')}`}
-          onChange={onChange('postType')}
-        >
-          <optgroup label='종류'>
-            <option value='notice'>공지</option>
-          </optgroup>
-        </select>
-        <TitleInput
-          id='keyword-input'
-          fontSize='1rem'
-          defaultValue={`${query.get('keyword')}`}
-          placeholder='검색어'
-          onKeyUp={(e: PostEventType) => {
-            if (e.key === 'Enter') {
-              onChange('keyword')(e);
-            }
-          }}
-        ></TitleInput>
-        <SendButton onClick={onChange('keyword')}>검색</SendButton>
-      </PostHeader>
+      <PostListHeader query={query} onChange={onChange} />
       {!isLoading ? (
         <>
           <PostBody border='1px solid black'>
-            <PostListHeader>
+            <PostListColumnHeader>
               <PostIndexContainer>번호</PostIndexContainer>
               <PostTitleContainer>제목</PostTitleContainer>
               <PostAuthorContainer>작성자</PostAuthorContainer>
               <PostControllerContainer></PostControllerContainer>
-            </PostListHeader>
+            </PostListColumnHeader>
             <HorizonDivider width='100%' margin='0' />
             {postList.length !== 0
               ? postList.map((post) => (
@@ -285,9 +255,9 @@ function PostList() {
               ))
               : message}
           </PostBody>
-          <PageAnchorContainer>
+          <PageButtonContainer>
             {new Array(totalPageCount).fill('').map((_, index) => (
-              <PageAnchor
+              <PageButton
                 className={
                   `${index + 1}` === query.get('page') ? 'current' : ''
                 }
@@ -295,7 +265,7 @@ function PostList() {
                 onClick={onChange('page')}
               >
                 {index + 1}
-              </PageAnchor>
+              </PageButton>
             ))}
             {isLogin ? (
               <PostAddButtonContainer>
@@ -304,7 +274,7 @@ function PostList() {
                 </SendButton>
               </PostAddButtonContainer>
             ) : null}
-          </PageAnchorContainer>
+          </PageButtonContainer>
         </>
       ) : (
         <PostBody>{message}</PostBody>

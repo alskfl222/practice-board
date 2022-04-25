@@ -33,3 +33,10 @@ export type PostEventType = React.ChangeEvent<HTMLSelectElement> &
   React.MouseEvent<HTMLAnchorElement> &
   React.MouseEvent<HTMLButtonElement> &
   React.KeyboardEvent<HTMLInputElement>;
+
+
+// * component props type
+export interface PostListHeaderProps {
+  query: URLSearchParams;
+  onChange: (key: keyof PostQueryType) => (e: PostEventType) => void;
+}
