@@ -5,16 +5,8 @@ import { PostType } from '../@types';
 import { getPost, deletePost } from '../apis';
 import NavigationBar from '../components/NavigationBar';
 import { theme } from '../styles/theme';
-import { PageContainer, HorizonDivider } from '../styles';
+import { PageContainer, HorizonDivider, PostHeader } from '../styles';
 
-const PostHeader = styled.header`
-  padding: 2rem;
-  padding-bottom: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-`;
 const ControlButton = styled.button`
   flex-shrink: 0;
   padding: 0.5rem;

@@ -22,6 +22,15 @@ export const PageContainer = styled.div<PageContainerProps>`
   gap: ${({ gap }) => gap || '1rem'};
 `;
 
+export const PostHeader = styled.header`
+  padding: 2rem;
+  padding-bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+`
+
 export const HorizonDivider = styled.div<HorizonDividerProps>`
   align-self: center;
   width: ${({ width }) => width || '70%'};

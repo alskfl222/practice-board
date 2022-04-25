@@ -5,7 +5,7 @@ import { PostType, PostEventType } from '../@types';
 import { createPost } from '../apis';
 import NavigationBar from '../components/NavigationBar';
 import SendButton from '../components/SendButton';
-import { PageContainer } from '../styles';
+import { PageContainer, PostHeader } from '../styles';
 
 // * rendering 최적화 중심 refactoring
 // ! styled-components 중복 관리
@@ -13,13 +13,6 @@ import { PageContainer } from '../styles';
 // ! 함수 쪼개기
 // ! onClick 익명함수 x
 
-const PageHeader = styled.div`
-  padding: 2rem;
-  padding-bottom: 0;
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-`;
 const PostControllerContainer = styled.div`  
   width: 70%;
   display: flex;
@@ -79,7 +72,7 @@ function CreatePost() {
   return (
     <PageContainer>
       <NavigationBar>게시글 생성</NavigationBar>
-      <PageHeader>
+      <PostHeader>
         <SendButton onClick={() => navigate('/post')}>게시글 목록</SendButton>
         <PostControllerContainer>
           <select onChange={onChange('postType')}>
@@ -96,7 +89,7 @@ function CreatePost() {
           </SendButton>
           <SendButton onClick={clearData}>초기화</SendButton>
         </PostControllerContainer>
-      </PageHeader>
+      </PostHeader>
       <HorizonDivider />
       <PageBody>
         <PostContentTextarea
