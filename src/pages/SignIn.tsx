@@ -5,10 +5,10 @@ import axios from 'axios';
 import { UserType } from '../@types';
 import signState from '../states/atom';
 import NavigationBar from '../components/NavigationBar';
-import InputTextLine from '../components/InputTextLine';
-import SendButton from '../components/SendButton';
 import {
   PageContainer,
+  FormInput,
+  SendButton,
   FormContainer,
   InputContainer,
   MessageContainer,
@@ -65,7 +65,7 @@ function SignIn() {
       <FormContainer name='signin-form' onSubmit={onSubmit}>
         <InputContainer>
           E-mail
-          <InputTextLine
+          <FormInput
             name='email'
             value={data.email}
             onChange={onChange('email')}
@@ -78,7 +78,7 @@ function SignIn() {
         </MessageContainer>
         <InputContainer>
           비밀번호
-          <InputTextLine
+          <FormInput
             name='password'
             value={data.password}
             type='password'
@@ -97,7 +97,7 @@ function SignIn() {
         <SendButton disabled={!(isValidEmail() && isValidPassword())}>
           로그인
         </SendButton>
-        <a onClick={() => navigate('/signup')}>회원가입 페이지</a>
+        <a href='/signup'>회원가입 페이지</a>
       </FormContainer>
     </PageContainer>
   );

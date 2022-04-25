@@ -21,15 +21,7 @@ const NavigationTop = styled.div`
   justify-content: space-between;
   align-items: center;
 `;
-const HomeAnchor = styled.a`
-  font-size: 1.5rem;
-  font-weight: 500;
-  cursor: pointer;
-  &:hover {
-    font-weight: 700;
-  }
-`;
-const SignButton = styled.button`
+const NavButton = styled.button`
   border: none;
   background-color: transparent;
   font-size: 1.5rem;
@@ -56,9 +48,9 @@ function NavigationBar(props: NavigationBarType) {
   return (
     <Container>
       <NavigationTop>
-        <HomeAnchor href='/'>홈</HomeAnchor>
+        <NavButton onClick={navigateTo('/')}>홈</NavButton>
         {isLogin && pathname !== '/signin' && (
-          <SignButton
+          <NavButton
             onClick={() => {
               setUser(JSON.stringify({ isLogin: false }));
               localStorage.removeItem('token');
@@ -66,10 +58,10 @@ function NavigationBar(props: NavigationBarType) {
             }}
           >
             로그아웃
-          </SignButton>
+          </NavButton>
         )}
         {!isLogin && !(pathname === '/signin' || pathname === '/signup') && (
-          <SignButton onClick={navigateTo('/signin')}>로그인</SignButton>
+          <NavButton onClick={navigateTo('/signin')}>로그인</NavButton>
         )}
       </NavigationTop>
       <NavigationBottom>{props.children}</NavigationBottom>

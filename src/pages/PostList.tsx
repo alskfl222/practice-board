@@ -7,9 +7,9 @@ import signState from '../states/atom';
 import { PostQueryType, PostEventType, PostType } from '../@types';
 
 import NavigationBar from '../components/NavigationBar';
-import SendButton from '../components/SendButton';
 import {
   PageContainer,
+  SendButton,
   HorizonDivider,
   PostHeader,
   PostBody,

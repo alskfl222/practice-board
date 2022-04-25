@@ -4,9 +4,9 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { PostType } from '../@types';
 import NavigationBar from '../components/NavigationBar';
-import SendButton from '../components/SendButton';
 import {
   PageContainer,
+  SendButton,
   PostHeader,
   PostControllerContainer,
   PostBody,

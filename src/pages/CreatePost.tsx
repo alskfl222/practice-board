@@ -2,9 +2,9 @@ import React, { useState, useCallback, memo } from 'react';
 import axios from 'axios';
 import { PostType, PostEventType } from '../@types';
 import NavigationBar from '../components/NavigationBar';
-import SendButton from '../components/SendButton';
 import {
   PageContainer,
+  SendButton,
   PostHeader,
   TitleInput,
   PostControllerContainer,

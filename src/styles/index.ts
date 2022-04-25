@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { PostEventType } from '../@types';
 import { theme } from './theme';
 
 interface PageContainerProps {
@@ -32,14 +33,50 @@ export const FormContainer = styled.form`
   gap: 1rem;
 `;
 export const InputContainer = styled.label`
-  width: 60%;
+  width: 70%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
+  word-break: keep-all;
 `;
+
+export const FormInput = styled.input<{ width?: string }>`
+  width: ${({ width }) => width || '300px'};
+  padding: 0.5rem 1rem;
+  border: none;
+  border-bottom: 1px solid black;
+  background-color: transparent;
+  &:focus {
+    border-bottom: 2px solid ${theme.border.red};
+  }
+`;
+
 export const MessageContainer = styled.div`
   font-size: 0.8rem;
+`;
+export const SendButton = styled.button<{ minWidth?: string }>`
+  min-width: ${({ minWidth }) => minWidth || '3rem'};
+  padding: 0.5rem;
+  border: 1px solid ${theme.border.gray707070};
+  border-radius: 1rem;
+  background-color: transparent;
+  overflow: hidden;
+  word-break: keep-all;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  &:disabled {
+    background-color: #ccc;
+    color: #777;
+    cursor: default;
+    &:hover {
+      background-color: #ccc;
+    }
+  }
+  &:hover {
+    background-color: #0003;
+  }
 `;
 
 export const PostHeader = styled.header<{ padding?: string }>`

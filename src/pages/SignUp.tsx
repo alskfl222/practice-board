@@ -1,12 +1,12 @@
 import React, { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import InputTextLine from '../components/InputTextLine';
-import SendButton from '../components/SendButton';
 import { UserType } from '../@types';
 import NavigationBar from '../components/NavigationBar';
 import {
   PageContainer,
+  FormInput,
+  SendButton,
   FormContainer,
   InputContainer,
   MessageContainer,
@@ -87,7 +87,7 @@ function SignUp() {
       <FormContainer name='signup-form' onSubmit={onSubmit}>
         <InputContainer>
           이름
-          <InputTextLine
+          <FormInput
             name='name'
             value={data.name}
             onChange={onChange('name')}
@@ -102,7 +102,7 @@ function SignUp() {
         </MessageContainer>
         <InputContainer>
           E-mail
-          <InputTextLine
+          <FormInput
             name='email'
             value={data.email}
             onChange={onChange('email')}
@@ -115,7 +115,7 @@ function SignUp() {
         </MessageContainer>
         <InputContainer>
           비밀번호
-          <InputTextLine
+          <FormInput
             name='password'
             value={data.password}
             type='password'
@@ -132,7 +132,7 @@ function SignUp() {
         </MessageContainer>
         <InputContainer>
           비밀번호 확인
-          <InputTextLine
+          <FormInput
             name='password-confirm'
             value={data.passwordConfirm}
             type='password'
@@ -146,7 +146,7 @@ function SignUp() {
         </MessageContainer>
         <InputContainer>
           전화번호
-          <InputTextLine
+          <FormInput
             name='pn'
             value={data.pn}
             placeholder='숫자만 입력해 주세요'
@@ -172,7 +172,7 @@ function SignUp() {
         >
           회원가입
         </SendButton>
-        <a onClick={() => navigate('/signin')}>로그인 페이지</a>
+        <a href='/signin'>로그인 페이지</a>
       </FormContainer>
     </PageContainer>
   );
