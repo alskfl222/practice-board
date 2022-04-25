@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import signState from '../states/atom';
 import { PostQueryType, PostEventType, PostType } from '../@types';
-import { getPostList, deletePost } from '../apis';
+import axios from 'axios';
+
 import NavigationBar from '../components/NavigationBar';
 import SendButton from '../components/SendButton';
 import { PageContainer } from '../styles';
+import { makeQueryString } from '../util';
 
 const FilterContainer = styled.div`
   padding: 1rem 2rem;
@@ -126,9 +128,11 @@ function PostList() {
   const [message, setMessage] = useState<string>(messageType.loading);
   const totalPageCount = Math.ceil(totalCount / query.pageSize);
 
-  function fetchPostList() {
+  const fetchPostList = useCallback(() => {
     setIsLoading(true);
-    getPostList(query)
+    const queryString = makeQueryString(query);
+    axios
+      .get(`${process.env.API_URL}/post?${queryString}`)
       .then((response) => {
         if (response.data && response.data.posts) {
           setPostList(response.data.posts);
@@ -143,52 +147,57 @@ function PostList() {
         console.error(err);
       })
       .finally(() => setIsLoading(false));
-  }
+  }, [query]);
 
-  const onChange = (type: keyof PostQueryType) => (e: PostEventType) => {
-    e.preventDefault();
-    setMessage(messageType.loading);
-    setIsLoading(true);
-    let value = '';
-    if (type === 'pageSize' || type === 'postType') {
-      value = e.target.value;
-    }
-    if (type === 'page') value = e.target.innerText;
-    if (type === 'keyword') {
-      const keywordInput = document.querySelector(
-        '#keyword-input',
-      ) as HTMLInputElement;
-      value = keywordInput.value;
-    }
-
-    if (
-      type === 'pageSize'
-      && totalPageCount > Math.floor(totalCount / parseInt(value, 10))
-    ) {
-      console.log('Non-Exist Page');
-      setQuery((beforeQuery) => ({
-        ...beforeQuery,
-        pageSize: parseInt(value, 10),
-        page: Math.ceil(totalCount / parseInt(value, 10)),
-      }));
-    } else {
-      setQuery((beforeQuery) => ({
-        ...beforeQuery,
-        [type]: Number.isNaN(value) ? parseInt(value, 10) : value,
-      }));
-    }
-
-    const queryString = Object.entries(query)
-      .map((item) =>
-        (item[0] !== type ? `${item[0]}=${item[1]}` : `${type}=${value}`))
-      .join('&');
-    // console.log(queryString);
-    setSearchParams(queryString);
-  };
+  const onChange = useCallback(
+    (type: keyof PostQueryType) => (e: PostEventType) => {
+      e.preventDefault();
+      setMessage(messageType.loading);
+      setIsLoading(true);
+      let value = '';
+      if (type === 'pageSize' || type === 'postType') {
+        value = e.target.value;
+      }
+      if (type === 'page') value = e.target.innerText;
+      if (type === 'keyword') {
+        const keywordInput = document.querySelector(
+          '#keyword-input'
+        ) as HTMLInputElement;
+        value = keywordInput.value;
+      }
+      let newQuery: PostQueryType;
+      if (
+        type === 'pageSize' &&
+        totalPageCount > Math.floor(totalCount / parseInt(value, 10))
+      ) {
+        newQuery = {
+          ...query,
+          pageSize: parseInt(value, 10),
+          page: Math.ceil(totalCount / parseInt(value, 10)),
+        };
+      } else {
+        newQuery = {
+          ...query,
+          [type]: Number.isNaN(value) ? parseInt(value, 10) : value,
+        };
+      }
+      const queryString = makeQueryString(newQuery);
+      navigate(`/post?${queryString}`);
+    },
+    []
+  );
 
   function onDelete(id: PostType['id']) {
-    console.log(id);
-    deletePost(id)
+    axios
+      .post(
+        `${process.env.API_URL}/post/delete`,
+        { id },
+        {
+          headers: {
+            token: localStorage.getItem('token') || '',
+          },
+        }
+      )
       .then((response) => {
         console.log(response);
         fetchPostList();
@@ -266,42 +275,42 @@ function PostList() {
             <HorizonDivider />
             {postList.length !== 0
               ? postList.map((post) => (
-                <PostContainer
-                  key={post.id}
-                  onClick={() => {
-                    navigate(`/post/${post.id}`);
-                  }}
-                >
-                  <PostIndexContainer>{post.id}</PostIndexContainer>
-                  <PostTitleContainer>{post.title}</PostTitleContainer>
-                  <PostControllerContainer>
-                    {isLogin && (
-                      <>
-                        <SendButton
-                          onClick={(
-                            e: React.MouseEvent<HTMLButtonElement>,
-                          ) => {
-                            e.stopPropagation();
-                            navigate(`/post/edit/${post.id}`);
-                          }}
-                        >
+                  <PostContainer
+                    key={post.id}
+                    onClick={() => {
+                      navigate(`/post/${post.id}`);
+                    }}
+                  >
+                    <PostIndexContainer>{post.id}</PostIndexContainer>
+                    <PostTitleContainer>{post.title}</PostTitleContainer>
+                    <PostControllerContainer>
+                      {isLogin && (
+                        <>
+                          <SendButton
+                            onClick={(
+                              e: React.MouseEvent<HTMLButtonElement>
+                            ) => {
+                              e.stopPropagation();
+                              navigate(`/post/edit/${post.id}`);
+                            }}
+                          >
                             수정
-                        </SendButton>
-                        <SendButton
-                          onClick={(
-                            e: React.MouseEvent<HTMLButtonElement>,
-                          ) => {
-                            e.stopPropagation();
-                            onDelete(post.id);
-                          }}
-                        >
+                          </SendButton>
+                          <SendButton
+                            onClick={(
+                              e: React.MouseEvent<HTMLButtonElement>
+                            ) => {
+                              e.stopPropagation();
+                              onDelete(post.id);
+                            }}
+                          >
                             삭제
-                        </SendButton>
-                      </>
-                    )}
-                  </PostControllerContainer>
-                </PostContainer>
-              ))
+                          </SendButton>
+                        </>
+                      )}
+                    </PostControllerContainer>
+                  </PostContainer>
+                ))
               : message}
           </PostListContainer>
           <PageAnchorContainer>

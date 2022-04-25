@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { PostType } from '../@types';
-import { getPost, deletePost } from '../apis';
+import axios from 'axios';
 import NavigationBar from '../components/NavigationBar';
-import { theme } from '../styles/theme';
 import { PageContainer, HorizonDivider, PostHeader, PostBody } from '../styles';
 import SendButton from '../components/SendButton';
 
@@ -49,7 +48,8 @@ function Post() {
   ).toLocaleDateString();
 
   function fetchPost() {
-    getPost(id)
+    axios
+      .get(`${process.env.API_URL}/post/${id}`)
       .then((response) => {
         if (response.data && response.data.post) {
           setData(response.data.post);
@@ -64,7 +64,16 @@ function Post() {
   }
 
   function onDelete() {
-    deletePost(id)
+    axios
+      .post(
+        `${process.env.API_URL}/post/delete`,
+        { id },
+        {
+          headers: {
+            token: localStorage.getItem('token') || '',
+          },
+        }
+      )
       .then((response) => {
         console.log(response);
         navigate('/post');

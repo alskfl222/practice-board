@@ -1,11 +1,17 @@
-import React, { useState, memo } from 'react';
+import React, { useState, useCallback, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { PostType, PostEventType } from '../@types';
-import { createPost } from '../apis';
+import axios from 'axios';
 import NavigationBar from '../components/NavigationBar';
 import SendButton from '../components/SendButton';
-import { PageContainer, PostHeader, HorizonDivider, TitleInput, PostBody } from '../styles';
+import {
+  PageContainer,
+  PostHeader,
+  HorizonDivider,
+  TitleInput,
+  PostBody,
+} from '../styles';
 
 // * rendering 최적화 중심 refactoring
 // ! styled-components 중복 관리
@@ -41,14 +47,21 @@ function CreatePost() {
     data.title.trim().length > 0 && data.contents.trim().length > 0
   );
 
-  const onChange = (type: string) => (e: PostEventType) => {
-    const { value } = e.target;
-    setData((beforeData) => ({ ...beforeData, [type]: value }));
-  };
+  const onChange = useCallback(
+    (type: keyof PostType) => (e: PostEventType) => {
+      const { value } = e.target;
+      setData((beforeData) => ({ ...beforeData, [type]: value }));
+    },
+    []
+  );
 
   const onSubmit = () => {
-    console.log(data);
-    createPost(data)
+    axios
+      .post(`${process.env.API_URL}/post`, data, {
+        headers: {
+          token: localStorage.getItem('token') || '',
+        },
+      })
       .then((response) => console.log(response.data))
       .catch((err) => console.error(err));
   };

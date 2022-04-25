@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import signState from '../states/atom';
 import { PostType, PostEventType } from '../@types';
-import { getPost, editPost } from '../apis';
+import axios from 'axios';
 import NavigationBar from '../components/NavigationBar';
 import SendButton from '../components/SendButton';
 import { theme } from '../styles/theme';
@@ -68,9 +68,9 @@ function EditPost() {
   );
 
   function fetchPost() {
-    getPost(id)
+    axios
+      .get(`${process.env.API_URL}/post/${id}`)
       .then((response) => {
-        // console.log(response.data);
         if (response.data && response.data.post) {
           setData(response.data.post);
         } else {
@@ -82,23 +82,32 @@ function EditPost() {
       });
   }
 
-  const onChange = (type: keyof PostType) => (e: PostEventType) => {
-    const { value } = e.target;
-    setData((beforeData) => ({ ...beforeData, [type]: value }));
-  };
+  const onChange = useCallback(
+    (type: keyof PostType) => (e: PostEventType) => {
+      const { value } = e.target;
+      setData((beforeData) => ({ ...beforeData, [type]: value }));
+    },
+    []
+  );
 
   const onSubmit = () => {
-    editPost(data).catch((err) => {
-      console.error(err);
-    });
+    axios
+      .post(`${process.env.API_URL}/post/edit`, data, {
+        headers: {
+          token: localStorage.getItem('token') || '',
+        },
+      })
+      .catch((err) => {
+        console.error(err);
+      });
     navigate('/post');
   };
 
   useEffect(() => {
-    if (!isLogin) {
-      navigate('/post');
-    }
-    fetchPost();
+    // if (!isLogin) {
+    //   navigate('/post');
+    // }
+    // fetchPost();
   }, []);
 
   return (
