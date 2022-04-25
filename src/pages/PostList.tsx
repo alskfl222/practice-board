@@ -8,48 +8,22 @@ import { PostQueryType, PostEventType, PostType } from '../@types';
 
 import NavigationBar from '../components/NavigationBar';
 import SendButton from '../components/SendButton';
-import { PageContainer } from '../styles';
-import { makeQueryString, navigateTo } from '../utils';
+import { PageContainer, HorizonDivider, PostHeader, PostBody } from '../styles';
+import { navigateTo } from '../utils';
 
-const FilterContainer = styled.div`
-  padding: 1rem 2rem;
-  display: flex;
-  justify-content: space-around;
-  gap: 1rem;
-  select {
-    width: 20%;
-    padding: 0 0.2rem;
-  }
-`;
 const KeywordInput = styled.input`
   flex-grow: 1;
   min-width: 0;
   padding: 0.2rem;
 `;
 
-const PostListContainer = styled.div`
-  min-height: calc(100vh - 25rem);
-  margin: 0 2rem;
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  border: 1px solid black;
-  border-radius: 1rem;
-  font-size: 1.2rem;
-  font-weight: 500;
-`;
 const PostListHeader = styled.div`
   width: 100%;
   padding: 0.5rem;
   display: flex;
   justify-content: space-between;
 `;
-const HorizonDivider = styled.div`
-  align-self: center;
-  width: 100%;
-  box-shadow: 0 0.5px 0 0.5px black;
-`;
+
 const PostContainer = styled.div`
   width: 100%;
   padding: 0.5rem;
@@ -63,15 +37,30 @@ const PostContainer = styled.div`
 `;
 const PostIndexContainer = styled.div`
   flex-shrink: 0;
-  width: 4rem;
+  width: 5rem;
+  padding-right: 1rem;
   border-right: 1px solid black;
   text-align: center;
 `;
 const PostTitleContainer = styled.div`
   position: relative;
   flex-grow: 1;
+  min-width: 10rem;
   z-index: 99;
   padding: 0 2rem;
+  text-align: center;
+  overflow: hidden;
+  word-break: keep-all;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+`;
+const PostAuthorContainer = styled.div`
+  flex-shrink: 0;
+  width: 7.5rem;
+  padding: 0 1rem;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+  text-align: center;
   overflow: hidden;
   word-break: keep-all;
   white-space: nowrap;
@@ -79,23 +68,25 @@ const PostTitleContainer = styled.div`
 `;
 const PostControllerContainer = styled.div`
   position: relative;
-  flex-shrink: 0;
+  flex-shrink: 0.5;
+  width: 7.5rem;
   z-index: 999;
+  padding: 0 1rem;
   display: flex;
   justify-content: flex-end;
   gap: 0.5rem;
 `;
 const PageAnchorContainer = styled.div`
+  padding: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 2rem;
-
-  a:hover {
-    background-color: #0003;
-  }
 `;
 const PageAnchor = styled.a`
+  &:hover {
+    background-color: #0003;
+  }
   &.current {
     font-weight: 700;
   }
@@ -132,7 +123,6 @@ function PostList() {
   );
 
   const fetchPostList = useCallback(() => {
-    setIsLoading(true);
     const queryString = query.toString();
     axios
       .get(`${process.env.API_URL}/post?${queryString}`)
@@ -236,6 +226,7 @@ function PostList() {
     return (
       <KeywordInput
         id='keyword-input'
+        defaultValue={`${query.get('keyword')}`}
         placeholder='검색어'
         onKeyUp={(e: PostEventType) => {
           if (e.key === 'Enter') {
@@ -253,21 +244,22 @@ function PostList() {
   return (
     <PageContainer>
       <NavigationBar>게시판 목록</NavigationBar>
-      <FilterContainer>
+      <PostHeader padding='1rem 2rem'>
         <PageSizeSelect />
         <PostTypeSelect />
         <PostKeywordInput />
         <SendButton onClick={onChange('keyword')}>검색</SendButton>
-      </FilterContainer>
+      </PostHeader>
       {!isLoading ? (
         <>
-          <PostListContainer>
+          <PostBody>
             <PostListHeader>
               <PostIndexContainer>번호</PostIndexContainer>
               <PostTitleContainer>제목</PostTitleContainer>
+              <PostAuthorContainer>작성자</PostAuthorContainer>
               <PostControllerContainer></PostControllerContainer>
             </PostListHeader>
-            <HorizonDivider />
+            <HorizonDivider width='100%' margin='0' />
             {postList.length !== 0
               ? postList.map((post) => (
                   <PostContainer
@@ -276,8 +268,9 @@ function PostList() {
                   >
                     <PostIndexContainer>{post.id}</PostIndexContainer>
                     <PostTitleContainer>{post.title}</PostTitleContainer>
+                    <PostAuthorContainer>{post.author}</PostAuthorContainer>
                     <PostControllerContainer>
-                      {isLogin && (
+                      {isLogin ? (
                         <>
                           <SendButton
                             onClick={(
@@ -300,12 +293,17 @@ function PostList() {
                             삭제
                           </SendButton>
                         </>
+                      ) : (
+                        <>
+                          <div></div>
+                          <div></div>
+                        </>
                       )}
                     </PostControllerContainer>
                   </PostContainer>
                 ))
               : message}
-          </PostListContainer>
+          </PostBody>
           <PageAnchorContainer>
             {new Array(totalPageCount).fill('').map((_, index) => (
               <PageAnchor
@@ -328,7 +326,7 @@ function PostList() {
           </PageAnchorContainer>
         </>
       ) : (
-        <PostListContainer>{message}</PostListContainer>
+        <PostBody>{message}</PostBody>
       )}
     </PageContainer>
   );

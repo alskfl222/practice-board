@@ -11,6 +11,7 @@ interface PageContainerProps {
 }
 interface HorizonDividerProps {
   width?: string;
+  margin?: string;
 }
 
 export const PageContainer = styled.div<PageContainerProps>`
@@ -20,7 +21,7 @@ export const PageContainer = styled.div<PageContainerProps>`
   display: flex;
   flex-direction: ${({ flexDirection }) => flexDirection || 'column'};
   align-items: ${({ alignItems }) => alignItems || 'normal'};
-  gap: ${({ gap }) => gap || '1rem'};
+  gap: ${({ gap }) => gap || '0.5rem'};
 `;
 
 export const FormContainer = styled.form`
@@ -31,7 +32,7 @@ export const FormContainer = styled.form`
   gap: 1rem;
 `;
 export const InputContainer = styled.label`
-  width: 50%;
+  width: 60%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -41,13 +42,16 @@ export const MessageContainer = styled.div`
   font-size: 0.8rem;
 `;
 
-export const PostHeader = styled.header`
-  padding: 2rem;
-  padding-bottom: 0;
+export const PostHeader = styled.header<{ padding?: string }>`
+  padding: ${({ padding }) => padding || '2rem'};
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
+  select {
+    width: 20%;
+    padding: 0 0.2rem;
+  }
 `;
 
 export const TitleInput = styled.input`
@@ -64,18 +68,20 @@ export const TitleInput = styled.input`
 export const HorizonDivider = styled.div<HorizonDividerProps>`
   align-self: center;
   width: ${({ width }) => width || '70%'};
-  margin: 2rem 0;
+  margin: ${({ margin }) => margin || '2rem 0'};
   box-shadow: 0 0.5px 0 0.5px black;
 `;
 
 export const PostBody = styled.div`
   width: calc(100% -4rem);
-  min-height: 20rem;
+  min-height: calc(100vh - 25rem);
   margin: 0 2rem;
   padding: 2rem;
   display: flex;
   flex-direction: column;
+  gap: 1rem;
   border: 1px solid black;
   border-radius: 1rem;
   background-color: ${theme.background.white};
+  font-weight: 500;
 `;

@@ -22,8 +22,8 @@ const Container = styled.div`
 `;
 const Inner = styled.div`
   width: calc(100vw - 2rem);
-  min-width: calc(480px - 2rem);
-  max-width: 900px;
+  min-width: calc(720px - 2rem);
+  max-width: 1080px;
   min-height: 100vh;
   background-color: ${theme.background.brightGray};
 `;

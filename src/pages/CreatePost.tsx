@@ -7,7 +7,6 @@ import SendButton from '../components/SendButton';
 import {
   PageContainer,
   PostHeader,
-  HorizonDivider,
   TitleInput,
   PostBody,
 } from '../styles';
@@ -15,9 +14,8 @@ import { navigateTo } from '../utils';
 
 // * rendering 최적화 중심 refactoring
 // ! styled-components 중복 관리
-// ! useCallback, useMemo 사용
+// ! useCallback, memo 사용
 // ! 함수 쪼개기
-// ! onClick 익명함수 x
 
 const PostControllerContainer = styled.div`
   width: 80%;
@@ -91,7 +89,6 @@ function CreatePost() {
           <SendButton onClick={clearData}>초기화</SendButton>
         </PostControllerContainer>
       </PostHeader>
-      <HorizonDivider />
       <PostBody>
         <PostContentTextarea
           value={data.contents}

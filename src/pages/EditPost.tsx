@@ -10,7 +10,6 @@ import SendButton from '../components/SendButton';
 import { theme } from '../styles/theme';
 import {
   PageContainer,
-  HorizonDivider,
   PostHeader,
   TitleInput,
 } from '../styles';
@@ -128,12 +127,10 @@ function EditPost() {
           </SendButton>
         </PostControllerContainer>
       </PostHeader>
-      <HorizonDivider />
       <PageBody>
         <PostContentHeader>
           <div>{data.author}</div> <div>{dateString}</div>
         </PostContentHeader>
-        <HorizonDivider />
         <PostContentTextarea
           value={data.contents}
           placeholder='내용을 입력해주세요'

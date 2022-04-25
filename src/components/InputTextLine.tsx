@@ -28,7 +28,7 @@ const InputTextLineInput = styled.input<InputTextLineProps>`
 function InputTextLine(props: InputTextLineProps) {
   const {
     name,
-    width = '200px',
+    width = '300px',
     value = '',
     type = 'text',
     placeholder,

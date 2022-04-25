@@ -18,7 +18,6 @@ const PostTitle = styled.h2`
   text-overflow: ellipsis;
 `;
 const PostControllerContainer = styled.div`
-  width: 100%;
   display: flex;
   gap: 1rem;
   justify-content: flex-end;
@@ -31,7 +30,7 @@ const PostContentHeader = styled.div`
   font-weight: 500;
 `;
 const PostContentBody = styled.div`
-  padding: 2rem;
+  padding: 0 2rem;
 `;
 
 function Post() {
@@ -88,7 +87,7 @@ function Post() {
   // }, []);
 
   return (
-    <PageContainer gap='2rem'>
+    <PageContainer>
       <NavigationBar>게시글</NavigationBar>
       <PostHeader>
         <SendButton minWidth='6rem' onClick={navigateTo('/post')}>
@@ -100,7 +99,6 @@ function Post() {
           <SendButton onClick={onDelete}>삭제</SendButton>
         </PostControllerContainer>
       </PostHeader>
-      <HorizonDivider />
       <PostBody>
         <PostContentHeader>
           <div>{data.author}</div> <div>{dateString}</div>

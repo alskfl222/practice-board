@@ -18,6 +18,7 @@ export default styled.button<SendButtonProps>`
   cursor: pointer;
   &:disabled {
     background-color: #ccc;
+    color: #777;
     cursor: default;
     &:hover {
       background-color: #ccc;
