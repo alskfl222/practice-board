@@ -1,8 +1,8 @@
 import React, { useState, useCallback, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { PostType, PostEventType } from '../@types';
 import axios from 'axios';
+import { PostType, PostEventType } from '../@types';
 import NavigationBar from '../components/NavigationBar';
 import SendButton from '../components/SendButton';
 import {
@@ -52,10 +52,10 @@ function CreatePost() {
       const { value } = e.target;
       setData((beforeData) => ({ ...beforeData, [type]: value }));
     },
-    []
+    [],
   );
 
-  const onSubmit = () => {
+  const onSubmit = useCallback(() => {
     axios
       .post(`${process.env.API_URL}/post`, data, {
         headers: {
@@ -64,7 +64,7 @@ function CreatePost() {
       })
       .then((response) => console.log(response.data))
       .catch((err) => console.error(err));
-  };
+  }, []);
 
   const clearData = () => {
     setData(initData);
@@ -73,7 +73,9 @@ function CreatePost() {
     <PageContainer>
       <NavigationBar>게시글 생성</NavigationBar>
       <PostHeader>
-        <SendButton onClick={() => navigate('/post')}>게시글 목록</SendButton>
+        <SendButton minWidth='6rem' onClick={() => navigate('/post')}>
+          게시글 목록
+        </SendButton>
         <PostControllerContainer>
           <select onChange={onChange('postType')}>
             <option value='notice'>공지</option>

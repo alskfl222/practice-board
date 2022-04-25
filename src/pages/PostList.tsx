@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
+import axios from 'axios';
 import signState from '../states/atom';
 import { PostQueryType, PostEventType, PostType } from '../@types';
-import axios from 'axios';
 
 import NavigationBar from '../components/NavigationBar';
 import SendButton from '../components/SendButton';
 import { PageContainer } from '../styles';
-import { makeQueryString } from '../util';
+import { makeQueryString, navigateTo } from '../utils';
 
 const FilterContainer = styled.div`
   padding: 1rem 2rem;
@@ -112,13 +112,15 @@ const messageType = {
 };
 
 function PostList() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
+  const { search } = location;
+  const pageQuery = new URLSearchParams(search);
   const navigate = useNavigate();
   const initQuery: PostQueryType = {
-    postType: 'notice',
-    pageSize: 10,
-    page: 1,
-    keyword: '',
+    postType: pageQuery.get('postType') || 'notice',
+    pageSize: parseInt(pageQuery.get('pageSize')!, 10) || 10,
+    page: parseInt(pageQuery.get('page')!, 10),
+    keyword: pageQuery.get('keyword') || '',
   };
   const { isLogin } = JSON.parse(useRecoilValue(signState));
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -187,7 +189,7 @@ function PostList() {
     []
   );
 
-  function onDelete(id: PostType['id']) {
+  const onDelete = useCallback((id: PostType['id']) => {
     axios
       .post(
         `${process.env.API_URL}/post/delete`,
@@ -203,13 +205,13 @@ function PostList() {
         fetchPostList();
       })
       .catch((err) => console.error(err));
-  }
+  }, []);
 
   function PageSizeSelect() {
     return (
       <select
         name='page-size'
-        defaultValue={`${query.pageSize}`}
+        value={`${query.pageSize}`}
         onChange={onChange('pageSize')}
       >
         <optgroup label='페이지 개수'>
@@ -247,12 +249,11 @@ function PostList() {
   }
   function clearQuery() {
     setQuery(initQuery);
-    setSearchParams('');
   }
 
   useEffect(() => {
     fetchPostList();
-  }, [searchParams]);
+  }, []);
 
   return (
     <PageContainer>
@@ -277,9 +278,7 @@ function PostList() {
               ? postList.map((post) => (
                   <PostContainer
                     key={post.id}
-                    onClick={() => {
-                      navigate(`/post/${post.id}`);
-                    }}
+                    onClick={navigateTo(`/post/${post.id}`)}
                   >
                     <PostIndexContainer>{post.id}</PostIndexContainer>
                     <PostTitleContainer>{post.title}</PostTitleContainer>

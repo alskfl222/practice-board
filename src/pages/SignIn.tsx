@@ -1,9 +1,9 @@
 import React, { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
+import axios from 'axios';
 import { UserType } from '../@types';
 import signState from '../states/atom';
-import axios from 'axios';
 import NavigationBar from '../components/NavigationBar';
 import InputTextLine from '../components/InputTextLine';
 import SendButton from '../components/SendButton';
@@ -44,7 +44,7 @@ function SignIn() {
           [key]: e.target.value,
         }));
       },
-    []
+    [],
   );
   const onSubmit = (e: React.SyntheticEvent): void => {
     e.preventDefault();

@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, memo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
+import axios from 'axios';
 import signState from '../states/atom';
 import { PostType, PostEventType } from '../@types';
-import axios from 'axios';
 import NavigationBar from '../components/NavigationBar';
 import SendButton from '../components/SendButton';
 import { theme } from '../styles/theme';
@@ -16,7 +16,7 @@ import {
 } from '../styles';
 
 const PostControllerContainer = styled.div`
-  width: 70%;
+  width: 100%;
   display: flex;
   gap: 1rem;
   justify-content: center;
@@ -60,7 +60,7 @@ function EditPost() {
   };
   const [data, setData] = useState<PostType>(initData);
   const dateString = new Date(
-    data.createdAt || '9999-99-99'
+    data.createdAt || '9999-99-99',
   ).toLocaleDateString();
 
   const isValid = !!(
@@ -87,10 +87,10 @@ function EditPost() {
       const { value } = e.target;
       setData((beforeData) => ({ ...beforeData, [type]: value }));
     },
-    []
+    [],
   );
 
-  const onSubmit = () => {
+  const onSubmit = useCallback(() => {
     axios
       .post(`${process.env.API_URL}/post/edit`, data, {
         headers: {
@@ -101,7 +101,7 @@ function EditPost() {
         console.error(err);
       });
     navigate('/post');
-  };
+  }, []);
 
   useEffect(() => {
     // if (!isLogin) {
@@ -114,7 +114,9 @@ function EditPost() {
     <PageContainer>
       <NavigationBar>게시글 수정</NavigationBar>
       <PostHeader>
-        <SendButton onClick={() => navigate('/post')}>게시글 목록</SendButton>
+        <SendButton minWidth='6rem' onClick={() => navigate('/post')}>
+          게시글 목록
+        </SendButton>
         <PostControllerContainer>
           <TitleInput
             value={data.title}
@@ -142,4 +144,4 @@ function EditPost() {
   );
 }
 
-export default EditPost;
+export default memo(EditPost);

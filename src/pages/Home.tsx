@@ -1,8 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { PageContainer } from '../styles';
-import { HorizonDivider } from '../styles';
+import { PageContainer, HorizonDivider } from '../styles';
 
 const HomeHeader = styled.header`
   display: flex;
@@ -13,7 +12,6 @@ const HomeTitle = styled.h1`
   padding: 1rem;
   font-size: 3rem;
 `;
-
 
 const AnchorContainer = styled.div`
   padding: 3rem;

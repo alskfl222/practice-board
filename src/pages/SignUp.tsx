@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import InputTextLine from '../components/InputTextLine';
 import SendButton from '../components/SendButton';
-import axios from 'axios';
 import { UserType } from '../@types';
 import NavigationBar from '../components/NavigationBar';
 import {
@@ -46,10 +46,9 @@ function SignUp() {
   const isValidPasswordConfirm = (): boolean => {
     const { passwordConfirm } = data;
     const compare = data.password;
-    const passwordConfirmCondition =
-      passwordConfirm &&
-      passwordConfirm.length > 0 &&
-      compare === passwordConfirm;
+    const passwordConfirmCondition = passwordConfirm
+      && passwordConfirm.length > 0
+      && compare === passwordConfirm;
     if (passwordConfirmCondition) return true;
     return false;
   };
@@ -69,7 +68,7 @@ function SignUp() {
           [key]: e.target.value,
         }));
       },
-    []
+    [],
   );
   const onSubmit = (e: React.SyntheticEvent): void => {
     e.preventDefault();
@@ -163,11 +162,11 @@ function SignUp() {
         <SendButton
           disabled={
             !(
-              isValidName() &&
-              isValidEmail() &&
-              isValidPassword() &&
-              isValidPasswordConfirm() &&
-              isValidPN()
+              isValidName()
+              && isValidEmail()
+              && isValidPassword()
+              && isValidPasswordConfirm()
+              && isValidPN()
             )
           }
         >

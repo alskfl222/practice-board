@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, memo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { PostType } from '../@types';
 import axios from 'axios';
+import { PostType } from '../@types';
 import NavigationBar from '../components/NavigationBar';
-import { PageContainer, HorizonDivider, PostHeader, PostBody } from '../styles';
 import SendButton from '../components/SendButton';
+import { PageContainer, HorizonDivider, PostHeader, PostBody } from '../styles';
+import { navigateTo } from '../utils';
 
 const PostTitle = styled.h2`
   flex-grow: 1;
@@ -17,6 +18,7 @@ const PostTitle = styled.h2`
   text-overflow: ellipsis;
 `;
 const PostControllerContainer = styled.div`
+  width: 100%;
   display: flex;
   gap: 1rem;
   justify-content: flex-end;
@@ -44,7 +46,7 @@ function Post() {
     createdAt: new Date().toString(),
   });
   const dateString = new Date(
-    data.createdAt || '9999-99-99'
+    data.createdAt || '9999-99-99',
   ).toLocaleDateString();
 
   function fetchPost() {
@@ -54,12 +56,12 @@ function Post() {
         if (response.data && response.data.post) {
           setData(response.data.post);
         } else {
-          navigate('/post');
+          navigateTo('/post');
         }
       })
       .catch((err) => {
         console.error(err);
-        navigate('/404');
+        navigateTo('/404');
       });
   }
 
@@ -72,7 +74,7 @@ function Post() {
           headers: {
             token: localStorage.getItem('token') || '',
           },
-        }
+        },
       )
       .then((response) => {
         console.log(response);
@@ -89,16 +91,12 @@ function Post() {
     <PageContainer gap='2rem'>
       <NavigationBar>게시글</NavigationBar>
       <PostHeader>
-        <SendButton onClick={() => navigate('/post')}>게시글 목록</SendButton>
+        <SendButton minWidth='6rem' onClick={navigateTo('/post')}>
+          게시글 목록
+        </SendButton>
         <PostTitle>{data.title}</PostTitle>
         <PostControllerContainer>
-          <SendButton
-            onClick={() => {
-              navigate(`/post/edit/${id}`);
-            }}
-          >
-            수정
-          </SendButton>
+          <SendButton onClick={navigateTo(`/post/edit/${id}`)}>수정</SendButton>
           <SendButton onClick={onDelete}>삭제</SendButton>
         </PostControllerContainer>
       </PostHeader>
@@ -114,4 +112,4 @@ function Post() {
   );
 }
 
-export default Post;
+export default memo(Post);

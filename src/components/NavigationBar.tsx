@@ -4,6 +4,7 @@ import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import signState from '../states/atom';
 import { NavigationBarType } from '../@types';
+import { navigateTo } from '../utils';
 
 const Container = styled.div`
   height: 10rem;
@@ -62,14 +63,14 @@ function NavigationBar(props: NavigationBarType) {
             onClick={() => {
               setUser(JSON.stringify({ isLogin: false }));
               localStorage.removeItem('token');
-              navigate('/');
+              navigateTo('/');
             }}
           >
             로그아웃
           </SignButton>
         )}
         {!isLogin && !(pathname === '/signin' || pathname === '/signup') && (
-          <SignButton onClick={() => navigate('/signin')}>로그인</SignButton>
+          <SignButton onClick={navigateTo('/signin')}>로그인</SignButton>
         )}
       </NavigationTop>
       <NavigationBottom>{props.children}</NavigationBottom>

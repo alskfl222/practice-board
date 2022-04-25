@@ -1,9 +1,12 @@
-import React from 'react';
 import styled from 'styled-components';
 import { theme } from '../styles/theme';
 
-export default styled.button`
-  min-width: 3rem;
+interface SendButtonProps {
+  minWidth? : string;
+}
+
+export default styled.button<SendButtonProps>`
+  min-width: ${({ minWidth }) => minWidth || '3rem'};
   padding: 0.5rem;
   border: 1px solid ${theme.border.gray707070};
   border-radius: 1rem;
@@ -24,5 +27,3 @@ export default styled.button`
     background-color: #0003;
   }
 `;
-
-
