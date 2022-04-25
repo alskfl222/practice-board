@@ -34,9 +34,21 @@ export type PostEventType = React.ChangeEvent<HTMLSelectElement> &
   React.MouseEvent<HTMLButtonElement> &
   React.KeyboardEvent<HTMLInputElement>;
 
-
 // * component props type
 export interface PostListHeaderProps {
   query: URLSearchParams;
   onChange: (key: keyof PostQueryType) => (e: PostEventType) => void;
+}
+export interface PostListBodyProps {
+  isLoading: boolean;
+  postList: PostType[];
+  isLogin: boolean;
+  message: string;
+  onDelete: (id: PostType['id']) => void;
+}
+export interface PostListFooterProps {
+  totalPageCount: number;
+  query: URLSearchParams;
+  onChange: (key: keyof PostQueryType) => (e: PostEventType) => void;
+  isLogin: boolean;
 }

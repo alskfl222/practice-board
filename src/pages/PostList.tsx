@@ -7,13 +7,10 @@ import signState from '../states/atom';
 import { PostQueryType, PostEventType, PostType } from '../@types';
 import NavigationBar from '../components/NavigationBar';
 import PostListHeader from '../components/PostListHeader';
-import {
-  PageContainer,
-  SendButton,
-  HorizonDivider,
-  PostBody,
-} from '../styles';
+import { PageContainer, SendButton, HorizonDivider, PostBody } from '../styles';
 import { navigateTo } from '../utils';
+import PostListFooter from '../components/PostListFooter';
+import PostListBody from '../components/PostListBody';
 
 const PostListColumnHeader = styled.div`
   width: 100%;
@@ -74,29 +71,6 @@ const PostControllerContainer = styled.div`
   justify-content: flex-end;
   gap: 0.5rem;
 `;
-const PageButtonContainer = styled.div`
-  padding: 1rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 2rem;
-`;
-const PageButton = styled.button`
-  border: none;
-  background-color: transparent;
-  &:hover {
-    background-color: #0003;
-  }
-  &.current {
-    font-size: 1.2rem;
-    font-weight: 700;
-  }
-`;
-const PostAddButtonContainer = styled.div`
-  position: absolute;
-  right: 5rem;
-  z-index: 9999;
-`;
 const messageType = {
   loading: '게시글을 불러오고 있습니다',
   noPost: '게시글이 없습니다',
@@ -120,7 +94,7 @@ function PostList() {
   const [postList, setPostList] = useState<PostType[]>([]);
   const [message, setMessage] = useState<string>(messageType.loading);
   const totalPageCount = Math.ceil(
-    totalCount / parseInt(query.get('pageSize')!, 10),
+    totalCount / parseInt(query.get('pageSize')!, 10)
   );
 
   const fetchPostList = useCallback(() => {
@@ -155,19 +129,19 @@ function PostList() {
       if (type === 'page') value = e.target.innerText;
       if (type === 'keyword') {
         const keywordInput = document.querySelector(
-          '#keyword-input',
+          '#keyword-input'
         ) as HTMLInputElement;
         value = keywordInput.value;
       }
 
       if (
-        type === 'pageSize'
-        && totalPageCount > Math.floor(totalCount / parseInt(value, 10))
+        type === 'pageSize' &&
+        totalPageCount > Math.floor(totalCount / parseInt(value, 10))
       ) {
         query.set('pageSize', value);
         query.set(
           'page',
-          Math.ceil(totalCount / parseInt(value, 10)).toString(),
+          Math.ceil(totalCount / parseInt(value, 10)).toString()
         );
       } else {
         query.set(type, value);
@@ -175,7 +149,7 @@ function PostList() {
       const queryString = query.toString();
       navigate(`/post?${queryString}`);
     },
-    [],
+    []
   );
 
   const onDelete = useCallback((id: PostType['id']) => {
@@ -187,7 +161,7 @@ function PostList() {
           headers: {
             token: localStorage.getItem('token') || '',
           },
-        },
+        }
       )
       .then((response) => {
         console.log(response);
@@ -204,81 +178,19 @@ function PostList() {
     <PageContainer>
       <NavigationBar>게시판 목록</NavigationBar>
       <PostListHeader query={query} onChange={onChange} />
-      {!isLoading ? (
-        <>
-          <PostBody border='1px solid black'>
-            <PostListColumnHeader>
-              <PostIndexContainer>번호</PostIndexContainer>
-              <PostTitleContainer>제목</PostTitleContainer>
-              <PostAuthorContainer>작성자</PostAuthorContainer>
-              <PostControllerContainer></PostControllerContainer>
-            </PostListColumnHeader>
-            <HorizonDivider width='100%' margin='0' />
-            {postList.length !== 0
-              ? postList.map((post) => (
-                <PostContainer
-                  key={post.id}
-                  onClick={navigateTo(`/post/${post.id}`)}
-                >
-                  <PostIndexContainer>{post.id}</PostIndexContainer>
-                  <PostTitleContainer>{post.title}</PostTitleContainer>
-                  <PostAuthorContainer>{post.author}</PostAuthorContainer>
-                  <PostControllerContainer>
-                    {isLogin ? (
-                      <>
-                        <SendButton
-                          onClick={(
-                            e: React.MouseEvent<HTMLButtonElement>,
-                          ) => {
-                            e.stopPropagation();
-                            navigate(`/post/edit/${post.id}`);
-                          }}
-                        >
-                            수정
-                        </SendButton>
-                        <SendButton
-                          onClick={(
-                            e: React.MouseEvent<HTMLButtonElement>,
-                          ) => {
-                            e.stopPropagation();
-                            onDelete(post.id);
-                          }}
-                        >
-                            삭제
-                        </SendButton>
-                      </>
-                    ) : (
-                      <div></div>
-                    )}
-                  </PostControllerContainer>
-                </PostContainer>
-              ))
-              : message}
-          </PostBody>
-          <PageButtonContainer>
-            {new Array(totalPageCount).fill('').map((_, index) => (
-              <PageButton
-                className={
-                  `${index + 1}` === query.get('page') ? 'current' : ''
-                }
-                key={index + 1}
-                onClick={onChange('page')}
-              >
-                {index + 1}
-              </PageButton>
-            ))}
-            {isLogin ? (
-              <PostAddButtonContainer>
-                <SendButton onClick={navigateTo('/post/create')}>
-                  글쓰기
-                </SendButton>
-              </PostAddButtonContainer>
-            ) : null}
-          </PageButtonContainer>
-        </>
-      ) : (
-        <PostBody>{message}</PostBody>
-      )}
+      <PostListBody
+        isLoading={isLoading}
+        postList={postList}
+        isLogin={isLogin}
+        message={message}
+        onDelete={onDelete}
+      />
+      <PostListFooter
+        totalPageCount={totalPageCount}
+        query={query}
+        onChange={onChange}
+        isLogin={isLogin}
+      />
     </PageContainer>
   );
 }
