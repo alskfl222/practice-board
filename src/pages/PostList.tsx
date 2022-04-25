@@ -8,14 +8,14 @@ import { PostQueryType, PostEventType, PostType } from '../@types';
 
 import NavigationBar from '../components/NavigationBar';
 import SendButton from '../components/SendButton';
-import { PageContainer, HorizonDivider, PostHeader, PostBody } from '../styles';
+import {
+  PageContainer,
+  HorizonDivider,
+  PostHeader,
+  PostBody,
+  TitleInput,
+} from '../styles';
 import { navigateTo } from '../utils';
-
-const KeywordInput = styled.input`
-  flex-grow: 1;
-  min-width: 0;
-  padding: 0.2rem;
-`;
 
 const PostListHeader = styled.div`
   width: 100%;
@@ -195,48 +195,6 @@ function PostList() {
       .catch((err) => console.error(err));
   }, []);
 
-  function PageSizeSelect() {
-    return (
-      <select
-        name='page-size'
-        value={`${query.get('pageSize')}`}
-        onChange={onChange('pageSize')}
-      >
-        <optgroup label='페이지 개수'>
-          <option value='5'>5개</option>
-          <option value='10'>10개</option>
-        </optgroup>
-      </select>
-    );
-  }
-  function PostTypeSelect() {
-    return (
-      <select
-        name='post-type'
-        value={`${query.get('postType')}`}
-        onChange={onChange('postType')}
-      >
-        <optgroup label='종류'>
-          <option value='notice'>공지</option>
-        </optgroup>
-      </select>
-    );
-  }
-  function PostKeywordInput() {
-    return (
-      <KeywordInput
-        id='keyword-input'
-        defaultValue={`${query.get('keyword')}`}
-        placeholder='검색어'
-        onKeyUp={(e: PostEventType) => {
-          if (e.key === 'Enter') {
-            onChange('keyword')(e);
-          }
-        }}
-      ></KeywordInput>
-    );
-  }
-
   useEffect(() => {
     fetchPostList();
   }, [location]);
@@ -245,14 +203,41 @@ function PostList() {
     <PageContainer>
       <NavigationBar>게시판 목록</NavigationBar>
       <PostHeader padding='1rem 2rem'>
-        <PageSizeSelect />
-        <PostTypeSelect />
-        <PostKeywordInput />
+        <select
+          name='page-size'
+          value={`${query.get('pageSize')}`}
+          onChange={onChange('pageSize')}
+        >
+          <optgroup label='페이지 개수'>
+            <option value='5'>5개</option>
+            <option value='10'>10개</option>
+          </optgroup>
+        </select>
+        <select
+          name='post-type'
+          value={`${query.get('postType')}`}
+          onChange={onChange('postType')}
+        >
+          <optgroup label='종류'>
+            <option value='notice'>공지</option>
+          </optgroup>
+        </select>
+        <TitleInput
+          id='keyword-input'
+          fontSize='1rem'
+          defaultValue={`${query.get('keyword')}`}
+          placeholder='검색어'
+          onKeyUp={(e: PostEventType) => {
+            if (e.key === 'Enter') {
+              onChange('keyword')(e);
+            }
+          }}
+        ></TitleInput>
         <SendButton onClick={onChange('keyword')}>검색</SendButton>
       </PostHeader>
       {!isLoading ? (
         <>
-          <PostBody>
+          <PostBody border='1px solid black'>
             <PostListHeader>
               <PostIndexContainer>번호</PostIndexContainer>
               <PostTitleContainer>제목</PostTitleContainer>
@@ -294,10 +279,7 @@ function PostList() {
                           </SendButton>
                         </>
                       ) : (
-                        <>
-                          <div></div>
-                          <div></div>
-                        </>
+                        <div></div>
                       )}
                     </PostControllerContainer>
                   </PostContainer>

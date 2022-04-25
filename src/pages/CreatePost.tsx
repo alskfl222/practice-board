@@ -1,5 +1,4 @@
 import React, { useState, useCallback, memo } from 'react';
-import styled from 'styled-components';
 import axios from 'axios';
 import { PostType, PostEventType } from '../@types';
 import NavigationBar from '../components/NavigationBar';
@@ -8,7 +7,9 @@ import {
   PageContainer,
   PostHeader,
   TitleInput,
+  PostControllerContainer,
   PostBody,
+  PostContentTextarea,
 } from '../styles';
 import { navigateTo } from '../utils';
 
@@ -16,21 +17,6 @@ import { navigateTo } from '../utils';
 // ! styled-components 중복 관리
 // ! useCallback, memo 사용
 // ! 함수 쪼개기
-
-const PostControllerContainer = styled.div`
-  width: 80%;
-  display: flex;
-  gap: 1rem;
-  justify-content: flex-end;
-`;
-
-const PostContentTextarea = styled.textarea`
-  width: 100%;
-  height: 20rem;
-  padding: 1rem;
-  border: none;
-  border-radius: 1rem;
-`;
 
 function CreatePost() {
   const initData: PostType = {
@@ -73,16 +59,16 @@ function CreatePost() {
         <SendButton minWidth='6rem' onClick={navigateTo('/post')}>
           게시글 목록
         </SendButton>
+        <select onChange={onChange('postType')}>
+          <option value='notice'>공지</option>
+          <option value=''>일반</option>
+        </select>
+        <TitleInput
+          value={data.title}
+          placeholder='제목을 입력해주세요'
+          onChange={onChange('title')}
+        />
         <PostControllerContainer>
-          <select onChange={onChange('postType')}>
-            <option value='notice'>공지</option>
-            <option value=''>일반</option>
-          </select>
-          <TitleInput
-            value={data.title}
-            placeholder='제목을 입력해주세요'
-            onChange={onChange('title')}
-          />
           <SendButton disabled={!isValid} onClick={onSubmit}>
             생성
           </SendButton>

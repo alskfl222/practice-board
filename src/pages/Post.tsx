@@ -5,7 +5,12 @@ import axios from 'axios';
 import { PostType } from '../@types';
 import NavigationBar from '../components/NavigationBar';
 import SendButton from '../components/SendButton';
-import { PageContainer, HorizonDivider, PostHeader, PostBody } from '../styles';
+import {
+  PageContainer,
+  PostHeader,
+  PostControllerContainer,
+  PostBody,
+} from '../styles';
 import { navigateTo } from '../utils';
 
 const PostTitle = styled.h2`
@@ -17,11 +22,6 @@ const PostTitle = styled.h2`
   white-space: nowrap;
   text-overflow: ellipsis;
 `;
-const PostControllerContainer = styled.div`
-  display: flex;
-  gap: 1rem;
-  justify-content: flex-end;
-`;
 
 const PostContentHeader = styled.div`
   padding: 0 2rem;
@@ -30,7 +30,10 @@ const PostContentHeader = styled.div`
   font-weight: 500;
 `;
 const PostContentBody = styled.div`
-  padding: 0 2rem;
+  padding: 2rem;
+  padding-bottom: 40%;
+  border: 1px solid black;
+  border-radius: 1rem;
 `;
 
 function Post() {
@@ -103,7 +106,6 @@ function Post() {
         <PostContentHeader>
           <div>{data.author}</div> <div>{dateString}</div>
         </PostContentHeader>
-        <HorizonDivider />
         <PostContentBody>{data.contents}</PostContentBody>
       </PostBody>
     </PageContainer>

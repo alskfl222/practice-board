@@ -54,7 +54,7 @@ export const PostHeader = styled.header<{ padding?: string }>`
   }
 `;
 
-export const TitleInput = styled.input`
+export const TitleInput = styled.input<{ fontSize?: string }>`
   flex-grow: 1;
   min-width: 0;
   padding: 0.2rem;
@@ -62,7 +62,16 @@ export const TitleInput = styled.input`
   border: none;
   border-bottom: 1px solid black;
   background-color: transparent;
-  font-size: 1.5rem;
+  font-size: ${({ fontSize }) => fontSize || '1.5rem'};
+  &:focus {
+    border-bottom: 1px solid ${theme.background.baseColor};
+  }
+`;
+
+export const PostControllerContainer = styled.div`
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
 `;
 
 export const HorizonDivider = styled.div<HorizonDividerProps>`
@@ -72,7 +81,7 @@ export const HorizonDivider = styled.div<HorizonDividerProps>`
   box-shadow: 0 0.5px 0 0.5px black;
 `;
 
-export const PostBody = styled.div`
+export const PostBody = styled.div<{ border?: string }>`
   width: calc(100% -4rem);
   min-height: calc(100vh - 25rem);
   margin: 0 2rem;
@@ -80,8 +89,15 @@ export const PostBody = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  border: 1px solid black;
+  border: ${({ border }) => border || 'none'};
   border-radius: 1rem;
-  background-color: ${theme.background.white};
-  font-weight: 500;
+`;
+
+export const PostContentTextarea = styled.textarea`
+  width: 100%;
+  padding: 2rem;
+  padding-bottom: 40%;
+  border-radius: 1rem;
+  overflow-y: hidden;
+  resize: none;
 `;
