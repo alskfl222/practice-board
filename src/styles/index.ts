@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { PostEventType } from '../@types';
 import { theme } from './theme';
 
 interface PageContainerProps {

@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, memo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import axios from 'axios';
 import signState from '../states/atom';
 import { PostQueryType, PostEventType, PostType } from '../@types';
-
 import NavigationBar from '../components/NavigationBar';
 import {
   PageContainer,
@@ -119,7 +118,7 @@ function PostList() {
   const [postList, setPostList] = useState<PostType[]>([]);
   const [message, setMessage] = useState<string>(messageType.loading);
   const totalPageCount = Math.ceil(
-    totalCount / parseInt(query.get('pageSize')!, 10)
+    totalCount / parseInt(query.get('pageSize')!, 10),
   );
 
   const fetchPostList = useCallback(() => {
@@ -154,19 +153,19 @@ function PostList() {
       if (type === 'page') value = e.target.innerText;
       if (type === 'keyword') {
         const keywordInput = document.querySelector(
-          '#keyword-input'
+          '#keyword-input',
         ) as HTMLInputElement;
         value = keywordInput.value;
       }
 
       if (
-        type === 'pageSize' &&
-        totalPageCount > Math.floor(totalCount / parseInt(value, 10))
+        type === 'pageSize'
+        && totalPageCount > Math.floor(totalCount / parseInt(value, 10))
       ) {
         query.set('pageSize', value);
         query.set(
           'page',
-          Math.ceil(totalCount / parseInt(value, 10)).toString()
+          Math.ceil(totalCount / parseInt(value, 10)).toString(),
         );
       } else {
         query.set(type, value);
@@ -174,7 +173,7 @@ function PostList() {
       const queryString = query.toString();
       navigate(`/post?${queryString}`);
     },
-    []
+    [],
   );
 
   const onDelete = useCallback((id: PostType['id']) => {
@@ -186,7 +185,7 @@ function PostList() {
           headers: {
             token: localStorage.getItem('token') || '',
           },
-        }
+        },
       )
       .then((response) => {
         console.log(response);
@@ -247,43 +246,43 @@ function PostList() {
             <HorizonDivider width='100%' margin='0' />
             {postList.length !== 0
               ? postList.map((post) => (
-                  <PostContainer
-                    key={post.id}
-                    onClick={navigateTo(`/post/${post.id}`)}
-                  >
-                    <PostIndexContainer>{post.id}</PostIndexContainer>
-                    <PostTitleContainer>{post.title}</PostTitleContainer>
-                    <PostAuthorContainer>{post.author}</PostAuthorContainer>
-                    <PostControllerContainer>
-                      {isLogin ? (
-                        <>
-                          <SendButton
-                            onClick={(
-                              e: React.MouseEvent<HTMLButtonElement>
-                            ) => {
-                              e.stopPropagation();
-                              navigate(`/post/edit/${post.id}`);
-                            }}
-                          >
+                <PostContainer
+                  key={post.id}
+                  onClick={navigateTo(`/post/${post.id}`)}
+                >
+                  <PostIndexContainer>{post.id}</PostIndexContainer>
+                  <PostTitleContainer>{post.title}</PostTitleContainer>
+                  <PostAuthorContainer>{post.author}</PostAuthorContainer>
+                  <PostControllerContainer>
+                    {isLogin ? (
+                      <>
+                        <SendButton
+                          onClick={(
+                            e: React.MouseEvent<HTMLButtonElement>,
+                          ) => {
+                            e.stopPropagation();
+                            navigate(`/post/edit/${post.id}`);
+                          }}
+                        >
                             수정
-                          </SendButton>
-                          <SendButton
-                            onClick={(
-                              e: React.MouseEvent<HTMLButtonElement>
-                            ) => {
-                              e.stopPropagation();
-                              onDelete(post.id);
-                            }}
-                          >
+                        </SendButton>
+                        <SendButton
+                          onClick={(
+                            e: React.MouseEvent<HTMLButtonElement>,
+                          ) => {
+                            e.stopPropagation();
+                            onDelete(post.id);
+                          }}
+                        >
                             삭제
-                          </SendButton>
-                        </>
-                      ) : (
-                        <div></div>
-                      )}
-                    </PostControllerContainer>
-                  </PostContainer>
-                ))
+                        </SendButton>
+                      </>
+                    ) : (
+                      <div></div>
+                    )}
+                  </PostControllerContainer>
+                </PostContainer>
+              ))
               : message}
           </PostBody>
           <PageAnchorContainer>
@@ -314,4 +313,4 @@ function PostList() {
   );
 }
 
-export default PostList;
+export default memo(PostList);

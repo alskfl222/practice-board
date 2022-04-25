@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import NavigationBar from '../components/NavigationBar';
@@ -29,4 +29,4 @@ function NotFound() {
   );
 }
 
-export default NotFound;
+export default memo(NotFound);

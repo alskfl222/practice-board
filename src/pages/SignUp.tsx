@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { UserType } from '../@types';
@@ -178,4 +178,4 @@ function SignUp() {
   );
 }
 
-export default SignUp;
+export default memo(SignUp);

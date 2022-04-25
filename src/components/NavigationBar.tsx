@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import signState from '../states/atom';
-import { NavigationBarType } from '../@types';
 import { navigateTo } from '../utils';
 
 const Container = styled.div`
@@ -40,7 +39,7 @@ const NavigationBottom = styled.div`
   font-weight: 700;
 `;
 
-function NavigationBar(props: NavigationBarType) {
+function NavigationBar(props: { children?: string }) {
   const location = useLocation();
   const { pathname } = location;
   const [user, setUser] = useRecoilState(signState);
@@ -69,4 +68,4 @@ function NavigationBar(props: NavigationBarType) {
   );
 }
 
-export default NavigationBar;
+export default memo(NavigationBar);

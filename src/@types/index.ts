@@ -33,33 +33,3 @@ export type PostEventType = React.ChangeEvent<HTMLSelectElement> &
   React.MouseEvent<HTMLAnchorElement> &
   React.MouseEvent<HTMLButtonElement> &
   React.KeyboardEvent<HTMLInputElement>;
-
-// * api response type
-export interface ResponseType {
-  status: number;
-  msg: string;
-}
-
-export interface SigninResponseType extends ResponseType {
-  data?: {
-    token: string;
-  };
-}
-export interface PostResponseType extends ResponseType {
-  data?: {
-    posts?: PostType[];
-    post?: PostType;
-    totalCount?: number;
-    page?: number;
-    pageSize?: number;
-    keyword?: string;
-  };
-}
-export interface SignupResponseType extends ResponseType {
-  data?: object;
-}
-
-// * components props type
-export interface NavigationBarType {
-  children?: string;
-}

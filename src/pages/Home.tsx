@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
 import { PageContainer, HorizonDivider } from '../styles';
 
@@ -42,4 +42,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default memo(Home);

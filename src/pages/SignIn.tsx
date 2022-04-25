@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import axios from 'axios';
@@ -103,4 +103,4 @@ function SignIn() {
   );
 }
 
-export default SignIn;
+export default memo(SignIn);
