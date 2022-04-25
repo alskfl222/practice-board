@@ -1,37 +1,17 @@
 import React, { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-import styled from 'styled-components';
 import InputTextLine from '../components/InputTextLine';
 import SendButton from '../components/SendButton';
-
 import axios from 'axios';
 import { UserType } from '../@types';
 import NavigationBar from '../components/NavigationBar';
-import { PageContainer } from '../styles';
-
-const FormContainer = styled.form`
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-`;
-const InputContainer = styled.label`
-  width: 50%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-`;
-const MessageContainer = styled.div`
-  font-size: 0.8rem;
-`;
-const HorizonDivider = styled.div`
-  width: 80%;
-  margin: 2rem 0;
-  box-shadow: 0 0.5px 0 0.5px black;
-`;
+import {
+  PageContainer,
+  FormContainer,
+  InputContainer,
+  MessageContainer,
+  HorizonDivider,
+} from '../styles';
 
 function SignUp() {
   const navigate = useNavigate();
@@ -43,27 +23,27 @@ function SignUp() {
     pn: '',
   });
 
-  const isValidName = useCallback((): boolean => {
+  const isValidName = (): boolean => {
     const { name } = data;
     const nameCondition = name.trim().length >= 3 && name.trim().length <= 10;
     if (nameCondition) return true;
     return false;
-  }, []);
-  const isValidEmail = useCallback((): boolean => {
+  };
+  const isValidEmail = (): boolean => {
     const { email } = data;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const emailCondition = emailRegex.test(email);
     if (emailCondition) return true;
     return false;
-  }, []);
-  const isValidPassword = useCallback((): boolean => {
+  };
+  const isValidPassword = (): boolean => {
     const { password } = data;
     const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*\W).{8,15}$/;
     const passwordCondition = passwordRegex.test(password);
     if (passwordCondition) return true;
     return false;
-  }, []);
-  const isValidPasswordConfirm = useCallback((): boolean => {
+  };
+  const isValidPasswordConfirm = (): boolean => {
     const { passwordConfirm } = data;
     const compare = data.password;
     const passwordConfirmCondition =
@@ -72,14 +52,14 @@ function SignUp() {
       compare === passwordConfirm;
     if (passwordConfirmCondition) return true;
     return false;
-  }, []);
-  const isValidPN = useCallback((): boolean => {
+  };
+  const isValidPN = (): boolean => {
     const { pn } = data;
     const pnRegex = /^0(2([0-9]{7,8})|[1|3-9]([0-9]{8,9}))$/;
     const pnCondition = pnRegex.test(pn);
     if (pnCondition) return true;
     return false;
-  }, []);
+  };
 
   const onChange = useCallback(
     (key: keyof UserType) =>

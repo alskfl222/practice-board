@@ -23,6 +23,24 @@ export const PageContainer = styled.div<PageContainerProps>`
   gap: ${({ gap }) => gap || '1rem'};
 `;
 
+export const FormContainer = styled.form`
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+`;
+export const InputContainer = styled.label`
+  width: 50%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+`;
+export const MessageContainer = styled.div`
+  font-size: 0.8rem;
+`;
+
 export const PostHeader = styled.header`
   padding: 2rem;
   padding-bottom: 0;
