@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { PostType, PostEventType } from '../@types';
 import { createPost } from '../apis';
 import NavigationBar from '../components/NavigationBar';
 import SendButton from '../components/SendButton';
-import { PageContainer, PostHeader, HorizonDivider } from '../styles';
+import { PageContainer, PostHeader, HorizonDivider, TitleInput, PostBody } from '../styles';
 
 // * rendering 최적화 중심 refactoring
 // ! styled-components 중복 관리
@@ -14,27 +14,17 @@ import { PageContainer, PostHeader, HorizonDivider } from '../styles';
 // ! onClick 익명함수 x
 
 const PostControllerContainer = styled.div`
-  width: 70%;
+  width: 80%;
   display: flex;
   gap: 1rem;
   justify-content: flex-end;
 `;
-const TitleInput = styled.input`
-  flex-grow: 1;
-  min-width: 0;
-  padding: 0.2rem;
-  padding-left: 1rem;
-`;
 
-const PageBody = styled.div`
-  width: 100%;
-  padding: 0 2rem;
-  display: flex;
-`;
 const PostContentTextarea = styled.textarea`
   width: 100%;
   height: 20rem;
-  padding: 2rem;
+  padding: 1rem;
+  border: none;
   border-radius: 1rem;
 `;
 
@@ -88,15 +78,15 @@ function CreatePost() {
         </PostControllerContainer>
       </PostHeader>
       <HorizonDivider />
-      <PageBody>
+      <PostBody>
         <PostContentTextarea
           value={data.contents}
           placeholder='내용을 입력해주세요'
           onChange={onChange('contents')}
         ></PostContentTextarea>
-      </PageBody>
+      </PostBody>
     </PageContainer>
   );
 }
 
-export default CreatePost;
+export default memo(CreatePost);

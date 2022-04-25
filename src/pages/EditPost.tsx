@@ -8,19 +8,18 @@ import { getPost, editPost } from '../apis';
 import NavigationBar from '../components/NavigationBar';
 import SendButton from '../components/SendButton';
 import { theme } from '../styles/theme';
-import { PageContainer, HorizonDivider, PostHeader } from '../styles';
+import {
+  PageContainer,
+  HorizonDivider,
+  PostHeader,
+  TitleInput,
+} from '../styles';
 
 const PostControllerContainer = styled.div`
   width: 70%;
   display: flex;
   gap: 1rem;
   justify-content: center;
-`;
-const TitleInput = styled.input`
-  flex-grow: 1;
-  min-width: 0;
-  padding: 0.2rem;
-  padding-left: 1rem;
 `;
 
 const PageBody = styled.div`
@@ -61,7 +60,7 @@ function EditPost() {
   };
   const [data, setData] = useState<PostType>(initData);
   const dateString = new Date(
-    data.createdAt || '9999-99-99',
+    data.createdAt || '9999-99-99'
   ).toLocaleDateString();
 
   const isValid = !!(

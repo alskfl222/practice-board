@@ -5,7 +5,7 @@ import { PostType } from '../@types';
 import { getPost, deletePost } from '../apis';
 import NavigationBar from '../components/NavigationBar';
 import { theme } from '../styles/theme';
-import { PageContainer, HorizonDivider, PostHeader } from '../styles';
+import { PageContainer, HorizonDivider, PostHeader, PostBody } from '../styles';
 import SendButton from '../components/SendButton';
 
 const PostTitle = styled.h2`
@@ -23,17 +23,6 @@ const PostControllerContainer = styled.div`
   justify-content: flex-end;
 `;
 
-const PageBody = styled.div`
-  width: calc(100% -4rem);
-  min-height: 20rem;
-  margin: 0 2rem;
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  border: 1px solid black;
-  border-radius: 1rem;
-  background-color: ${theme.background.white};
-`;
 const PostContentHeader = styled.div`
   padding: 0 2rem;
   display: flex;
@@ -56,7 +45,7 @@ function Post() {
     createdAt: new Date().toString(),
   });
   const dateString = new Date(
-    data.createdAt || '9999-99-99',
+    data.createdAt || '9999-99-99'
   ).toLocaleDateString();
 
   function fetchPost() {
@@ -91,9 +80,7 @@ function Post() {
     <PageContainer gap='2rem'>
       <NavigationBar>게시글</NavigationBar>
       <PostHeader>
-        <SendButton onClick={() => navigate('/post')}>
-          게시글 목록
-        </SendButton>
+        <SendButton onClick={() => navigate('/post')}>게시글 목록</SendButton>
         <PostTitle>{data.title}</PostTitle>
         <PostControllerContainer>
           <SendButton
@@ -107,13 +94,13 @@ function Post() {
         </PostControllerContainer>
       </PostHeader>
       <HorizonDivider />
-      <PageBody>
+      <PostBody>
         <PostContentHeader>
           <div>{data.author}</div> <div>{dateString}</div>
         </PostContentHeader>
         <HorizonDivider />
         <PostContentBody>{data.contents}</PostContentBody>
-      </PageBody>
+      </PostBody>
     </PageContainer>
   );
 }
