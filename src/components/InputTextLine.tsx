@@ -1,10 +1,21 @@
 import React from 'react';
 import styled from 'styled-components';
-import { InputTextLineType } from '../@types';
+import { PostEventType } from '../@types';
 import { theme } from '../styles/theme';
 
-const CuntomInput = styled.input`
-  width: ${(props) => props.width};
+interface InputTextLineType {
+  id?: string;
+  name?: string;
+  type?: string;
+  width?: string;
+  placeholder?: string;
+  value?: string;
+  // eslint-disable-next-line no-unused-vars
+  onChange?: (e: PostEventType) => void;
+}
+
+const InputTextLineInput = styled.input<InputTextLineType>`
+  width: ${({ width }) => width || '200px'};
   padding: 0.5rem 1rem;
   border: none;
   border-bottom: 1px solid black;
@@ -14,7 +25,7 @@ const CuntomInput = styled.input`
   }
 `;
 
-function InputTextLine(props: Partial<InputTextLineType>) {
+function InputTextLine(props: InputTextLineType) {
   const {
     name,
     width = '200px',
@@ -24,7 +35,7 @@ function InputTextLine(props: Partial<InputTextLineType>) {
     onChange,
   } = props;
   return (
-    <CuntomInput
+    <InputTextLineInput
       type={type}
       width={width}
       name={name}

@@ -34,6 +34,6 @@ export const PostHeader = styled.header`
 export const HorizonDivider = styled.div<HorizonDividerProps>`
   align-self: center;
   width: ${({ width }) => width || '70%'};
-  margin: 2rem 1rem 0;
+  margin: 2rem 0;
   box-shadow: 0 0.5px 0 0.5px black;
 `;

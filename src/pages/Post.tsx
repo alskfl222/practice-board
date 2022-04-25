@@ -6,18 +6,8 @@ import { getPost, deletePost } from '../apis';
 import NavigationBar from '../components/NavigationBar';
 import { theme } from '../styles/theme';
 import { PageContainer, HorizonDivider, PostHeader } from '../styles';
+import SendButton from '../components/SendButton';
 
-const ControlButton = styled.button`
-  flex-shrink: 0;
-  padding: 0.5rem;
-  border: 1px solid black;
-  border-radius: 1rem;
-  background-color: transparent;
-  cursor: pointer;
-  &:hover {
-    background-color: #0003;
-  }
-`;
 const PostTitle = styled.h2`
   flex-grow: 1;
   padding: 0 2rem;
@@ -101,19 +91,19 @@ function Post() {
     <PageContainer gap='2rem'>
       <NavigationBar>게시글</NavigationBar>
       <PostHeader>
-        <ControlButton onClick={() => navigate('/post')}>
+        <SendButton onClick={() => navigate('/post')}>
           게시글 목록
-        </ControlButton>
+        </SendButton>
         <PostTitle>{data.title}</PostTitle>
         <PostControllerContainer>
-          <ControlButton
+          <SendButton
             onClick={() => {
               navigate(`/post/edit/${id}`);
             }}
           >
             수정
-          </ControlButton>
-          <ControlButton onClick={onDelete}>삭제</ControlButton>
+          </SendButton>
+          <SendButton onClick={onDelete}>삭제</SendButton>
         </PostControllerContainer>
       </PostHeader>
       <HorizonDivider />

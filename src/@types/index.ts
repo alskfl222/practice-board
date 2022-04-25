@@ -60,23 +60,8 @@ export interface SignupResponseType extends ResponseType {
 }
 
 // * components props type
-export interface InputTextLineType {
-  id?: string;
-  name?: string;
-  type?: string;
-  width?: string;
-  placeholder?: string;
-  value?: string;
-  // eslint-disable-next-line no-unused-vars
-  onChange?: (e: PostEventType) => void;
-}
 
-export interface SendButtonType {
-  disabled?: boolean;
-  children: string;
-  // eslint-disable-next-line no-unused-vars
-  onClick?: (e: PostEventType) => void;
-}
+
 
 export interface NavigationBarType {
   children?: string;

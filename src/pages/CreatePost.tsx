@@ -5,7 +5,7 @@ import { PostType, PostEventType } from '../@types';
 import { createPost } from '../apis';
 import NavigationBar from '../components/NavigationBar';
 import SendButton from '../components/SendButton';
-import { PageContainer, PostHeader } from '../styles';
+import { PageContainer, PostHeader, HorizonDivider } from '../styles';
 
 // * rendering 최적화 중심 refactoring
 // ! styled-components 중복 관리
@@ -13,7 +13,7 @@ import { PageContainer, PostHeader } from '../styles';
 // ! 함수 쪼개기
 // ! onClick 익명함수 x
 
-const PostControllerContainer = styled.div`  
+const PostControllerContainer = styled.div`
   width: 70%;
   display: flex;
   gap: 1rem;
@@ -25,12 +25,7 @@ const TitleInput = styled.input`
   padding: 0.2rem;
   padding-left: 1rem;
 `;
-const HorizonDivider = styled.div`
-  align-self: center;
-  width: 80%;
-  margin: 2rem 0;
-  box-shadow: 0 0.5px 0 0.5px black;
-`;
+
 const PageBody = styled.div`
   width: 100%;
   padding: 0 2rem;
@@ -52,7 +47,9 @@ function CreatePost() {
   };
   const [data, setData] = useState<PostType>(initData);
 
-  const isValid = !!(data.title.trim().length > 0 && data.contents.trim().length > 0);
+  const isValid = !!(
+    data.title.trim().length > 0 && data.contents.trim().length > 0
+  );
 
   const onChange = (type: string) => (e: PostEventType) => {
     const { value } = e.target;
