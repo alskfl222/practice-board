@@ -1,8 +1,5 @@
 import axios from 'axios';
 import {
-  UserType,
-  SignupResponseType,
-  SigninResponseType,
   PostQueryType,
   PostType,
   PostResponseType,
@@ -12,17 +9,6 @@ import {
 
 // axios.defaults.headers.post.token = localStorage.getItem('token') || '';
 
-export function signin(data: Partial<UserType>): Promise<SigninResponseType> {
-  return axios
-    .post(`${process.env.API_URL}/user`, data)
-    .then((response) => response.data);
-}
-
-export function register(data: UserType): Promise<SignupResponseType> {
-  return axios
-    .post(`${process.env.API_URL}/user/register`, data)
-    .then((response) => response.data);
-}
 
 export function getPostList(query: PostQueryType): Promise<PostResponseType> {
   const queryString = Object.entries(query)
@@ -30,13 +16,11 @@ export function getPostList(query: PostQueryType): Promise<PostResponseType> {
     .join('&');
   return axios
     .get(`${process.env.API_URL}/post?${queryString}`)
-    .then((response) => response.data);
 }
 
 export function getPost(id: PostType['id']): Promise<PostResponseType> {
   return axios
     .get(`${process.env.API_URL}/post/${id}`)
-    .then((response) => response.data);
 }
 
 export function createPost(data: PostType) {
@@ -46,7 +30,6 @@ export function createPost(data: PostType) {
         token: localStorage.getItem('token') || '',
       },
     })
-    .then((response) => response.data);
 }
 
 export function editPost(data: Partial<PostType>) {

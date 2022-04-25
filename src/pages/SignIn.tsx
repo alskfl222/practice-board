@@ -4,7 +4,7 @@ import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { UserType } from '../@types';
 import signState from '../states/atom';
-import { signin } from '../apis';
+import axios from 'axios';
 import NavigationBar from '../components/NavigationBar';
 import InputTextLine from '../components/InputTextLine';
 import SendButton from '../components/SendButton';
@@ -16,7 +16,6 @@ const FormContainer = styled.form`
   flex-direction: column;
   align-items: center;
   gap: 2rem;
-
 `;
 const InputContainer = styled.label`
   width: 50%;
@@ -38,23 +37,25 @@ function SignIn() {
     password: '',
   });
   const setLogin = useSetRecoilState(signState);
-  const onChange = (key: keyof UserType) =>
-    (e: React.ChangeEvent<HTMLInputElement>): void => {
-      setData((beforeData: Partial<UserType>) => ({
-        ...beforeData,
-        [key]: e.target.value,
-      }));
-    };
+  const onChange = useCallback(
+    (key: keyof UserType) =>
+      (e: React.ChangeEvent<HTMLInputElement>): void => {
+        setData((beforeData: Partial<UserType>) => ({
+          ...beforeData,
+          [key]: e.target.value,
+        }));
+      },
+    []
+  );
   const onSubmit = (e: React.SyntheticEvent): void => {
     e.preventDefault();
-    signin(data)
+    axios
+      .post(`${process.env.API_URL}/user`, data)
       .then((response) => {
         if (response.data) {
           localStorage.setItem('token', response.data.token);
           setLogin(JSON.stringify({ isLogin: true }));
           setTimeout(() => navigate('/post'), 1000);
-        } else {
-          window.location.reload();
         }
       })
       .catch((err) => console.error(err));

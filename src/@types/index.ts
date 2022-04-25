@@ -60,9 +60,6 @@ export interface SignupResponseType extends ResponseType {
 }
 
 // * components props type
-
-
-
 export interface NavigationBarType {
   children?: string;
 }

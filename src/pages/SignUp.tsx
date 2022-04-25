@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
 import InputTextLine from '../components/InputTextLine';
 import SendButton from '../components/SendButton';
 
+import axios from 'axios';
 import { UserType } from '../@types';
-import { register } from '../apis';
 import NavigationBar from '../components/NavigationBar';
 import { PageContainer } from '../styles';
 
 const FormContainer = styled.form`
-  margin-top: 2rem;
+  padding: 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -42,51 +42,59 @@ function SignUp() {
     passwordConfirm: '',
     pn: '',
   });
-  const isVaild = (key: keyof UserType): boolean => {
-    const { name, email, password, passwordConfirm, pn } = data;
-    if (key === 'name') {
-      const nameCondition = name.trim().length >= 3 && name.trim().length <= 10;
-      if (nameCondition) return true;
-      return false;
-    }
-    if (key === 'email') {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      const emailCondition = emailRegex.test(email);
-      if (emailCondition) return true;
-      return false;
-    }
-    if (key === 'password') {
-      const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*\W).{8,15}$/;
-      const passwordCondition = passwordRegex.test(password);
-      if (passwordCondition) return true;
-      return false;
-    }
-    if (key === 'passwordConfirm') {
-      const compare = data.password;
-      const passwordConfirmCondition = passwordConfirm
-        && passwordConfirm.length > 0
-        && compare === passwordConfirm;
-      if (passwordConfirmCondition) return true;
-      return false;
-    }
-    if (key === 'pn') {
-      const pnRegex = /^0(2([0-9]{7,8})|[1|3-9]([0-9]{8,9}))$/;
-      const pnCondition = pnRegex.test(pn);
-      if (pnCondition) return true;
-      return false;
-    }
+
+  const isValidName = useCallback((): boolean => {
+    const { name } = data;
+    const nameCondition = name.trim().length >= 3 && name.trim().length <= 10;
+    if (nameCondition) return true;
     return false;
-  };
-  const onChange = (key: keyof UserType) =>
-    (e: React.ChangeEvent<HTMLInputElement>): void => {
-      setData((beforeData: UserType) => ({
-        ...beforeData,
-        [key]: e.target.value,
-      }));
-    };
+  }, []);
+  const isValidEmail = useCallback((): boolean => {
+    const { email } = data;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailCondition = emailRegex.test(email);
+    if (emailCondition) return true;
+    return false;
+  }, []);
+  const isValidPassword = useCallback((): boolean => {
+    const { password } = data;
+    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*\W).{8,15}$/;
+    const passwordCondition = passwordRegex.test(password);
+    if (passwordCondition) return true;
+    return false;
+  }, []);
+  const isValidPasswordConfirm = useCallback((): boolean => {
+    const { passwordConfirm } = data;
+    const compare = data.password;
+    const passwordConfirmCondition =
+      passwordConfirm &&
+      passwordConfirm.length > 0 &&
+      compare === passwordConfirm;
+    if (passwordConfirmCondition) return true;
+    return false;
+  }, []);
+  const isValidPN = useCallback((): boolean => {
+    const { pn } = data;
+    const pnRegex = /^0(2([0-9]{7,8})|[1|3-9]([0-9]{8,9}))$/;
+    const pnCondition = pnRegex.test(pn);
+    if (pnCondition) return true;
+    return false;
+  }, []);
+
+  const onChange = useCallback(
+    (key: keyof UserType) =>
+      (e: React.ChangeEvent<HTMLInputElement>): void => {
+        setData((beforeData: UserType) => ({
+          ...beforeData,
+          [key]: e.target.value,
+        }));
+      },
+    []
+  );
   const onSubmit = (e: React.SyntheticEvent): void => {
     e.preventDefault();
-    register(data)
+    axios
+      .post(`${process.env.API_URL}/user/register`, data)
       .then((response) => {
         console.log(response);
         navigate('/signin');
@@ -107,7 +115,7 @@ function SignUp() {
           />
         </InputContainer>
         <MessageContainer>
-          {isVaild('name') || data.name.length === 0 ? (
+          {isValidName() || data.name.length === 0 ? (
             <p></p>
           ) : (
             <p>이름은 3글자 이상 10글자 이하여야 합니다</p>
@@ -122,7 +130,7 @@ function SignUp() {
           />
         </InputContainer>
         <MessageContainer>
-          {isVaild('email') || data.email.length === 0 ? null : (
+          {isValidEmail() || data.email.length === 0 ? null : (
             <p>유효하지 않은 이메일입니다</p>
           )}
         </MessageContainer>
@@ -136,7 +144,7 @@ function SignUp() {
           />
         </InputContainer>
         <MessageContainer>
-          {isVaild('password') || data.password.length === 0 ? null : (
+          {isValidPassword() || data.password.length === 0 ? null : (
             <p>
               비밀번호는 최소 8글자, 최대 15글자이면서 <br />
               숫자 및 특수문자를 1개 이상 포함하여야합니다
@@ -153,10 +161,9 @@ function SignUp() {
           />
         </InputContainer>
         <MessageContainer>
-          {isVaild('passwordConfirm')
-          || (data.passwordConfirm && data.passwordConfirm.length === 0) ? null : (
-              <p>위에 입력한 비밀번호와 일치하지 않습니다</p>
-            )}
+          {isValidPasswordConfirm() || data.passwordConfirm === '' ? null : (
+            <p>위에 입력한 비밀번호와 일치하지 않습니다</p>
+          )}
         </MessageContainer>
         <InputContainer>
           전화번호
@@ -168,14 +175,20 @@ function SignUp() {
           />
         </InputContainer>
         <MessageContainer>
-          {data.pn.length === 0 || isVaild('pn') ? null : (
+          {isValidPN() || data.pn.length === 0 ? null : (
             <p>유효하지 않은 전화번호입니다</p>
           )}
         </MessageContainer>
         <HorizonDivider />
         <SendButton
           disabled={
-            !(isVaild('name') && isVaild('email') && isVaild('password'))
+            !(
+              isValidName() &&
+              isValidEmail() &&
+              isValidPassword() &&
+              isValidPasswordConfirm() &&
+              isValidPN()
+            )
           }
         >
           회원가입
