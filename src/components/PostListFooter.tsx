@@ -1,8 +1,9 @@
 import React, { memo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { PostListFooterProps } from '../@types';
 import { SendButton } from '../styles';
-import { useNavigateTo } from '../utils';
+
 
 const PageButtonContainer = styled.div`
   padding: 1rem;
@@ -30,6 +31,7 @@ const PostAddButtonContainer = styled.div`
 
 function PostListFooter(props: PostListFooterProps) {
   const { totalPageCount, query, onChange, isLogin } = props;
+  const navigate = useNavigate()
   return (
     <PageButtonContainer>
       {new Array(totalPageCount).fill('').map((_, index) => (
@@ -43,7 +45,7 @@ function PostListFooter(props: PostListFooterProps) {
       ))}
       {isLogin ? (
         <PostAddButtonContainer>
-          <SendButton onClick={useNavigateTo('/post/create')}>
+          <SendButton onClick={() => navigate('/post/create')}>
             글쓰기
           </SendButton>
         </PostAddButtonContainer>

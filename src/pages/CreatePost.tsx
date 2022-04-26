@@ -1,4 +1,5 @@
 import React, { useState, useCallback, memo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { PostType, PostEventType } from '../@types';
 import NavigationBar from '../components/NavigationBar';
@@ -11,9 +12,9 @@ import {
   PostBody,
   PostContentTextarea,
 } from '../styles';
-import { useNavigateTo } from '../utils';
 
 function CreatePost() {
+  const navigate = useNavigate();
   const initData: PostType = {
     title: '',
     contents: '',
@@ -30,7 +31,7 @@ function CreatePost() {
       const { value } = e.target;
       setData((beforeData) => ({ ...beforeData, [type]: value }));
     },
-    [],
+    []
   );
 
   const onSubmit = useCallback(() => {
@@ -51,7 +52,7 @@ function CreatePost() {
     <PageContainer>
       <NavigationBar>게시글 생성</NavigationBar>
       <PostHeader>
-        <SendButton minWidth='6rem' onClick={useNavigateTo('/post')}>
+        <SendButton minWidth='6rem' onClick={() => navigate('/post')}>
           게시글 목록
         </SendButton>
         <select onChange={onChange('postType')}>
