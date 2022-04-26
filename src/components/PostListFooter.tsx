@@ -54,4 +54,4 @@ function PostListFooter(props: PostListFooterProps) {
   );
 }
 
-export default memo(PostListFooter);
+export default PostListFooter;

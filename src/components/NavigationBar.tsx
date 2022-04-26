@@ -68,4 +68,4 @@ function NavigationBar(props: { children?: string }) {
   );
 }
 
-export default memo(NavigationBar);
+export default NavigationBar;

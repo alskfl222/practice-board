@@ -117,4 +117,4 @@ function PostListBody(props: PostListBodyProps) {
   );
 }
 
-export default memo(PostListBody);
+export default PostListBody;

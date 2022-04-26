@@ -25,9 +25,6 @@ function PostList() {
   const [postList, setPostList] = useState<PostType[]>([]);
   const [totalCount, setTotalCount] = useState<number>(1);
   const [message, setMessage] = useState<string>(messageType.loading);
-
-
-
   const { search } = location;
   const initQuery = new URLSearchParams(search);
   const query = new URLSearchParams({

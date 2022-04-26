@@ -41,4 +41,4 @@ function PostListHeader(props: PostListHeaderProps) {
   );
 }
 
-export default memo(PostListHeader);
+export default PostListHeader;
