@@ -11,7 +11,7 @@ import {
   PostControllerContainer,
   PostBody,
 } from '../styles';
-import { navigateTo } from '../utils';
+import { useNavigateTo } from '../utils';
 
 const PostTitle = styled.h2`
   flex-grow: 1;
@@ -93,12 +93,14 @@ function Post() {
     <PageContainer>
       <NavigationBar>게시글</NavigationBar>
       <PostHeader>
-        <SendButton minWidth='6rem' onClick={navigateTo('/post')}>
+        <SendButton minWidth='6rem' onClick={useNavigateTo('/post')}>
           게시글 목록
         </SendButton>
         <PostTitle>{data.title}</PostTitle>
         <PostControllerContainer>
-          <SendButton onClick={navigateTo(`/post/edit/${id}`)}>수정</SendButton>
+          <SendButton onClick={useNavigateTo(`/post/edit/${id}`)}>
+            수정
+          </SendButton>
           <SendButton onClick={onDelete}>삭제</SendButton>
         </PostControllerContainer>
       </PostHeader>

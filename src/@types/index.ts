@@ -41,15 +41,15 @@ export interface PostListHeaderProps {
   onChange: (key: keyof PostQueryType) => (e: PostEventType) => void;
 }
 export interface PostListBodyProps {
+  isLogin: boolean;
   isLoading: boolean;
   postList: PostType[];
-  isLogin: boolean;
   message: string;
   onDelete: (id: PostType['id']) => void;
 }
 export interface PostListFooterProps {
+  isLogin: boolean;
   totalPageCount: number;
   query: URLSearchParams;
   onChange: (key: keyof PostQueryType) => (e: PostEventType) => void;
-  isLogin: boolean;
 }

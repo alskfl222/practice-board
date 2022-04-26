@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { PostBody, HorizonDivider, SendButton } from '../styles';
 import { PostListBodyProps } from '../@types';
-import { navigateTo } from '../utils';
 
 const PostListColumnHeader = styled.div`
   width: 100%;
@@ -71,51 +70,45 @@ function PostListBody(props: PostListBodyProps) {
 
   return (
     <PostBody border='1px solid black'>
-      <PostListColumnHeader>
-        <PostIndexContainer>번호</PostIndexContainer>
-        <PostTitleContainer>제목</PostTitleContainer>
-        <PostAuthorContainer>작성자</PostAuthorContainer>
-        <PostControllerContainer></PostControllerContainer>
-      </PostListColumnHeader>
-      <HorizonDivider width='100%' margin='0' />
       {!isLoading ? (
         <>
-          {postList.length !== 0
-            ? postList.map((post) => (
-              <PostContainer
-                key={post.id}
-                onClick={navigateTo(`/post/${post.id}`)}
-              >
-                <PostIndexContainer>{post.id}</PostIndexContainer>
-                <PostTitleContainer>{post.title}</PostTitleContainer>
-                <PostAuthorContainer>{post.author}</PostAuthorContainer>
+          <PostListColumnHeader>
+            <PostIndexContainer>번호</PostIndexContainer>
+            <PostTitleContainer>제목</PostTitleContainer>
+            <PostAuthorContainer>작성자</PostAuthorContainer>
+            {isLogin && <PostControllerContainer></PostControllerContainer>}
+          </PostListColumnHeader>
+          <HorizonDivider width='100%' margin='0' />
+          {postList.map((post) => (
+            <PostContainer
+              key={post.id}
+              onClick={() => navigate(`/post/${post.id}`)}
+            >
+              <PostIndexContainer>{post.id}</PostIndexContainer>
+              <PostTitleContainer>{post.title}</PostTitleContainer>
+              <PostAuthorContainer>{post.author}</PostAuthorContainer>
+              {isLogin && (
                 <PostControllerContainer>
-                  {isLogin ? (
-                    <>
-                      <SendButton
-                        onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                          e.stopPropagation();
-                          navigate(`/post/edit/${post.id}`);
-                        }}
-                      >
-                          수정
-                      </SendButton>
-                      <SendButton
-                        onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                          e.stopPropagation();
-                          onDelete(post.id);
-                        }}
-                      >
-                          삭제
-                      </SendButton>
-                    </>
-                  ) : (
-                    <div></div>
-                  )}
+                  <SendButton
+                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                      e.stopPropagation();
+                      navigate(`/post/edit/${post.id}`);
+                    }}
+                  >
+                    수정
+                  </SendButton>
+                  <SendButton
+                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                      e.stopPropagation();
+                      onDelete(post.id);
+                    }}
+                  >
+                    삭제
+                  </SendButton>
                 </PostControllerContainer>
-              </PostContainer>
-            ))
-            : message}
+              )}
+            </PostContainer>
+          ))}
         </>
       ) : (
         message

@@ -20,7 +20,7 @@
     "project": "./tsconfig.json",
     "tsconfigRootDir": "./"
   },
-  "plugins": ["@typescript-eslint", "import"],
+  "plugins": ["@typescript-eslint", "import", "react-hooks"],
   "rules": {
     "no-console": 0,
     "semi": ["error", "always"],
@@ -31,7 +31,8 @@
     "max-len": 0,
     "import/extensions": 0,
     "implicit-arrow-linebreak": 0,
-    "no-await-in-loop": 0
+    "no-await-in-loop": 0,
+    "react-hooks/rules-of-hooks": "error",
   },
   "settings": {
     "import/resolver": {

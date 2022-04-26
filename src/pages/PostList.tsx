@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, memo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import axios from 'axios';
@@ -6,9 +6,10 @@ import signState from '../states/atom';
 import { PostQueryType, PostEventType, PostType } from '../@types';
 import NavigationBar from '../components/NavigationBar';
 import PostListHeader from '../components/PostListHeader';
-import PostListFooter from '../components/PostListFooter';
 import PostListBody from '../components/PostListBody';
+import PostListFooter from '../components/PostListFooter';
 import { PageContainer } from '../styles';
+import dummyPostList from '../temp/dummyData';
 
 const messageType = {
   loading: '게시글을 불러오고 있습니다',
@@ -18,6 +19,15 @@ const messageType = {
 
 function PostList() {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { isLogin } = JSON.parse(useRecoilValue(signState));
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [postList, setPostList] = useState<PostType[]>([]);
+  const [totalCount, setTotalCount] = useState<number>(1);
+  const [message, setMessage] = useState<string>(messageType.loading);
+
+
+
   const { search } = location;
   const initQuery = new URLSearchParams(search);
   const query = new URLSearchParams({
@@ -26,17 +36,14 @@ function PostList() {
     page: initQuery.get('page') || '1',
     keyword: initQuery.get('keyword') || '',
   });
-  const navigate = useNavigate();
-  const { isLogin } = JSON.parse(useRecoilValue(signState));
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [totalCount, setTotalCount] = useState<number>(1);
-  const [postList, setPostList] = useState<PostType[]>([]);
-  const [message, setMessage] = useState<string>(messageType.loading);
+
   const totalPageCount = Math.ceil(
     totalCount / parseInt(query.get('pageSize')!, 10),
   );
 
   const fetchPostList = useCallback(() => {
+    setMessage(messageType.loading);
+    setIsLoading(true);
     const queryString = query.toString();
     axios
       .get(`${process.env.API_URL}/post?${queryString}`)
@@ -50,6 +57,7 @@ function PostList() {
         }
       })
       .catch((err) => {
+        setPostList(dummyPostList);
         setMessage(messageType.error);
         console.error(err);
       })
@@ -60,7 +68,6 @@ function PostList() {
     (type: keyof PostQueryType) => (e: PostEventType) => {
       e.preventDefault();
       setMessage(messageType.loading);
-      setIsLoading(true);
       let value = '';
       if (type === 'pageSize' || type === 'postType') {
         value = e.target.value;
@@ -118,20 +125,20 @@ function PostList() {
       <NavigationBar>게시판 목록</NavigationBar>
       <PostListHeader query={query} onChange={onChange} />
       <PostListBody
+        isLogin={isLogin}
         isLoading={isLoading}
         postList={postList}
-        isLogin={isLogin}
         message={message}
         onDelete={onDelete}
       />
       <PostListFooter
+        isLogin={isLogin}
         totalPageCount={totalPageCount}
         query={query}
         onChange={onChange}
-        isLogin={isLogin}
       />
     </PageContainer>
   );
 }
 
-export default memo(PostList);
+export default PostList;

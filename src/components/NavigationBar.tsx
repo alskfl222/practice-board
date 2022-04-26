@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import signState from '../states/atom';
-import { navigateTo } from '../utils';
+import { useNavigateTo } from '../utils';
 
 const Container = styled.div`
   height: 10rem;
@@ -47,20 +47,20 @@ function NavigationBar(props: { children?: string }) {
   return (
     <Container>
       <NavigationTop>
-        <NavButton onClick={navigateTo('/')}>홈</NavButton>
+        <NavButton onClick={useNavigateTo('/')}>홈</NavButton>
         {isLogin && pathname !== '/signin' && (
           <NavButton
             onClick={() => {
               setUser(JSON.stringify({ isLogin: false }));
               localStorage.removeItem('token');
-              navigateTo('/');
+              useNavigateTo('/');
             }}
           >
             로그아웃
           </NavButton>
         )}
         {!isLogin && !(pathname === '/signin' || pathname === '/signup') && (
-          <NavButton onClick={navigateTo('/signin')}>로그인</NavButton>
+          <NavButton onClick={useNavigateTo('/signin')}>로그인</NavButton>
         )}
       </NavigationTop>
       <NavigationBottom>{props.children}</NavigationBottom>

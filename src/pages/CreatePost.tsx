@@ -11,7 +11,7 @@ import {
   PostBody,
   PostContentTextarea,
 } from '../styles';
-import { navigateTo } from '../utils';
+import { useNavigateTo } from '../utils';
 
 function CreatePost() {
   const initData: PostType = {
@@ -51,7 +51,7 @@ function CreatePost() {
     <PageContainer>
       <NavigationBar>게시글 생성</NavigationBar>
       <PostHeader>
-        <SendButton minWidth='6rem' onClick={navigateTo('/post')}>
+        <SendButton minWidth='6rem' onClick={useNavigateTo('/post')}>
           게시글 목록
         </SendButton>
         <select onChange={onChange('postType')}>

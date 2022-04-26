@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import styled from 'styled-components';
 import { PostListFooterProps } from '../@types';
 import { SendButton } from '../styles';
-import { navigateTo } from '../utils';
+import { useNavigateTo } from '../utils';
 
 const PageButtonContainer = styled.div`
   padding: 1rem;
@@ -43,7 +43,9 @@ function PostListFooter(props: PostListFooterProps) {
       ))}
       {isLogin ? (
         <PostAddButtonContainer>
-          <SendButton onClick={navigateTo('/post/create')}>글쓰기</SendButton>
+          <SendButton onClick={useNavigateTo('/post/create')}>
+            글쓰기
+          </SendButton>
         </PostAddButtonContainer>
       ) : null}
     </PageButtonContainer>

@@ -7,7 +7,7 @@ export function makeQueryString(query: PostQueryType) {
     .join('&');
 }
 
-export function navigateTo(to: string) {
+export function useNavigateTo(to: string) {
   const navigate = useNavigate();
   return () => navigate(to);
 }

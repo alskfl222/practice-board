@@ -15,7 +15,7 @@ import {
   PostBody,
   PostContentTextarea,
 } from '../styles';
-import { navigateTo } from '../utils';
+import { useNavigateTo } from '../utils';
 
 const PostContentHeader = styled.div`
   padding: 0 2rem;
@@ -92,7 +92,7 @@ function EditPost() {
     <PageContainer>
       <NavigationBar>게시글 수정</NavigationBar>
       <PostHeader>
-        <SendButton minWidth='6rem' onClick={navigateTo('/post')}>
+        <SendButton minWidth='6rem' onClick={useNavigateTo('/post')}>
           게시글 목록
         </SendButton>
         <TitleInput
