@@ -84,9 +84,9 @@ function Post() {
       .catch((err) => console.error(err));
   }
 
-  useEffect(() => {
-    fetchPost();
-  }, []);
+  // useEffect(() => {
+  //   fetchPost();
+  // }, []);
 
   return (
     <PageContainer>

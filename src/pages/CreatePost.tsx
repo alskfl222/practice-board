@@ -1,6 +1,8 @@
-import React, { useState, useCallback, memo } from 'react';
+import React, { useState, useEffect, useCallback, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 import axios from 'axios';
+import signState from '../states/atom';
 import { PostType, PostEventType } from '../@types';
 import NavigationBar from '../components/NavigationBar';
 import {
@@ -21,6 +23,7 @@ function CreatePost() {
     postType: 'notice',
   };
   const [data, setData] = useState<PostType>(initData);
+  const isLogin = useRecoilValue(signState);
 
   const isValid = !!(
     data.title.trim().length > 0 && data.contents.trim().length > 0
@@ -45,9 +48,16 @@ function CreatePost() {
       .catch((err) => console.error(err));
   }, []);
 
-  const clearData = () => {
+  const clearData = useCallback(() => {
     setData(initData);
-  };
+  }, []);
+
+  // useEffect(() => {
+  //   if (!isLogin) {
+  //     navigate('/post');
+  //   }
+  // }, []);
+
   return (
     <PageContainer>
       <NavigationBar>게시글 생성</NavigationBar>

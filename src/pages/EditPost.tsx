@@ -80,12 +80,12 @@ function EditPost() {
     navigate('/post');
   }, []);
 
-  useEffect(() => {
-    // if (!isLogin) {
-    //   navigate('/post');
-    // }
-    // fetchPost();
-  }, []);
+  // useEffect(() => {
+  //   if (!isLogin) {
+  //     navigate('/post');
+  //   }
+  //   fetchPost();
+  // }, []);
 
   return (
     <PageContainer>
