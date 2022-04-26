@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, memo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import axios from 'axios';
@@ -138,4 +138,4 @@ function PostList() {
   );
 }
 
-export default PostList;
+export default memo(PostList);

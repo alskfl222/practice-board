@@ -26,10 +26,10 @@ const PostContentHeader = styled.div`
 function EditPost() {
   const navigate = useNavigate();
   const params = useParams();
-  const id = parseInt(params.id || '-1', 10);
+  const id = params.id as string;
   const isLogin = useRecoilValue(signState);
   const initData: PostType = {
-    id: 0,
+    id: '0',
     title: '불러오는 중입니다',
     contents: '불러오는 중입니다',
     author: '불러오는 중입니다',
@@ -37,7 +37,7 @@ function EditPost() {
   };
   const [data, setData] = useState<PostType>(initData);
   const dateString = new Date(
-    data.createdAt || '9999-99-99',
+    data.createdAt || '9999-99-99'
   ).toLocaleDateString();
 
   const isValid = !!(
@@ -56,6 +56,7 @@ function EditPost() {
       })
       .catch((err) => {
         console.error(err);
+        navigate('/post');
       });
   }
 
@@ -64,7 +65,7 @@ function EditPost() {
       const { value } = e.target;
       setData((beforeData) => ({ ...beforeData, [type]: value }));
     },
-    [],
+    []
   );
 
   const onSubmit = useCallback(() => {
@@ -80,12 +81,15 @@ function EditPost() {
     navigate('/post');
   }, []);
 
-  // useEffect(() => {
-  //   if (!isLogin) {
-  //     navigate('/post');
-  //   }
-  //   fetchPost();
-  // }, []);
+  useEffect(() => {
+    if (!isLogin) {
+      navigate('/signin');
+    }
+    if (Number.isNaN(+id)) {
+      navigate('/404');
+    }
+    fetchPost();
+  }, []);
 
   return (
     <PageContainer>

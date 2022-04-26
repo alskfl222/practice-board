@@ -37,17 +37,17 @@ const PostContentBody = styled.div`
 
 function Post() {
   const params = useParams();
-  const id = parseInt(params.id || '-1', 10);
+  const id = params.id as string;
   const navigate = useNavigate();
   const [data, setData] = useState<PostType>({
-    id: 0,
+    id: '0',
     title: '불러오는 중입니다',
     contents: '불러오는 중입니다',
     author: '불러오는 중입니다',
     createdAt: new Date().toString(),
   });
   const dateString = new Date(
-    data.createdAt || '9999-99-99',
+    data.createdAt || '9999-99-99'
   ).toLocaleDateString();
 
   function fetchPost() {
@@ -62,7 +62,7 @@ function Post() {
       })
       .catch((err) => {
         console.error(err);
-        navigate('/404');
+        navigate('/post');
       });
   }
 
@@ -75,7 +75,7 @@ function Post() {
           headers: {
             token: localStorage.getItem('token') || '',
           },
-        },
+        }
       )
       .then((response) => {
         console.log(response);
@@ -84,9 +84,12 @@ function Post() {
       .catch((err) => console.error(err));
   }
 
-  // useEffect(() => {
-  //   fetchPost();
-  // }, []);
+  useEffect(() => {
+    if (Number.isNaN(+id)) {
+      navigate('/404');
+    }
+    fetchPost();
+  }, []);
 
   return (
     <PageContainer>

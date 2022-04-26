@@ -10,7 +10,7 @@ export interface UserType {
   pn: string;
 }
 export interface PostType {
-  id?: number;
+  id?: string;
   title: string;
   contents: string;
   author?: string;

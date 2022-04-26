@@ -1,5 +1,5 @@
 const dummyPostList = new Array(10).fill('').map((_, i) => ({
-  id: i + 1,
+  id: `${i + 1}`,
   title: `dummy title ${i + 1}`,
   contents: `dummy content ${i + 1}`,
   author: `author ${i + 1}`,
