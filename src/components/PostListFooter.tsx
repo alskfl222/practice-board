@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
 import { PostListFooterProps } from '../@types';
 import { SendButton } from '../styles';
@@ -50,4 +50,4 @@ function PostListFooter(props: PostListFooterProps) {
   );
 }
 
-export default PostListFooter;
+export default memo(PostListFooter);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { PostBody, HorizonDivider, SendButton } from '../styles';
@@ -67,7 +67,7 @@ const PostControllerContainer = styled.div`
 
 function PostListBody(props: PostListBodyProps) {
   const { isLoading, postList, isLogin, message, onDelete } = props;
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   return (
     <PostBody border='1px solid black'>
@@ -82,39 +82,39 @@ function PostListBody(props: PostListBodyProps) {
         <>
           {postList.length !== 0
             ? postList.map((post) => (
-                <PostContainer
-                  key={post.id}
-                  onClick={navigateTo(`/post/${post.id}`)}
-                >
-                  <PostIndexContainer>{post.id}</PostIndexContainer>
-                  <PostTitleContainer>{post.title}</PostTitleContainer>
-                  <PostAuthorContainer>{post.author}</PostAuthorContainer>
-                  <PostControllerContainer>
-                    {isLogin ? (
-                      <>
-                        <SendButton
-                          onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                            e.stopPropagation();
-                            navigate(`/post/edit/${post.id}`);
-                          }}
-                        >
+              <PostContainer
+                key={post.id}
+                onClick={navigateTo(`/post/${post.id}`)}
+              >
+                <PostIndexContainer>{post.id}</PostIndexContainer>
+                <PostTitleContainer>{post.title}</PostTitleContainer>
+                <PostAuthorContainer>{post.author}</PostAuthorContainer>
+                <PostControllerContainer>
+                  {isLogin ? (
+                    <>
+                      <SendButton
+                        onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                          e.stopPropagation();
+                          navigate(`/post/edit/${post.id}`);
+                        }}
+                      >
                           수정
-                        </SendButton>
-                        <SendButton
-                          onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                            e.stopPropagation();
-                            onDelete(post.id);
-                          }}
-                        >
+                      </SendButton>
+                      <SendButton
+                        onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                          e.stopPropagation();
+                          onDelete(post.id);
+                        }}
+                      >
                           삭제
-                        </SendButton>
-                      </>
-                    ) : (
-                      <div></div>
-                    )}
-                  </PostControllerContainer>
-                </PostContainer>
-              ))
+                      </SendButton>
+                    </>
+                  ) : (
+                    <div></div>
+                  )}
+                </PostControllerContainer>
+              </PostContainer>
+            ))
             : message}
         </>
       ) : (
@@ -124,4 +124,4 @@ function PostListBody(props: PostListBodyProps) {
   );
 }
 
-export default PostListBody
+export default memo(PostListBody);

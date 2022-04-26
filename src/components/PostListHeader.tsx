@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { PostHeader, TitleInput, SendButton } from '../styles';
 import { PostListHeaderProps, PostEventType } from '../@types';
 
@@ -41,4 +41,4 @@ function PostListHeader(props: PostListHeaderProps) {
   );
 }
 
-export default PostListHeader;
+export default memo(PostListHeader);
